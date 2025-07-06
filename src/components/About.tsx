@@ -1,4 +1,3 @@
-import FadeInEffect from "./ui/fadein";
 
 function About() {
   return (
@@ -8,7 +7,7 @@ function About() {
     >
       {/* Gold gradient accent bar */}
       <div className="absolute top-0 left-0 w-full h-2 bg-gold-gradient" />
-      <FadeInEffect className="container mx-auto px-4">
+      <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row items-center gap-16 relative z-10">
           {/* Profile Image with gold border and shadow */}
           <div className="flex-1 flex justify-center">
@@ -41,7 +40,7 @@ function About() {
             </a>
           </div>
         </div>
-      </FadeInEffect>
+      </div>
       {/* Decorative large numbers in the background */}
       <span className="absolute left-0 bottom-0 text-[8rem] md:text-[12rem] text-yellow-900/10 font-serif font-bold select-none pointer-events-none pl-4 pb-2">
         07

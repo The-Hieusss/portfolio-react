@@ -1,5 +1,4 @@
 import Carousel from "./Carousel";
-import FadeInEffect from "./ui/fadein";
 
 const education = [
   {
@@ -112,7 +111,7 @@ export default function Resume() {
     <section id="resume-section" className="py-24 bg-gradient-to-b from-black via-gray-900 to-black relative overflow-hidden">
       {/* Gold accent bar */}
       <div className="absolute top-0 left-0 w-full h-2 bg-gold-gradient" />
-      <FadeInEffect className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-4 relative z-10">
         <div className="flex flex-col md:flex-row gap-12">
           {/* Navigation */}
           <nav className="md:w-1/4 mb-8 md:mb-0">
@@ -198,7 +197,7 @@ export default function Resume() {
             </div>
           </div>
         </div>
-      </FadeInEffect>
+      </div>
       {/* Decorative large numbers in the background */}
       <span className="absolute left-0 bottom-0 text-[8rem] md:text-[12rem] text-yellow-900/10 font-serif font-bold select-none pointer-events-none pl-4 pb-2 z-0">
         07

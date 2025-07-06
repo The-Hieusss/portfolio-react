@@ -1,12 +1,11 @@
 import { Phone, Mail, Link, Github, Linkedin, Instagram } from "lucide-react";
-import FadeInEffect from "./ui/fadein";
 
 function Contact() {
   return (
     <section id="contact-section" className="py-24 bg-gradient-to-b from-black via-gray-900 to-black relative overflow-hidden">
       {/* Gold accent bar */}
       <div className="absolute top-0 left-0 w-full h-2 bg-gold-gradient" />
-      <FadeInEffect className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-4 relative z-10">
         <div className="mb-12 text-center">
           <h2 className="text-4xl md:text-5xl font-serif font-bold mb-4 text-gold-gradient drop-shadow-lg tracking-wider">
             Contact Me
@@ -62,7 +61,7 @@ function Contact() {
             <div className="absolute left-0 top-0 h-2 w-1/3 bg-gold-gradient rounded-tr-3xl" />
           </div>
         </div>
-      </FadeInEffect>
+      </div>
       {/* Decorative large numbers in the background */}
       <span className="absolute left-0 bottom-0 text-[8rem] md:text-[12rem] text-yellow-900/10 font-serif font-bold select-none pointer-events-none pl-4 pb-2 z-0">
         07
