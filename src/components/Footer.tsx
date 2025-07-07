@@ -56,7 +56,7 @@ function Footer() {
           </div>
         </div>
         <div className="flex justify-center">
-          <img src="/images/favicon.png" alt="logo" className="h-12" />
+          <img src="/images/favicon.svg" alt="logo" className="h-12" />
         </div>
       </div>
     </footer>

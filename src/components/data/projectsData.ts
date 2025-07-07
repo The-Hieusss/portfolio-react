@@ -3,7 +3,7 @@ import type { Project } from "../types";
 export const projectsData: Project[] = [
   {
     title: "Google Flight",
-    image: "/images/favicon.png",
+    image: "/images/favicon.svg",
     description:
       "Replica of Google Flight search engine. Simple UI, dummy data, beta mode.",
     demoUrl: "https://google-flight.vercel.app/",
@@ -26,7 +26,7 @@ export const projectsData: Project[] = [
   },
   {
     title: "The Garden",
-    image: "/images/favicon.png",
+    image: "/images/favicon.svg",
     description:
       "Interactive learning app for patients with dementia and stroke recovery.",
     demoUrl: "",
@@ -49,7 +49,7 @@ export const projectsData: Project[] = [
   },
   {
     title: "Deadline.AI",
-    image: "/images/favicon.png",
+    image: "/images/favicon.svg",
     description: "Mobile app for AI-powered personal scheduling and chat.",
     demoUrl: "",
     githubUrl: "https://github.com/Smit2553/deadline.ai-frontend",
@@ -67,7 +67,7 @@ export const projectsData: Project[] = [
   },
   {
     title: "Gift4U",
-    image: "/images/favicon.png",
+    image: "/images/favicon.svg",
     description:
       "PWA simulating a gift trading/e-commerce website with real-time updates.",
     demoUrl: "",
@@ -94,7 +94,7 @@ export const projectsData: Project[] = [
   },
   {
     title: "Arizona Tree",
-    image: "/images/favicon.png",
+    image: "/images/favicon.svg",
     description: "Web app for visualizing tree canopy coverage by location.",
     demoUrl: "",
     githubUrl: "https://github.com/Gabenn1/TreeZona",
@@ -118,12 +118,12 @@ export const projectsData: Project[] = [
   },
   {
     title: "Coming Soon",
-    image: "/images/favicon.png",
+    image: "/images/favicon.svg",
     description: "Something awesome is being made...",
     demoUrl: "",
     githubUrl: "",
     tech: [],
-    modalImage: "/images/favicon.png",
+    modalImage: "/images/favicon.svg",
     modalSummary: "Stay tuned for more exciting projects!",
     modalTech: [],
   },

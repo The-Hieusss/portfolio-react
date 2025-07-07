@@ -18,7 +18,7 @@ const Navbar: React.FC = () => {
       <div className="container mx-auto flex items-center justify-between px-5 py-3">
         <div className="flex items-center gap-3">
           <img
-            src="/images/favicon.png"
+            src="/images/favicon.svg"
             alt="logo"
             className="h-12 drop-shadow-lg"
           />
