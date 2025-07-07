@@ -1,4 +1,4 @@
-import { Menu } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import React, { useState } from "react";
 import { Link as ScrollLink } from "react-scroll";
 
@@ -28,7 +28,11 @@ const Navbar: React.FC = () => {
           onClick={() => setOpen(!open)}
           aria-label="Toggle navigation"
         >
-          <Menu className="h-7 w-7" />
+          {open ? (
+            <X className="h-7 w-7 transform rotate-90" />
+          ) : (
+            <Menu className="h-7 w-7" />
+          )}
         </button>
         <ul className="hidden md:flex space-x-10 items-center">
           {navLinks.map((link) => (
