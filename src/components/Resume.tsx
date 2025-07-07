@@ -106,6 +106,15 @@ const awards = [
   },
 ];
 
+const leadership = [
+  {
+    logo: "/images/vinasubanner.jpg",
+    title: "President",
+    company: "Vietnamese Student Union at ASU",
+    date: "Aug 2024 - Present",
+  },
+];
+
 export default function Resume() {
   return (
     <section
@@ -133,6 +142,14 @@ export default function Resume() {
                   className="text-lg font-serif font-bold text-gold-gradient hover:text-yellow-400 transition"
                 >
                   Experience
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#leadership"
+                  className="text-lg font-serif font-bold text-gold-gradient hover:text-yellow-400 transition"
+                >
+                  Leadership
                 </a>
               </li>
               <li>
@@ -197,7 +214,7 @@ export default function Resume() {
                 {experience.map((exp, i) => (
                   <div
                     key={i}
-                    className="flex items-center gap-6 bg-black/80 rounded-2xl shadow-lg p-6 border-l-8 border-yellow-400"
+                    className="flex items-center gap-6 bg-gradient-to-br from-black via-gray-900 to-black rounded-2xl shadow-lg p-6 border-l-8 border-yellow-400"
                   >
                     <img
                       src={exp.logo}
@@ -212,6 +229,35 @@ export default function Resume() {
                         {exp.company}
                       </div>
                       <div className="text-sm text-gray-400">{exp.date}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            {/* Leadership */}
+            <div id="leadership">
+              <h2 className="text-3xl font-serif font-bold mb-6 text-gold-gradient drop-shadow-lg">
+                Leadership
+              </h2>
+              <div className="space-y-6">
+                {leadership.map((lead, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-6 bg-black/80 rounded-2xl shadow-lg p-6 border-l-8 border-yellow-400"
+                  >
+                    <img
+                      src={lead.logo}
+                      alt={lead.company}
+                      className="w-16 h-16 object-contain rounded-lg shadow-md bg-white"
+                    />
+                    <div>
+                      <h3 className="text-xl font-serif font-bold text-white mb-1">
+                        {lead.title}
+                      </h3>
+                      <div className="text-yellow-300 font-serif">
+                        {lead.company}
+                      </div>
+                      <div className="text-sm text-gray-400">{lead.date}</div>
                     </div>
                   </div>
                 ))}
