@@ -2,30 +2,32 @@ function About() {
   return (
     <section
       id="about-section"
-      className="py-24 bg-gradient-to-b from-black via-gray-900 to-black relative overflow-hidden"
+      className="py-24 bg-gradient-to-b from-[#0a0402] via-[#120905] to-[#0a0402] relative overflow-hidden"
     >
-      {/* Gold gradient accent bar */}
+      {/* Accent bar in fiery orange gradient */}
       <div className="absolute top-0 left-0 w-full h-2 bg-gold-gradient" />
+
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row items-center gap-16 relative z-10">
-          {/* Profile Image with gold border and shadow */}
+          {/* Profile Image with custom orange border */}
           <div className="flex-1 flex justify-center">
-            <div className="relative rounded-full overflow-hidden shadow-2xl w-72 h-72 border-4 border-yellow-400 bg-black">
+            <div className="relative rounded-full overflow-hidden shadow-2xl w-72 h-72 border-4 border-[#fa7636] bg-[#0a0402]">
               <img
                 src="/images/profile1.jpg"
                 alt="Profile"
-                className="object-cover w-full h-full  transition duration-500"
+                className="object-cover w-full h-full transition duration-500"
               />
-              {/* Gold ring effect */}
-              <div className="absolute inset-0 rounded-full border-4 border-yellow-400 pointer-events-none" />
+              {/* Glowing ring effect in accent color */}
+              <div className="absolute inset-0 rounded-full border-4 border-[#fa7636] pointer-events-none" />
             </div>
           </div>
+
           {/* About Text */}
           <div className="flex-1">
             <h2 className="text-4xl md:text-5xl font-serif font-bold mb-6 text-gold-gradient drop-shadow-lg">
               About Me
             </h2>
-            <p className="text-lg md:text-xl text-gray-200 mb-8 font-sans leading-relaxed">
+            <p className="text-lg md:text-xl text-[#fceee6] mb-8 font-sans leading-relaxed">
               Hi, I'm{" "}
               <span className="text-gold-gradient font-serif font-semibold">
                 Huey Than
@@ -33,7 +35,7 @@ function About() {
               . I'm a learner, a leader, and a software engineer.
               <br />
               Currently studying at{" "}
-              <span className="text-yellow-300 font-serif font-semibold">
+              <span className="text-[#ffb48a] font-serif font-semibold">
                 Arizona State University
               </span>
               , I've had the chance to work on exciting projects and
@@ -48,19 +50,18 @@ function About() {
             <a
               href="/Resume.pdf"
               download="Resume.pdf"
-              className="inline-block bg-gold-gradient text-black px-8 py-3 rounded-full font-serif font-bold shadow-lg hover:bg-yellow-500 hover:text-black transition"
+              className="inline-block bg-gold-gradient text-[#0a0402] px-8 py-3 rounded-full font-serif font-bold shadow-lg hover:bg-[#ff9462] hover:text-[#0a0402] transition"
             >
               Download CV
             </a>
           </div>
         </div>
       </div>
-      {/* Decorative large numbers in the background */}
-      <span className="absolute left-0 bottom-0 text-[8rem] md:text-[12rem] text-yellow-900/10 font-serif font-bold select-none pointer-events-none pl-4 pb-2">
-        07
+
+      {/* Decorative numbers with soft accent tone */}
+      <span className="absolute left-0 bottom-0 text-[8rem] md:text-[12rem] text-[#fa7636]/10 font-serif font-bold select-none pointer-events-none pl-4 pb-2">
       </span>
-      <span className="absolute right-0 top-0 text-[8rem] md:text-[12rem] text-yellow-900/10 font-serif font-bold select-none pointer-events-none pr-4 pt-2">
-        24
+      <span className="absolute right-0 top-0 text-[8rem] md:text-[12rem] text-[#fa7636]/10 font-serif font-bold select-none pointer-events-none pr-4 pt-2">
       </span>
     </section>
   );

@@ -55,10 +55,10 @@ body,
   font-family: "EB Garamond", serif;
 }
 .bg-gold-gradient {
-  background: linear-gradient(90deg, #ffd700 0%, #ffb800 100%);
+  background: linear-gradient(90deg, #fa7636 0%, #ffb48a 100%);
 }
 .text-gold-gradient {
-  background: linear-gradient(90deg, #ffd700 0%, #ffb800 100%);
+  background: linear-gradient(90deg, #fa7636 0%, #ffb48a 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

@@ -15,18 +15,17 @@ function Carousel() {
     { img: "/frameworks/tailwindcss.svg", name: "Tailwind CSS" },
     { img: "/frameworks/vite.png", name: "Vite" },
   ];
-  // Duplicate the array for seamless looping
-  const logos = [...frameworks, ...frameworks];
+
+  const logos = [...frameworks, ...frameworks]; // seamless loop
 
   return (
-    <div className="flex flex-col items-center justify-center w-full min-h-[300px] ">
-      <div className="" />
+    <div className="flex flex-col items-center justify-center w-full min-h-[300px]">
       <div className="overflow-x-hidden w-full py-4">
         <div className="flex gap-8 items-center flex-nowrap animate-scroll">
           {logos.map((logo, index) => (
             <div
-              className="flex-col shrink-0 w-24 h-24 md:w-32 md:h-32 bg-gray-500 rounded-xl shadow-md flex items-center justify-center transition-transform hover:scale-105 hover:shadow-lg"
               key={index}
+              className="flex flex-col shrink-0 w-24 h-24 md:w-32 md:h-32 bg-[#1f1411]/90 border border-[#fa7636]/20 rounded-xl shadow-lg items-center justify-center transition-transform hover:scale-105 hover:shadow-[0_0_10px_#fa7636] duration-300"
             >
               <img
                 src={logo.img}
@@ -38,7 +37,6 @@ function Carousel() {
           ))}
         </div>
       </div>
-      {/* Tailwind custom animation keyframes (add to your tailwind.config.js if needed) */}
     </div>
   );
 }

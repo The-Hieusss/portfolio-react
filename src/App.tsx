@@ -6,8 +6,30 @@ import Projects from "./components/Projects/Projects";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import { Analytics } from "@vercel/analytics/react";
+import {useState, useEffect } from "react";
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="h-screen w-screen flex items-center justify-center bg-black p-5">
+        <img
+          src="/images/labor.svg"
+          alt="labor"
+          className="w-screen h-screen object-contain"
+          loading="lazy"
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white text-gray-900 font-sans">
       <Navbar />

@@ -1,53 +1,53 @@
+import { Omega } from "lucide-react";
+
 function Footer() {
   return (
-    <footer className="bg-black text-white py-10">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-wrap justify-between gap-8 mb-8">
+    <footer className="bg-[#0a0402] text-[#fceee6] py-10 border-t border-[#fa7636]/20">
+      <div className="container mx-auto px-4 ">
+        <div className="flex flex-wrap justify-between gap-12 mb-10">
+          {/* Motto */}
           <div>
-            <h2 className="text-xl font-bold mb-2 text-gold-gradient">VENI, VIDI, VICI</h2>
+            <h2 className="text-xl font-serif font-bold mb-2 text-gold-gradient tracking-wider">
+              VENI, VIDI, VICI
+            </h2>
           </div>
+
+          {/* Navigation Links */}
           <div>
-            <h2 className="text-xl font-bold mb-2  text-gold-gradient">Links</h2>
-            <ul className="space-y-1">
-              <li>
-                <a href="#home-section" className="hover:text-yellow-400">
-                  Home
-                </a>
-              </li>
-              <li>
-                <a href="#about-section" className="hover:text-yellow-400">
-                  About
-                </a>
-              </li>
-              <li>
-                <a href="#resume-section" className="hover:text-yellow-400">
-                  Resume
-                </a>
-              </li>
-              <li>
-                <a href="#project-section" className="hover:text-yellow-400">
-                  Projects
-                </a>
-              </li>
-              <li>
-                <a href="#contact-section" className="hover:text-yellow-400">
-                  Contact
-                </a>
-              </li>
+            <h2 className="text-xl font-serif font-bold mb-2 text-gold-gradient">
+              Links
+            </h2>
+            <ul className="space-y-1 font-sans">
+              {["Home", "About", "Resume", "Projects", "Contact"].map((label) => (
+                <li key={label}>
+                  <a
+                    href={`#${label.toLowerCase()}-section`}
+                    className="hover:text-[#ffb48a] transition"
+                  >
+                    {label}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
+
+          {/* Contact Info */}
           <div>
-            <h2 className="text-xl font-serif font-bold mb-2 text-gold-gradient">DEUS EX MACHINA</h2>
-            <ul className="space-y-1">
+            <h2 className="text-xl font-serif font-bold mb-2 text-gold-gradient tracking-wide">
+              DEUS EX MACHINA
+            </h2>
+            <ul className="space-y-1 font-sans">
               <li>
-                <span className="material-icons align-middle mr-2">phone</span>
-                414-394-5060
+                📞{" "}
+                <span className="ml-1">
+                  414-394-5060
+                </span>
               </li>
               <li>
-                <span className="material-icons align-middle mr-2">email</span>
+                📧{" "}
                 <a
                   href="mailto:hank170305@gmail.com"
-                  className="hover:text-yellow-400"
+                  className="hover:text-[#ffb48a] ml-1 transition"
                 >
                   hank170305@gmail.com
                 </a>
@@ -55,11 +55,14 @@ function Footer() {
             </ul>
           </div>
         </div>
+
+        {/* Logo */}
         <div className="flex justify-center">
-          <img src="/images/favicon.svg" alt="logo" className="h-12" />
+          <Omega className="h-24 w-24 animate-bounce" />
         </div>
       </div>
     </footer>
   );
 }
+
 export default Footer;

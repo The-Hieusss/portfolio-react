@@ -39,7 +39,7 @@ export const projectsData: Project[] = [
     ],
     modalImage: "/images/projdemo/thegarden.png",
     modalSummary:
-      "The Garden is a web application that provides an interactive learning experience. It focuses on the development and optimal training for patients with dementia and patients recovering from stroke through video games and graphical presentation. The application features an intuitive and user-friendly interface using HTML, CSS, and JavaScript, while operating on a simplistic design.",
+      "The Garden is a web application that provides an interactive learning experience. It focuses on the development and optimal training for patients with dementia and patients recovering from stroke through video games and graphical presentation.",
     modalTech: [
       { label: "JavaScript", icon: "/images/skills/javascript.png" },
       { label: "HTML", icon: "/images/skills/html.png" },

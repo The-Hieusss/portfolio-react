@@ -1,5 +1,6 @@
 import { Typewriter } from "react-simple-typewriter";
 import { ChevronsDown } from "lucide-react";
+import FadeInEffect from "./ui/fadein";
 
 const rotatingTexts = [
   "Coding.",
@@ -10,24 +11,28 @@ const rotatingTexts = [
 
 function Hero() {
   return (
-    <section
-      className="relative flex items-center justify-center min-h-screen bg-gradient-to-b from-black via-gray-900 to-black overflow-hidden"
+    <FadeInEffect
+      className="relative flex items-center justify-center min-h-screen bg-gradient-to-b from-[#0a0402] via-[#1a0d08] to-[#0a0402] overflow-hidden"
       id="intro-section"
     >
+      {/* Background image */}
       <img
         src="/images/hero.png"
         alt="Greek Myth"
-        className="absolute inset-0 w-full h-full object-cover items-center justify-center opacity-70"
+        className="absolute inset-0 w-full h-full object-cover opacity-30"
         loading="lazy"
         style={{ zIndex: 0 }}
       />
-      {/* Overlay for gold/black effect */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-black/80 z-10" />
-      <div className="container mx-auto flex flex-col items-center justify-center relative z-20">
-        <h1 className="text-6xl md:text-8xl font-serif font-bold text-center mb-4 text-gold-gradient drop-shadow-lg tracking-wider">
+
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#0a0402]/80 via-transparent to-[#0a0402]/80 z-10" />
+
+      {/* Hero Content */}
+      <div className="container mx-auto flex flex-col items-center justify-center relative z-20 text-center">
+        <h1 className="text-6xl md:text-8xl font-serif font-bold text-gold-gradient drop-shadow-lg tracking-widest mb-4">
           Hieu Than
         </h1>
-        <h3 className="text-2xl md:text-3xl font-medium text-center text-gray-100 mb-4 font-sans">
+        <h3 className="text-2xl md:text-3xl font-medium text-[#fceee6] mb-4 font-sans">
           I like{" "}
           <span className="text-gold-gradient font-serif font-semibold">
             <Typewriter
@@ -41,24 +46,24 @@ function Hero() {
             />
           </span>
         </h3>
-        {/* Scroll Down Animation */}
+
+        {/* Scroll Down Icon */}
         <div className="mt-16 flex flex-col items-center">
           <div className="animate-bounce">
-            <ChevronsDown className="w-8 h-8 text-yellow-400" />
+            <ChevronsDown className="w-8 h-8 text-[#fa7636]" />
           </div>
-          <span className="text-xs text-gray-400 mt-2 font-serif tracking-widest">
+          <span className="text-xs text-[#d2bba8] mt-2 font-serif tracking-widest">
             Scroll Down
           </span>
         </div>
       </div>
-      {/* Large decorative numbers */}
-      <span className="absolute left-0 bottom-0 text-[8rem] md:text-[12rem] text-yellow-900/10 font-serif font-bold select-none pointer-events-none pl-4 pb-2 z-10">
-        07
+
+      {/* Decorative Numbers */}
+      <span className="absolute left-0 bottom-0 text-[8rem] md:text-[12rem] text-[#fa7636]/10 font-serif font-bold select-none pointer-events-none pl-4 pb-2 z-10">
       </span>
-      <span className="absolute right-0 top-0 text-[8rem] md:text-[12rem] text-yellow-900/10 font-serif font-bold select-none pointer-events-none pr-4 pt-2 z-10">
-        22
+      <span className="absolute right-0 top-0 text-[8rem] md:text-[12rem] text-[#fa7636]/10 font-serif font-bold select-none pointer-events-none pr-4 pt-2 z-10">
       </span>
-    </section>
+    </FadeInEffect>
   );
 }
 

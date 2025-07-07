@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 interface FadeInSectionProps {
   children: ReactNode;
   className?: string;
+  id?: string;
 }
 
 const FadeInEffect = ({ children, className }: FadeInSectionProps) => {
