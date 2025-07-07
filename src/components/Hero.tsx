@@ -1,5 +1,5 @@
 import { Typewriter } from "react-simple-typewriter";
-import { ArrowDown } from "lucide-react";
+import { ChevronsDown } from "lucide-react";
 
 const rotatingTexts = [
   "Coding.",
@@ -17,7 +17,7 @@ function Hero() {
       <img
         src="/images/hero.png"
         alt="Greek Myth"
-        className="absolute inset-0 w-full h-full object-cover items-center justify-center "
+        className="absolute inset-0 w-full h-full object-cover items-center justify-center opacity-70"
         loading="lazy"
         style={{ zIndex: 0 }}
       />
@@ -44,7 +44,7 @@ function Hero() {
         {/* Scroll Down Animation */}
         <div className="mt-16 flex flex-col items-center">
           <div className="animate-bounce">
-            <ArrowDown className="w-8 h-8 text-yellow-400" />
+            <ChevronsDown className="w-8 h-8 text-yellow-400" />
           </div>
           <span className="text-xs text-gray-400 mt-2 font-serif tracking-widest">
             Scroll Down

@@ -4,10 +4,10 @@ function Footer() {
       <div className="container mx-auto px-4">
         <div className="flex flex-wrap justify-between gap-8 mb-8">
           <div>
-            <h2 className="text-xl font-bold mb-2">Thank You...</h2>
+            <h2 className="text-xl font-bold mb-2 text-gold-gradient">VENI, VIDI, VICI</h2>
           </div>
           <div>
-            <h2 className="text-xl font-bold mb-2">Links</h2>
+            <h2 className="text-xl font-bold mb-2  text-gold-gradient">Links</h2>
             <ul className="space-y-1">
               <li>
                 <a href="#home-section" className="hover:text-yellow-400">
@@ -37,7 +37,7 @@ function Footer() {
             </ul>
           </div>
           <div>
-            <h2 className="text-xl font-bold mb-2">Nice To Meet You</h2>
+            <h2 className="text-xl font-serif font-bold mb-2 text-gold-gradient">DEUS EX MACHINA</h2>
             <ul className="space-y-1">
               <li>
                 <span className="material-icons align-middle mr-2">phone</span>
