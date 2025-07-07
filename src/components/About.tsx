@@ -1,4 +1,3 @@
-
 function About() {
   return (
     <section
@@ -15,7 +14,7 @@ function About() {
               <img
                 src="/images/profile1.jpg"
                 alt="Profile"
-                className="object-cover w-full h-full grayscale hover:grayscale-0 transition duration-500"
+                className="object-cover w-full h-full  transition duration-500"
               />
               {/* Gold ring effect */}
               <div className="absolute inset-0 rounded-full border-4 border-yellow-400 pointer-events-none" />
@@ -27,9 +26,24 @@ function About() {
               About Me
             </h2>
             <p className="text-lg md:text-xl text-gray-200 mb-8 font-sans leading-relaxed">
-              Hi, I'm <span className="text-gold-gradient font-serif font-semibold">Huey Than</span>. I'm a learner, a leader, and a software engineer.<br />
-              Currently studying at <span className="text-yellow-300 font-serif font-semibold">Arizona State University</span>, I've had the chance to work on exciting projects and internships, which has helped me enhance my skills in many areas such as problem-solving, team collaboration, and creativity.<br />
-              <span className="block mt-4">My largest goal in life is to use my knowledge to help those that are less fortunate than I am.</span>
+              Hi, I'm{" "}
+              <span className="text-gold-gradient font-serif font-semibold">
+                Huey Than
+              </span>
+              . I'm a learner, a leader, and a software engineer.
+              <br />
+              Currently studying at{" "}
+              <span className="text-yellow-300 font-serif font-semibold">
+                Arizona State University
+              </span>
+              , I've had the chance to work on exciting projects and
+              internships, which has helped me enhance my skills in many areas
+              such as problem-solving, team collaboration, and creativity.
+              <br />
+              <span className="block mt-4">
+                My largest goal in life is to use my knowledge to help those
+                that are less fortunate than I am.
+              </span>
             </p>
             <a
               href="/Resume.pdf"

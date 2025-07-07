@@ -2,7 +2,10 @@ import { Phone, Mail, Link, Github, Linkedin, Instagram } from "lucide-react";
 
 function Contact() {
   return (
-    <section id="contact-section" className="py-24 bg-gradient-to-b from-black via-gray-900 to-black relative overflow-hidden">
+    <section
+      id="contact-section"
+      className="py-24 bg-gradient-to-b from-black via-gray-900 to-black relative overflow-hidden"
+    >
       {/* Gold accent bar */}
       <div className="absolute top-0 left-0 w-full h-2 bg-gold-gradient" />
       <div className="container mx-auto px-4 relative z-10">
@@ -11,7 +14,8 @@ function Contact() {
             Contact Me
           </h2>
           <p className="text-lg text-gray-300 font-sans max-w-2xl mx-auto">
-            Feel free to reach out for collaborations, questions, or just to connect!
+            Feel free to reach out for collaborations, questions, or just to
+            connect!
           </p>
         </div>
         <div className="flex flex-wrap justify-center gap-10">
@@ -20,7 +24,9 @@ function Contact() {
             <div className="flex justify-center mb-4">
               <Phone className="w-8 h-8 text-yellow-400" />
             </div>
-            <h3 className="mb-2 font-serif text-xl font-bold text-gold-gradient">Contact Number</h3>
+            <h3 className="mb-2 font-serif text-xl font-bold text-gold-gradient">
+              Contact Number
+            </h3>
             <p className="text-gray-200 font-sans">414-394-5060</p>
             <div className="absolute left-0 top-0 h-2 w-1/3 bg-gold-gradient rounded-tr-3xl" />
           </div>
@@ -29,9 +35,16 @@ function Contact() {
             <div className="flex justify-center mb-4">
               <Mail className="w-8 h-8 text-yellow-400" />
             </div>
-            <h3 className="mb-2 font-serif text-xl font-bold text-gold-gradient">Email Address</h3>
+            <h3 className="mb-2 font-serif text-xl font-bold text-gold-gradient">
+              Email Address
+            </h3>
             <p className="text-gray-200 font-sans">
-              <a href="mailto:hank170305@gmail.com" className="underline hover:text-yellow-400 transition">hank170305@gmail.com</a>
+              <a
+                href="mailto:hank170305@gmail.com"
+                className="underline hover:text-yellow-400 transition"
+              >
+                hank170305@gmail.com
+              </a>
             </p>
             <div className="absolute left-0 top-0 h-2 w-1/3 bg-gold-gradient rounded-tr-3xl" />
           </div>
@@ -40,20 +53,37 @@ function Contact() {
             <div className="flex justify-center mb-4">
               <Link className="w-8 h-8 text-yellow-400" />
             </div>
-            <h3 className="mb-2 font-serif text-xl font-bold text-gold-gradient">Social Links</h3>
+            <h3 className="mb-2 font-serif text-xl font-bold text-gold-gradient">
+              Social Links
+            </h3>
             <ul className="flex justify-center gap-4 mt-2">
               <li>
-                <a href="https://github.com/The-Hieusss" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                <a
+                  href="https://github.com/The-Hieusss"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="GitHub"
+                >
                   <Github className="w-7 h-7 hover:text-yellow-400 transition" />
                 </a>
               </li>
               <li>
-                <a href="https://www.linkedin.com/in/hieu-than-40b264290/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                <a
+                  href="https://www.linkedin.com/in/hieu-than-40b264290/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LinkedIn"
+                >
                   <Linkedin className="w-7 h-7 hover:text-yellow-400 transition" />
                 </a>
               </li>
               <li>
-                <a href="https://www.instagram.com/the_hieusss/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                <a
+                  href="https://www.instagram.com/the_hieusss/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram"
+                >
                   <Instagram className="w-7 h-7 hover:text-yellow-400 transition" />
                 </a>
               </li>

@@ -1,10 +1,11 @@
 import type { Project } from "../types";
 
 export const projectsData: Project[] = [
-{
+  {
     title: "Google Flight",
     image: "/images/favicon.png",
-    description: "Replica of Google Flight search engine. Simple UI, dummy data, beta mode.",
+    description:
+      "Replica of Google Flight search engine. Simple UI, dummy data, beta mode.",
     demoUrl: "https://google-flight.vercel.app/",
     githubUrl: "https://github.com/The-Hieusss/GoogleFlight",
     tech: [
@@ -26,7 +27,8 @@ export const projectsData: Project[] = [
   {
     title: "The Garden",
     image: "/images/favicon.png",
-    description: "Interactive learning app for patients with dementia and stroke recovery.",
+    description:
+      "Interactive learning app for patients with dementia and stroke recovery.",
     demoUrl: "",
     githubUrl: "https://github.com/ForgotSemiColon/Master-Project",
     tech: [
@@ -66,7 +68,8 @@ export const projectsData: Project[] = [
   {
     title: "Gift4U",
     image: "/images/favicon.png",
-    description: "PWA simulating a gift trading/e-commerce website with real-time updates.",
+    description:
+      "PWA simulating a gift trading/e-commerce website with real-time updates.",
     demoUrl: "",
     githubUrl: "https://github.com/The-Hieusss/EximbankGiftTrading",
     tech: [
@@ -124,4 +127,4 @@ export const projectsData: Project[] = [
     modalSummary: "Stay tuned for more exciting projects!",
     modalTech: [],
   },
-];  
+];

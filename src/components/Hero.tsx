@@ -14,11 +14,11 @@ function Hero() {
       className="relative flex items-center justify-center min-h-screen bg-gradient-to-b from-black via-gray-900 to-black overflow-hidden"
       id="intro-section"
     >
-      {/* Decorative background image (optional, adjust path as needed) */}
       <img
-        src="/greek-myth-design/idea2.jpg"
+        src="/images/hero.png"
         alt="Greek Myth"
-        className="absolute inset-0 w-full h-full object-cover opacity-40"
+        className="absolute inset-0 w-full h-full object-cover items-center justify-center "
+        loading="lazy"
         style={{ zIndex: 0 }}
       />
       {/* Overlay for gold/black effect */}
@@ -46,7 +46,9 @@ function Hero() {
           <div className="animate-bounce">
             <ArrowDown className="w-8 h-8 text-yellow-400" />
           </div>
-          <span className="text-xs text-gray-400 mt-2 font-serif tracking-widest">Scroll Down</span>
+          <span className="text-xs text-gray-400 mt-2 font-serif tracking-widest">
+            Scroll Down
+          </span>
         </div>
       </div>
       {/* Large decorative numbers */}

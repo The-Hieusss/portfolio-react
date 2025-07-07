@@ -17,7 +17,11 @@ const Navbar: React.FC = () => {
     <nav className="fixed w-full z-30 bg-gradient-to-b from-black via-gray-900 to-black bg-opacity-95 shadow-lg border-b border-yellow-400/30">
       <div className="container mx-auto flex items-center justify-between px-8 py-3">
         <div className="flex items-center gap-3">
-          <img src="/images/favicon.png" alt="logo" className="h-12 drop-shadow-lg" />
+          <img
+            src="/images/favicon.png"
+            alt="logo"
+            className="h-12 drop-shadow-lg"
+          />
           <span className="text-gold-gradient font-serif font-bold text-2xl tracking-widest drop-shadow-lg select-none">
             Hieu Than
           </span>

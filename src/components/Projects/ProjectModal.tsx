@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+
 type ProjectModalProps = {
   project: {
     title: string;
@@ -11,81 +12,76 @@ type ProjectModalProps = {
 };
 
 function ProjectModal({ project, onClose }: ProjectModalProps) {
-      useEffect(() => {
-    const section = document.getElementById("project-section")
-    if (!section) return
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
-    const handleScroll = () => {
-      const { top, bottom } = section.getBoundingClientRect()
-      // if the entire section is above the top **or** below the bottom of the viewport
-      if (bottom < 0 || top > window.innerHeight) {
-        onClose()
-      }
-    }
-
-    window.addEventListener("scroll", handleScroll, { passive: true })
     return () => {
-      window.removeEventListener("scroll", handleScroll)
-    }
-  }, [onClose])
-  return (
-    <div className="absolute inset-0 z-100 flex items-center justify-center bg-black/80 bg-opacity-80 overflow-hidden">
-      <div className="bg-gradient-to-br from-black via-gray-900 to-black 
-                      rounded-3xl max-w-xl w-11/12 sm:w-3/4 
-                      p-6 relative shadow-2xl">
-        {/* Gold accent bar */}
-        <div className="absolute left-0 top-0 h-2 w-1/3 bg-gold-gradient rounded-tr-3xl" />
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
 
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 bg-opacity-80 overflow-auto px-4 py-8">
+      <div className="bg-gradient-to-br from-black via-gray-900 to-black text-white rounded-2xl w-full max-w-md p-6 shadow-lg relative">
+        <div className="absolute left-0 top-0 h-2 w-1/3 bg-gold-gradient rounded-tr-3xl" />
         {/* Title */}
-        <h2 className="text-3xl font-serif font-bold mb-6 text-gold-gradient drop-shadow-lg text-center tracking-wider">
+        <h2 className="text-xl font-semibold mb-4 text-center">
           {project.title}
         </h2>
 
         {/* Image */}
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-center mb-4">
           <img
             src={project.modalImage}
             alt={project.title}
-            className="w-36 h-36 rounded-2xl shadow-lg bg-white object-contain border-4 border-yellow-400"
+            className="w-32 h-32 object-contain rounded-lg border border-yellow-400 bg-white"
           />
         </div>
 
         {/* Summary */}
-        <div className="mb-6">
-          <h3 className="font-serif text-xl font-bold mb-2 text-yellow-300">Summary</h3>
-          <p className="text-gray-200 font-sans leading-relaxed">
-            {project.modalSummary}
-          </p>
+        <div className="mb-4">
+          <h3 className="text-lg font-medium text-yellow-300 mb-1">Summary</h3>
+          <p className="text-sm leading-relaxed">{project.modalSummary}</p>
         </div>
 
-        {/* Tech */}
-        <div className="mb-8">
-          <h3 className="font-serif text-xl font-bold mb-2 text-yellow-300">Technologies</h3>
-          <div className="flex gap-3 flex-wrap">
-            {project.modalTech.map((t) => (
-              <div key={t.label} className="flex items-center gap-2 bg-black/70 px-3 py-2 rounded-lg shadow">
-                <img src={t.icon} alt={t.label} className="w-8 h-8 rounded bg-white p-1" />
-                <span className="text-sm text-gray-100 font-serif">{t.label}</span>
+        {/* Technologies */}
+        <div className="mb-6">
+          <h3 className="text-lg font-medium text-yellow-300 mb-2">
+            Technologies
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            {project.modalTech.map((tech) => (
+              <div
+                key={tech.label}
+                className="flex items-center gap-2 bg-gray-800 px-3 py-1 rounded-lg"
+              >
+                <img
+                  src={tech.icon}
+                  alt={tech.label}
+                  className="w-6 h-6 bg-white rounded p-1"
+                />
+                <span className="text-sm">{tech.label}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Actions */}
-        <div className="flex gap-3 justify-center">
+        <div className="flex justify-center gap-3">
           {project.githubUrl && (
             <a
               href={project.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-gold-gradient text-black px-6 py-2 rounded-full font-serif font-bold shadow hover:bg-yellow-500 transition"
+              className="bg-yellow-400 text-black px-4 py-2 rounded-full text-sm font-semibold hover:bg-yellow-300"
             >
-              See Program
+              View Code
             </a>
           )}
           <button
-            className="bg-gray-200 text-black px-6 py-2 rounded-full font-serif font-bold shadow hover:bg-gray-300 transition"
             onClick={onClose}
+            className="bg-white text-black px-4 py-2 rounded-full text-sm font-semibold hover:bg-gray-200"
           >
             Close
           </button>

@@ -70,7 +70,7 @@ const programmingLanguages = [
   "c++.png",
   "c.png",
   "sql.png",
-  "matlab.png",
+  "matlab.svg",
   "python.png",
   "ruby.svg",
 ];
@@ -108,7 +108,10 @@ const awards = [
 
 export default function Resume() {
   return (
-    <section id="resume-section" className="py-24 bg-gradient-to-b from-black via-gray-900 to-black relative overflow-hidden">
+    <section
+      id="resume-section"
+      className="py-24 bg-gradient-to-b from-black via-gray-900 to-black relative overflow-hidden"
+    >
       {/* Gold accent bar */}
       <div className="absolute top-0 left-0 w-full h-2 bg-gold-gradient" />
       <div className="container mx-auto px-4 relative z-10">
@@ -117,16 +120,36 @@ export default function Resume() {
           <nav className="md:w-1/4 mb-8 md:mb-0">
             <ul className="space-y-4 sticky top-24">
               <li>
-                <a href="#education" className="text-lg font-serif font-bold text-gold-gradient hover:text-yellow-400 transition">Education</a>
+                <a
+                  href="#education"
+                  className="text-lg font-serif font-bold text-gold-gradient hover:text-yellow-400 transition"
+                >
+                  Education
+                </a>
               </li>
               <li>
-                <a href="#experience" className="text-lg font-serif font-bold text-gold-gradient hover:text-yellow-400 transition">Experience</a>
+                <a
+                  href="#experience"
+                  className="text-lg font-serif font-bold text-gold-gradient hover:text-yellow-400 transition"
+                >
+                  Experience
+                </a>
               </li>
               <li>
-                <a href="#skills" className="text-lg font-serif font-bold text-gold-gradient hover:text-yellow-400 transition">Skills</a>
+                <a
+                  href="#skills"
+                  className="text-lg font-serif font-bold text-gold-gradient hover:text-yellow-400 transition"
+                >
+                  Skills
+                </a>
               </li>
               <li>
-                <a href="#awards" className="text-lg font-serif font-bold text-gold-gradient hover:text-yellow-400 transition">Awards</a>
+                <a
+                  href="#awards"
+                  className="text-lg font-serif font-bold text-gold-gradient hover:text-yellow-400 transition"
+                >
+                  Awards
+                </a>
               </li>
             </ul>
           </nav>
@@ -134,14 +157,30 @@ export default function Resume() {
           <div className="md:w-3/4 space-y-16">
             {/* Education */}
             <div id="education">
-              <h2 className="text-3xl font-serif font-bold mb-6 text-gold-gradient drop-shadow-lg">Education</h2>
-              <div className="space-y-6">
+              <h2 className="text-3xl font-serif font-bold mb-6 text-gold-gradient drop-shadow-lg">
+                Education
+              </h2>
+              <div className="space-y-6 ">
                 {education.map((edu) => (
-                  <div key={edu.school} className="flex items-center gap-6 bg-black/80 rounded-2xl shadow-lg p-6 border-l-8 border-yellow-400">
-                    <img src={edu.logo} alt={edu.school} className="w-16 h-16 object-contain rounded-lg shadow-md bg-white" />
+                  <div
+                    key={edu.school}
+                    className="flex items-center gap-6 bg-gradient-to-br from-black via-gray-900 to-black rounded-2xl shadow-lg p-6 border-l-8 border-yellow-400"
+                  >
+                    <img
+                      src={edu.logo}
+                      alt={edu.school}
+                      className="w-16 h-16 object-contain rounded-lg shadow-md bg-white"
+                    />
                     <div>
-                      <h3 className="text-2xl font-serif font-bold text-white mb-1" id={edu.id}>{edu.school}</h3>
-                      <div className="text-yellow-300 font-serif">{edu.degree}</div>
+                      <h3
+                        className="text-2xl font-serif font-bold text-white mb-1"
+                        id={edu.id}
+                      >
+                        {edu.school}
+                      </h3>
+                      <div className="text-yellow-300 font-serif">
+                        {edu.degree}
+                      </div>
                       <div className="text-gray-300">{edu.location}</div>
                       <div className="text-sm text-gray-400">{edu.date}</div>
                     </div>
@@ -151,14 +190,27 @@ export default function Resume() {
             </div>
             {/* Experience */}
             <div id="experience">
-              <h2 className="text-3xl font-serif font-bold mb-6 text-gold-gradient drop-shadow-lg">Experience</h2>
+              <h2 className="text-3xl font-serif font-bold mb-6 text-gold-gradient drop-shadow-lg">
+                Experience
+              </h2>
               <div className="space-y-6">
                 {experience.map((exp, i) => (
-                  <div key={i} className="flex items-center gap-6 bg-black/80 rounded-2xl shadow-lg p-6 border-l-8 border-yellow-400">
-                    <img src={exp.logo} alt={exp.company} className="w-16 h-16 object-contain rounded-lg shadow-md bg-white" />
+                  <div
+                    key={i}
+                    className="flex items-center gap-6 bg-black/80 rounded-2xl shadow-lg p-6 border-l-8 border-yellow-400"
+                  >
+                    <img
+                      src={exp.logo}
+                      alt={exp.company}
+                      className="w-16 h-16 object-contain rounded-lg shadow-md bg-white"
+                    />
                     <div>
-                      <h3 className="text-xl font-serif font-bold text-white mb-1">{exp.title}</h3>
-                      <div className="text-yellow-300 font-serif">{exp.company}</div>
+                      <h3 className="text-xl font-serif font-bold text-white mb-1">
+                        {exp.title}
+                      </h3>
+                      <div className="text-yellow-300 font-serif">
+                        {exp.company}
+                      </div>
                       <div className="text-sm text-gray-400">{exp.date}</div>
                     </div>
                   </div>
@@ -167,29 +219,55 @@ export default function Resume() {
             </div>
             {/* Skills */}
             <div id="skills">
-              <h2 className="text-3xl font-serif font-bold mb-6 text-gold-gradient drop-shadow-lg">Programming Languages</h2>
+              <h2 className="text-3xl font-serif font-bold mb-6 text-gold-gradient drop-shadow-lg">
+                Programming Languages
+              </h2>
               <div className="grid grid-cols-3 sm:grid-cols-6 gap-6 mb-8">
                 {programmingLanguages.map((img) => (
-                  <div key={img} className="flex justify-center items-center bg-black/80 rounded-xl p-4 shadow-md hover:scale-110 transition">
-                    <img src={`/images/skills/${img}`} alt={img.replace(".png", "")} className="w-12 h-12 object-contain" />
+                  <div
+                    key={img}
+                    className="flex justify-center items-center bg-black/80 rounded-xl p-4 shadow-md hover:scale-110 transition"
+                  >
+                    <img
+                      src={`/images/skills/${img}`}
+                      alt={img.replace(".png", "")}
+                      className="w-12 h-12 object-contain"
+                    />
                   </div>
                 ))}
               </div>
-              <h2 className="text-3xl font-serif font-bold mb-6 text-gold-gradient drop-shadow-lg">Frameworks & Libraries</h2>
+              <h2 className="text-3xl font-serif font-bold mb-6 text-gold-gradient drop-shadow-lg">
+                Frameworks & Libraries
+              </h2>
               <Carousel />
             </div>
             {/* Awards */}
             <div id="awards">
-              <h2 className="text-3xl font-serif font-bold mb-6 text-gold-gradient drop-shadow-lg">Awards</h2>
+              <h2 className="text-3xl font-serif font-bold mb-6 text-gold-gradient drop-shadow-lg">
+                Awards
+              </h2>
               <div className="space-y-6">
                 {awards.map((award, i) => (
-                  <div key={i} className="flex items-center gap-6 bg-black/80 rounded-2xl shadow-lg p-6 border-l-8 border-yellow-400">
-                    <img src={award.logo} alt={award.title} className="w-16 h-16 object-contain rounded-lg shadow-md bg-white" />
+                  <div
+                    key={i}
+                    className="flex items-center gap-6 bg-gradient-to-br from-black via-gray-900 to-black rounded-2xl shadow-lg p-6 border-l-8 border-yellow-400"
+                  >
+                    <img
+                      src={award.logo}
+                      alt={award.title}
+                      className="w-16 h-16 object-contain rounded-lg shadow-md bg-white"
+                    />
                     <div>
-                      <h3 className="text-xl font-serif font-bold text-white mb-1">{award.title}</h3>
-                      <div className="text-yellow-300 font-serif">{award.org}</div>
+                      <h3 className="text-xl font-serif font-bold text-white mb-1">
+                        {award.title}
+                      </h3>
+                      <div className="text-yellow-300 font-serif">
+                        {award.org}
+                      </div>
                       <div className="text-sm text-gray-400">{award.date}</div>
-                      {award.location && <div className="text-gray-300">{award.location}</div>}
+                      {award.location && (
+                        <div className="text-gray-300">{award.location}</div>
+                      )}
                     </div>
                   </div>
                 ))}

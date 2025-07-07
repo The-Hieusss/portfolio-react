@@ -1,6 +1,6 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 @import url(https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@400;700&display=swap);
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500&display=swap");
 @import "tw-animate-css";
 /*
   ---break---
@@ -26,35 +26,39 @@
 }
 
 html {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
 .animate-scroll {
-    animation: scroll 30s linear infinite;
-    display: flex;
-    width: max-content;
+  animation: scroll 30s linear infinite;
+  display: flex;
+  width: max-content;
 }
 
 @keyframes scroll {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-50%);
-    }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
-h1, h2, h3, .font-serif {
-  font-family: 'Cinzel', serif;
+h1,
+h2,
+h3,
+.font-serif {
+  font-family: "Cinzel", serif;
 }
-body, .font-sans {
-  font-family: 'EB Garamond', serif;
+body,
+.font-sans {
+  font-family: "EB Garamond", serif;
 }
 .bg-gold-gradient {
-  background: linear-gradient(90deg, #FFD700 0%, #FFB800 100%);
+  background: linear-gradient(90deg, #ffd700 0%, #ffb800 100%);
 }
 .text-gold-gradient {
-  background: linear-gradient(90deg, #FFD700 0%, #FFB800 100%);
+  background: linear-gradient(90deg, #ffd700 0%, #ffb800 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
