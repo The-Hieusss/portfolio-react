@@ -8,7 +8,6 @@ function Carousel() {
     { img: "/frameworks/git.svg", name: "Git" },
     { img: "/frameworks/mysql.svg", name: "MySQL" },
     { img: "/frameworks/node.svg", name: "Node.js " },
-    { img: "/frameworks/npm.svg", name: "npm" },
     { img: "/frameworks/postgre.svg", name: "PostgreSQL" },
     { img: "/frameworks/react.svg", name: "React " },
     { img: "/frameworks/ROR.svg", name: "Ruby on Rails" },
