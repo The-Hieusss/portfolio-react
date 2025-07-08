@@ -11,14 +11,22 @@ function About() {
         <div className="flex flex-col md:flex-row items-center gap-16 relative z-10">
           {/* Profile Image with custom orange border */}
           <div className="flex-1 flex justify-center">
-            <div className="relative rounded-full overflow-hidden shadow-2xl w-72 h-72 border-4 border-[#fa7636] bg-[#0a0402]">
+            <div className="relative flex flex-col items-center rounded-full overflow-hidden shadow-2xl w-72 h-72 border-4 border-[#fa7636] bg-[#fa7636]">
+              {/* Decorative Greek-style frame */}
               <img
-                src="/images/profile1.jpg"
-                alt="Profile"
-                className="object-cover w-full h-full transition duration-500"
+                src="/images/profile-border.svg"
+                alt="Border"
+                className="absolute top-4.5 left-0 w-full h-full z-10 pointer-events-none scale-[1.48] "
               />
-              {/* Glowing ring effect in accent color */}
-              <div className="absolute inset-0 rounded-full border-4 border-[#fa7636] pointer-events-none" />
+
+              {/* Profile image underneath */}
+              <div className="w-full h-full relative rounded-full overflow-hidden scale-[0.95]">
+                <img
+                  src="/images/profile1.jpg"
+                  alt="Profile"
+                  className="object-cover w-full h-full z-0 "
+                />
+              </div>
             </div>
           </div>
 
@@ -59,10 +67,8 @@ function About() {
       </div>
 
       {/* Decorative numbers with soft accent tone */}
-      <span className="absolute left-0 bottom-0 text-[8rem] md:text-[12rem] text-[#fa7636]/10 font-serif font-bold select-none pointer-events-none pl-4 pb-2">
-      </span>
-      <span className="absolute right-0 top-0 text-[8rem] md:text-[12rem] text-[#fa7636]/10 font-serif font-bold select-none pointer-events-none pr-4 pt-2">
-      </span>
+      <span className="absolute left-0 bottom-0 text-[8rem] md:text-[12rem] text-[#fa7636]/10 font-serif font-bold select-none pointer-events-none pl-4 pb-2"></span>
+      <span className="absolute right-0 top-0 text-[8rem] md:text-[12rem] text-[#fa7636]/10 font-serif font-bold select-none pointer-events-none pr-4 pt-2"></span>
     </section>
   );
 }

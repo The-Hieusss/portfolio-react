@@ -228,35 +228,33 @@ export default function Resume() {
 
             {/* Leadership */}
             <div id="leadership">
-  <h2 className="text-3xl font-serif font-bold mb-6 text-gold-gradient drop-shadow-lg tracking-wide">
-    Leadership
-  </h2>
-  <div className="space-y-6">
-    {leadership.map((lead, i) => (
-      <div
-        key={i}
-        className="flex items-center gap-6 bg-[#1f1411]/90 border border-[#fa7636]/20 border-l-8 border-l-[#fa7636] rounded-2xl shadow-lg hover:shadow-[0_0_15px_#fa7636] transition-shadow p-6"
-      >
-        {/* Logo */}
-        <img
-          src={lead.logo}
-          alt={lead.company}
-          className="w-16 h-16 object-contain rounded-lg shadow-md bg-white p-1"
-        />
-
-        {/* Info */}
-        <div>
-          <h3 className="text-xl font-serif font-bold text-gold-gradient mb-1 tracking-wide">
-            {lead.title}
-          </h3>
-          <div className="text-[#ffb48a] font-sans mb-1">{lead.company}</div>
-          <div className="text-sm text-[#d2bba8]">{lead.date}</div>
-        </div>
-      </div>
-    ))}
-  </div>
-</div>
-
+              <h2 className="text-3xl font-serif font-bold mb-6 text-gold-gradient drop-shadow-lg">
+                Leadership
+              </h2>
+              <div className="space-y-6">
+                {leadership.map((lead, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-6 bg-[#120905]/90 rounded-2xl shadow-lg p-6 border-l-8 border-[#fa7636]"
+                  >
+                    <img
+                      src={lead.logo}
+                      alt={lead.company}
+                      className="w-16 h-16 object-contain rounded-lg shadow-md bg-white"
+                    />
+                    <div>
+                      <h3 className="text-xl font-serif font-bold text-white mb-1">
+                        {lead.title}
+                      </h3>
+                      <div className="text-[#ffb48a] font-serif">
+                        {lead.company}
+                      </div>
+                      <div className="text-sm text-[#d2bba8]">{lead.date}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
 
             {/* Skills */}
             <div id="skills">
@@ -289,41 +287,38 @@ export default function Resume() {
 
             {/* Awards */}
             <div id="awards">
-              <h2 className="text-3xl font-serif font-bold mb-6 text-gold-gradient drop-shadow-lg tracking-wide">
-                Awards
-              </h2>
-              <div className="space-y-6">
-                {awards.map((award, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center gap-6 bg-[#1f1411]/90 border border-[#fa7636]/20 border-l-8 border-l-[#fa7636] rounded-2xl shadow-lg hover:shadow-[0_0_15px_#fa7636] transition-shadow p-6"
-                  >
-                    {/* Logo */}
-                    <img
-                      src={award.logo}
-                      alt={award.title}
-                      className="w-16 h-16 object-contain rounded-lg shadow-md bg-white p-1"
-                    />
+  <h2 className="text-3xl font-serif font-bold mb-6 text-gold-gradient drop-shadow-lg tracking-wide">
+    Awards
+  </h2>
+  <div className="space-y-6">
+    {awards.map((award, i) => (
+      <div
+        key={i}
+        className="flex items-center gap-6 bg-[#1f1411]/90 border border-[#fa7636]/20 border-l-8 border-l-[#fa7636] rounded-2xl shadow-lg hover:shadow-[0_0_15px_#fa7636] transition-shadow p-6"
+      >
+        {/* Logo */}
+        <img
+          src={award.logo}
+          alt={award.title}
+          className="w-16 h-16 object-contain rounded-lg shadow-md bg-white p-1"
+        />
 
-                    {/* Info */}
-                    <div>
-                      <h3 className="text-xl font-serif font-bold text-gold-gradient mb-1 tracking-wide">
-                        {award.title}
-                      </h3>
-                      <div className="text-[#ffb48a] font-sans mb-1">
-                        {award.org}
-                      </div>
-                      <div className="text-sm text-[#d2bba8]">{award.date}</div>
-                      {award.location && (
-                        <div className="text-sm text-[#fceee6] mt-1">
-                          {award.location}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+        {/* Info */}
+        <div>
+          <h3 className="text-xl font-serif font-bold text-gold-gradient mb-1 tracking-wide">
+            {award.title}
+          </h3>
+          <div className="text-[#ffb48a] font-sans mb-1">{award.org}</div>
+          <div className="text-sm text-[#d2bba8]">{award.date}</div>
+          {award.location && (
+            <div className="text-sm text-[#fceee6] mt-1">{award.location}</div>
+          )}
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
           </div>
         </div>
       </div>

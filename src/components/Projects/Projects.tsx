@@ -18,8 +18,23 @@ function Projects() {
   return (
     <section
       id="project-section"
-      className="py-24 bg-gradient-to-b from-[#0a0402] via-[#1a0d08] to-[#0a0402] relative overflow-hidden"
+      className=" flex flex-col gap-10  bg-gradient-to-b from-[#0a0402] via-[#1a0d08] to-[#0a0402] relative overflow-hidden"
     >
+      <div className="flex flex-row justify-between">
+        <img
+          src="/images/greek-border.svg"
+          alt="Lines"
+          className=" top-0 left-0 opacity-30 pointer-events-none"
+          loading="lazy"
+        />
+        <img
+          src="/images/greek-border.svg"
+          alt="Lines"
+          className=" top-0 left-0 opacity-30 pointer-events-none rotate-y-180"
+          loading="lazy"
+        />
+      </div>
+
       {/* Accent bar */}
       <div className="absolute top-0 left-0 w-full h-2 bg-gold-gradient" />
 
@@ -53,6 +68,20 @@ function Projects() {
           ))}
         </div>
       </FadeInEffect>
+      <div className="flex flex-row justify-between">
+        <img
+          src="/images/greek-border.svg"
+          alt="Lines"
+          className=" top-0 left-0 opacity-30 pointer-events-none"
+          loading="lazy"
+        />
+        <img
+          src="/images/greek-border.svg"
+          alt="Lines"
+          className=" top-0 left-0 opacity-30 pointer-events-none rotate-y-180"
+          loading="lazy"
+        />
+      </div>
     </section>
   );
 }
