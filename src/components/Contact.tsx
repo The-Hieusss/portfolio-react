@@ -44,10 +44,10 @@ function Contact() {
             </h3>
             <p className="text-[#fceee6] font-sans">
               <a
-                href="mailto:hank170305@gmail.com"
+                href="mailto:hieuthan1703@gmail.com"
                 className="underline hover:text-[#ffb48a] transition"
               >
-                hank170305@gmail.com
+                hieuthan1703@gmail.com
               </a>
             </p>
             <div className="absolute left-0 top-0 h-2 w-1/3 bg-gold-gradient rounded-tr-3xl" />

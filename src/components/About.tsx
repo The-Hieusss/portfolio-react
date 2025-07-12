@@ -11,18 +11,18 @@ function About() {
         <div className="flex flex-col md:flex-row items-center gap-16 relative z-10">
           {/* Profile Image with custom orange border */}
           <div className="flex-1 flex justify-center">
-            <div className="relative flex flex-col items-center rounded-full overflow-hidden shadow-2xl w-72 h-72 border-4 border-[#fa7636] bg-[#fa7636]">
+            <div className="  relative flex flex-col items-center rounded-[8%] overflow-hidden shadow-2xl w-72 h-72 border-4 border-[#fa7636] bg-[#fa7636]">
               {/* Decorative Greek-style frame */}
-              <img
+              {/* <img
                 src="/images/profile-border.svg"
                 alt="Border"
                 className="absolute top-4.5 left-0 w-full h-full z-10 pointer-events-none scale-[1.48] "
-              />
+              /> */}
 
               {/* Profile image underneath */}
-              <div className="w-full h-full relative rounded-full overflow-hidden scale-[0.95]">
+              <div className="w-full h-full relative  overflow-hidden ">
                 <img
-                  src="/images/profile1.jpg"
+                  src="/images/profile2.jpeg"
                   alt="Profile"
                   className="object-cover w-full h-full z-0 "
                 />
@@ -57,10 +57,10 @@ function About() {
             </p>
             <a
               href="/Resume.pdf"
-              download="Resume.pdf"
+              // download="Resume.pdf"
               className="inline-block bg-gold-gradient text-[#0a0402] px-8 py-3 rounded-full font-serif font-bold shadow-lg hover:bg-[#ff9462] hover:text-[#0a0402] transition"
             >
-              Download CV
+              View & Download Resume
             </a>
           </div>
         </div>
