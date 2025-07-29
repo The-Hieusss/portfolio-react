@@ -13,7 +13,7 @@ function Hero() {
   return (
     <FadeInEffect
       className="relative flex items-center justify-center min-h-screen bg-gradient-to-b from-[#0a0402] via-[#1a0d08] to-[#0a0402] overflow-hidden"
-      id="intro-section"
+      id="home-section"
     >
       {/* Background image */}
       <img
