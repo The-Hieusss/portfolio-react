@@ -22,7 +22,7 @@ function About() {
               {/* Profile image underneath */}
               <div className="w-full h-full relative  overflow-hidden ">
                 <img
-                  src="/images/profile2.jpeg"
+                  src="/images/IMG_1649.PNG"
                   alt="Profile"
                   className="object-cover w-full h-full z-0 "
                 />
