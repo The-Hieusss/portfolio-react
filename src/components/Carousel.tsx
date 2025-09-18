@@ -13,6 +13,8 @@ function Carousel() {
     { img: "/frameworks/ROR.svg", name: "Ruby on Rails" },
     { img: "/frameworks/tailwindcss.svg", name: "Tailwind CSS" },
     { img: "/frameworks/vite.png", name: "Vite" },
+    { img: "/frameworks/supabase.svg", name: "Supabase" },
+    { img: "/frameworks/firebase.svg", name: "Firebase" },
   ];
 
   const logos = [...frameworks, ...frameworks]; // seamless loop
