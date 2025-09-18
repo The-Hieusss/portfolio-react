@@ -40,7 +40,7 @@ function Footer() {
               <li>
                 📞{" "}
                 <span className="ml-1">
-                  414-394-5060
+                  602-214-1715
                 </span>
               </li>
               <li>
@@ -49,7 +49,7 @@ function Footer() {
                   href="mailto:hank170305@gmail.com"
                   className="hover:text-[#ffb48a] ml-1 transition"
                 >
-                  hank170305@gmail.com
+                  hieuthan1703@gmail.com
                 </a>
               </li>
             </ul>
