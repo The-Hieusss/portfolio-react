@@ -30,7 +30,7 @@ function Contact() {
             <h3 className="mb-2 font-serif text-xl font-bold text-gold-gradient">
               Contact Number
             </h3>
-            <p className="text-[#fceee6] font-sans">414-394-5060</p>
+            <p className="text-[#fceee6] font-sans">602-214-1715</p>
             <div className="absolute left-0 top-0 h-2 w-1/3 bg-gold-gradient rounded-tr-3xl" />
           </div>
 
