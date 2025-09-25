@@ -34,8 +34,9 @@ function ProjectModal({ project, onClose }: ProjectModalProps) {
 
         {/* Image */}
         <div className="flex justify-center mb-4">
+          
           <img
-            src={project.modalImage}
+            src={project.modalImage} 
             alt={project.title}
             className="w-32 h-32 object-contain rounded-lg border border-[#fa7636] bg-white p-2"
           />

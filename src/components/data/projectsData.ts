@@ -2,8 +2,32 @@ import type { Project } from "../types";
 
 export const projectsData: Project[] = [
   {
-    title: "Google Flight",
+    title: "Jobless - A Tinder For Jobs",
     image: "/images/favicon.svg",
+    description:
+      "A Tinder for job seekers and employers.",
+    demoUrl: "https://jobless-demo.vercel.app/",
+    githubUrl: "https://github.com/The-Hieusss/jobless-demo",
+    tech: [
+      { label: "TypeScript", icon: "/images/skills/typescript.png" },
+      { label: "TailwindCSS", icon: "/frameworks/tailwindcss.svg" },
+      { label: "Supabase", icon: "/images/frameworks/supabase.svg" },
+      { label: "PostgreSQL", icon: "/images/frameworks/postgre.svg" },
+    ],
+    modalImage: "/images/projdemo/jobless.svg",
+    modalSummary:
+      "Jobless is a web application that provides an interactive job-matching experience. It focuses on connecting job seekers with potential employers through a swipe-based interface.",
+    modalTech: [
+      { label: "TypeScript", icon: "/images/skills/typescript.png" },
+      { label: "TailwindCSS", icon: "/frameworks/tailwindcss.svg" },
+      { label: "Supabase", icon: "/frameworks/supabase.svg" },
+      { label: "PostgreSQL", icon: "/frameworks/postgre.svg" },
+      { label: "Vite", icon: "/frameworks/vite.png" },
+    ],
+  },
+  {
+    title: "Google Flight",
+    image: "/images/projdemo/googleflight.jpeg",
     description:
       "Replica of Google Flight search engine. Simple UI, dummy data, beta mode.",
     demoUrl: "https://google-flight.vercel.app/",
@@ -25,31 +49,8 @@ export const projectsData: Project[] = [
     ],
   },
   {
-    title: "The Garden",
-    image: "/images/favicon.svg",
-    description:
-      "Interactive learning app for patients with dementia and stroke recovery.",
-    demoUrl: "",
-    githubUrl: "https://github.com/ForgotSemiColon/Master-Project",
-    tech: [
-      { label: "JavaScript", icon: "/images/skills/javascript.png" },
-      { label: "HTML", icon: "/images/skills/html.png" },
-      { label: "CSS", icon: "/images/skills/css.png" },
-      { label: "p5.js", icon: "/images/projdemo/p5js.png" },
-    ],
-    modalImage: "/images/projdemo/thegarden.png",
-    modalSummary:
-      "The Garden is a web application that provides an interactive learning experience. It focuses on the development and optimal training for patients with dementia and patients recovering from stroke through video games and graphical presentation.",
-    modalTech: [
-      { label: "JavaScript", icon: "/images/skills/javascript.png" },
-      { label: "HTML", icon: "/images/skills/html.png" },
-      { label: "CSS", icon: "/images/skills/css.png" },
-      { label: "p5.js", icon: "/images/projdemo/p5js.png" },
-    ],
-  },
-  {
     title: "Deadline.AI",
-    image: "/images/favicon.svg",
+    image: "/images/projdemo/deadlineai.png",
     description: "Mobile app for AI-powered personal scheduling and chat.",
     demoUrl: "",
     githubUrl: "https://github.com/Smit2553/deadline.ai-frontend",
@@ -67,7 +68,7 @@ export const projectsData: Project[] = [
   },
   {
     title: "Gift4U",
-    image: "/images/favicon.svg",
+    image: "/images/projdemo/gift4.png",
     description:
       "PWA simulating a gift trading/e-commerce website with real-time updates.",
     demoUrl: "",
@@ -94,7 +95,7 @@ export const projectsData: Project[] = [
   },
   {
     title: "Arizona Tree",
-    image: "/images/favicon.svg",
+    image: "/images/projdemo/Arizona_Tree.png",
     description: "Web app for visualizing tree canopy coverage by location.",
     demoUrl: "",
     githubUrl: "https://github.com/Gabenn1/TreeZona",
