@@ -177,14 +177,6 @@ export default function Resume() {
 					<h1 className="text-4xl md:text-5xl font-serif font-bold text-gold-gradient drop-shadow-lg tracking-wider">
 						Résumé
 					</h1>
-					<a
-						href="/resume.pdf"
-						target="_blank"
-						rel="noreferrer"
-						className="bg-gold-gradient text-black px-6 py-2 rounded-full font-serif font-bold shadow hover:bg-yellow-500 transition"
-					>
-						Download PDF
-					</a>
 				</div>
 
 				<div className="flex flex-col md:flex-row gap-12">
