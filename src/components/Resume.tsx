@@ -175,7 +175,7 @@ export default function Resume() {
 				{/* Header row */}
 				<div className="mb-10 flex flex-col md:flex-row items-center justify-between gap-6">
 					<h1 className="text-4xl md:text-5xl font-serif font-bold text-gold-gradient drop-shadow-lg tracking-wider">
-						Résumé
+						RESUME
 					</h1>
 				</div>
 
