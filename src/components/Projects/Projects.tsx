@@ -32,7 +32,7 @@ function Projects() {
     for (const p of projects) {
       if (p.tech.some((t) => ["TailwindCSS", "Bootstrap", "Vite", "React", "Node.js"].some((w) => t.label.includes(w)))) byCat.Web++;
       if (p.tech.some((t) => ["React Native", "Expo"].some((w) => t.label.includes(w)))) byCat.Mobile++;
-      if (p.tech.some((t) => ["Python", "Machine Learning", "OpenAI", "AI"].some((w) => t.label.includes(w)))) byCat.AI++;
+      if (p.tech.some((t) => ["Python", "Machine Learning", "OpenAI", "AI", "Gemini"].some((w) => t.label.includes(w)))) byCat.AI++;
       // "Tools" left as 0 unless you define criteria; feel free to adapt
     }
     return byCat;
@@ -60,7 +60,7 @@ function Projects() {
           )) ||
         (activeCategory === "AI" &&
           p.tech.some((t) =>
-            ["Python", "Machine Learning", "OpenAI", "AI"].some((w) =>
+            ["Python", "Machine Learning", "OpenAI", "AI" , "Gemini"].some((w) =>
               t.label.includes(w)
             )
           ));

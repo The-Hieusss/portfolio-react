@@ -2,8 +2,33 @@ import type { Project } from "../types";
 
 export const projectsData: Project[] = [
   {
+    title: "Dreamscape",
+    image: "/images/projdemo/dreamscape.logo.png",
+    description:
+      "Build Your World With A Thought: AI-Powered 3D World Generation at Your Fingertips.",
+    demoUrl: "https://dreamscape-teal.vercel.app/",
+    githubUrl: "https://github.com/The-Hieusss/dreamscape",
+    tech: [
+      { label: "Gemini", icon: "/frameworks/gemini.png" }, 
+      { label: "Supabase", icon: "/frameworks/supabase.svg" },
+      { label: "PostgreSQL", icon: "/frameworks/postgre.svg" },
+      { label: "Three.js", icon: "/frameworks/three.png" },
+    ],
+    modalImage: "/images/projdemo/dreamscape.logo.png",
+    modalSummary:
+      "Dreamscape is an innovative web application that leverages AI technology to enable users to create and explore personalized 3D worlds. By simply providing text prompts, users can generate unique environments that reflect their imagination and creativity.",
+    modalTech: [
+      { label: "TypeScript", icon: "/images/skills/typescript.png" },
+      { label: "Gemini", icon: "/frameworks/gemini.png" }, 
+      { label: "Supabase", icon: "/frameworks/supabase.svg" },
+      { label: "PostgreSQL", icon: "/frameworks/postgre.svg" },
+      { label: "Three.js", icon: "/frameworks/three.png" },
+      { label: "Drei", icon: "/frameworks/drei.svg" },
+    ],
+  },
+  {
     title: "Jobless - A Tinder For Jobs",
-    image: "/images/favicon.svg",
+    image: "/images/projdemo/jobless.svg",
     description:
       "A Tinder for job seekers and employers.",
     demoUrl: "https://jobless-demo.vercel.app/",
@@ -11,8 +36,8 @@ export const projectsData: Project[] = [
     tech: [
       { label: "TypeScript", icon: "/images/skills/typescript.png" },
       { label: "TailwindCSS", icon: "/frameworks/tailwindcss.svg" },
-      { label: "Supabase", icon: "/images/frameworks/supabase.svg" },
-      { label: "PostgreSQL", icon: "/images/frameworks/postgre.svg" },
+      { label: "Supabase", icon: "/frameworks/supabase.svg" },
+      { label: "PostgreSQL", icon: "/frameworks/postgre.svg" },
     ],
     modalImage: "/images/projdemo/jobless.svg",
     modalSummary:
