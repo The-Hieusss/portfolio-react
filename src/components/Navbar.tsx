@@ -1,35 +1,42 @@
-import { Code, File, HomeIcon, Menu, SearchX, SmartphoneNfc, X } from "lucide-react";
+import {
+  ArrowUpRight,
+  Code,
+  File,
+  HomeIcon,
+  Menu,
+  SearchX,
+  SmartphoneNfc,
+  X,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link as ScrollLink } from "react-scroll";
 
 const navLinks = [
-  { label: "Home", to: "home-section", icon: <HomeIcon /> },
-  { label: "About", to: "about-section", icon: <SearchX /> },
-  { label: "Resume", to: "resume-section", icon: <File /> },
-  { label: "Projects", to: "project-section", icon: <Code /> },
-  { label: "Contact", to: "contact-section", icon: <SmartphoneNfc /> },
+  { label: "Home", to: "home-section", icon: HomeIcon },
+  { label: "About", to: "about-section", icon: SearchX },
+  { label: "Resume", to: "resume-section", icon: File },
+  { label: "Projects", to: "project-section", icon: Code },
+  { label: "Contact", to: "contact-section", icon: SmartphoneNfc },
 ];
 
 function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 24);
     };
+
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Prevent body scroll when mobile menu is open
   useEffect(() => {
-    if (open) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
+    document.body.style.overflow = open ? "hidden" : "unset";
+
     return () => {
       document.body.style.overflow = "unset";
     };
@@ -37,198 +44,163 @@ function Navbar() {
 
   return (
     <>
-      <nav
-        className={`fixed w-full z-50 transition-all duration-300 ${
-          scrolled
-            ? "bg-[#0a0402]/95 backdrop-blur-lg shadow-2xl shadow-[#fa7636]/10 border-b-2 border-[#fa7636]/40"
-            : "bg-gradient-to-b from-[#0a0402]/90 to-transparent backdrop-blur-sm border-b border-[#fa7636]/20"
-        }`}
-      >
-        <div className="container mx-auto px-4 md:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
-            {/* Logo */}
+      <nav className="fixed inset-x-0 top-0 z-50 px-4 pt-4 md:px-6 lg:px-8">
+        <div
+          className={`mx-auto max-w-7xl rounded-[1.8rem] border transition-all duration-300 ${
+            scrolled
+              ? "border-[#fa7636]/35 bg-[#0a0402]/88 shadow-[0_18px_70px_rgba(0,0,0,0.35)] backdrop-blur-xl"
+              : "border-[#fa7636]/18 bg-[#0a0402]/62 backdrop-blur-md"
+          }`}
+        >
+          <div className="flex h-20 items-center justify-between px-4 md:px-6">
             <ScrollLink
               to="home-section"
               smooth
               duration={500}
-              className="flex items-center gap-3 group cursor-pointer"
+              className="group flex cursor-pointer items-center gap-3"
             >
               <div className="relative">
-                <div className="absolute inset-0 bg-gold-gradient opacity-30 blur-lg rounded-full group-hover:opacity-50 transition-opacity" />
-                <img
-                  src="/images/favicon.svg"
-                  alt="logo"
-                  className="relative h-12 md:h-14 drop-shadow-2xl group-hover:scale-110 transition-transform duration-300"
-                />
+                <div className="absolute inset-0 rounded-full bg-gold-gradient opacity-30 blur-lg transition-opacity duration-300 group-hover:opacity-55" />
+                <div className="relative flex h-12 w-12 items-center justify-center rounded-full border border-[#fa7636]/25 bg-[#120905]/92">
+                  <img
+                    src="/images/favicon.svg"
+                    alt="logo"
+                    className="h-8 w-8 transition-transform duration-300 group-hover:scale-110"
+                  />
+                </div>
               </div>
+
               <div className="hidden sm:block">
+                <p className="font-serif text-lg font-bold tracking-[0.16em] text-gold-gradient">
+                  HIEU THAN
+                </p>
+                <p className="text-[11px] uppercase tracking-[0.28em] text-[#caa58f]">
+                  Software Engineer
+                </p>
               </div>
             </ScrollLink>
 
-            {/* Desktop Navigation */}
-            <ul className="hidden lg:flex items-center gap-2">
-              {navLinks.map((link) => (
-                <li key={link.to}>
-                  <ScrollLink
-                    to={link.to}
-                    smooth
-                    duration={500}
-                    offset={-80}
-                    spy={true}
-                    activeClass="active-nav-link"
-                    className="group relative text-[#fceee6] font-serif text-base font-semibold px-5 py-2.5 rounded-full transition-all duration-300 hover:text-[#ffb48a] cursor-pointer flex items-center gap-2"
-                  >
-                    <span className="text-lg group-hover:scale-125 transition-transform duration-300">
-                      {link.icon}
-                    </span>
-                    <span className="relative">
-                      {link.label}
-                      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gold-gradient group-hover:w-full transition-all duration-300" />
-                    </span>
-                  </ScrollLink>
-                </li>
-              ))}
-            </ul>
+            <div className="hidden lg:flex items-center gap-4">
+              <div className="flex items-center rounded-full border border-[#fa7636]/16 bg-[#120905]/78 p-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]">
+                {navLinks.map((link) => {
+                  const Icon = link.icon;
 
-            {/* CTA Button - Desktop */}
-            <div className="hidden lg:block">
+                  return (
+                    <ScrollLink
+                      key={link.to}
+                      to={link.to}
+                      smooth
+                      duration={500}
+                      offset={-90}
+                      spy={true}
+                      activeClass="active-nav-link"
+                      className="group relative flex cursor-pointer items-center gap-2 rounded-full px-4 py-2.5 font-serif text-sm font-semibold text-[#fceee6] transition-all duration-300 hover:text-[#ffb48a]"
+                    >
+                      <Icon className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
+                      <span>{link.label}</span>
+                    </ScrollLink>
+                  );
+                })}
+              </div>
+
               <ScrollLink
                 to="contact-section"
                 smooth
                 duration={500}
-                offset={-80}
-                className="group bg-gold-gradient text-[#0a0402] px-6 py-3 rounded-full font-serif font-bold shadow-lg hover:shadow-[#fa7636]/40 transition-all duration-300 hover:scale-105 cursor-pointer inline-flex items-center gap-2"
+                offset={-90}
+                className="group inline-flex cursor-pointer items-center gap-2 rounded-full bg-gold-gradient px-5 py-3 font-serif text-sm font-bold text-[#0a0402] shadow-lg shadow-[#fa7636]/15 transition-all duration-300 hover:scale-[1.02] hover:shadow-[#fa7636]/30"
               >
-                <span>Let's Talk</span>
-                <svg
-                  className="w-5 h-5 group-hover:translate-x-1 transition-transform"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 7l5 5m0 0l-5 5m5-5H6"
-                  />
-                </svg>
+                <span>Let&apos;s Talk</span>
+                <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
               </ScrollLink>
             </div>
 
-            {/* Mobile Menu Toggle */}
             <button
-              className="lg:hidden relative w-11 h-11 flex items-center justify-center rounded-full bg-[#1f1411]/60 border-2 border-[#fa7636]/30 hover:border-[#fa7636]/60 text-[#fa7636] hover:bg-[#2a1b15] transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#fa7636]/20"
-              onClick={() => setOpen(!open)}
+              className="relative flex h-11 w-11 items-center justify-center rounded-full border border-[#fa7636]/25 bg-[#120905]/88 text-[#fa7636] transition-all duration-300 hover:border-[#fa7636]/55 hover:bg-[#1a100c] focus:outline-none focus:ring-4 focus:ring-[#fa7636]/15 lg:hidden"
+              onClick={() => setOpen((value) => !value)}
               aria-label="Toggle navigation"
               aria-expanded={open}
             >
               {open ? (
-                <X className="h-6 w-6 transition-transform duration-300 rotate-90" />
+                <X className="h-5 w-5 rotate-90 transition-transform duration-300" />
               ) : (
-                <Menu className="h-6 w-6 transition-transform duration-300" />
+                <Menu className="h-5 w-5 transition-transform duration-300" />
               )}
             </button>
           </div>
         </div>
-
-        {/* Decorative bottom accent */}
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#fa7636]/50 to-transparent" />
       </nav>
 
-      {/* Mobile Menu Overlay */}
-      {open && (
+      {open ? (
         <div
-          className="fixed inset-0 z-40 bg-[#0a0402]/80 backdrop-blur-sm lg:hidden animate-fadeIn"
+          className="fixed inset-0 z-40 animate-fadeIn bg-[#0a0402]/82 backdrop-blur-sm lg:hidden"
           onClick={() => setOpen(false)}
           aria-hidden="true"
         />
-      )}
+      ) : null}
 
-      {/* Mobile Slide-in Menu */}
       <div
-        className={`fixed top-20 right-0 bottom-0 z-40 w-full max-w-sm bg-gradient-to-b from-[#120905] to-[#0a0402] border-l-2 border-[#fa7636]/30 shadow-2xl lg:hidden transform transition-transform duration-300 ease-out ${
-          open ? "translate-x-0" : "translate-x-full"
+        className={`fixed right-4 top-24 bottom-4 z-40 w-[calc(100%-2rem)] max-w-sm rounded-[2rem] border border-[#fa7636]/22 bg-gradient-to-b from-[#120905] to-[#0a0402] shadow-[0_24px_90px_rgba(0,0,0,0.45)] transition-transform duration-300 ease-out lg:hidden ${
+          open ? "translate-x-0" : "translate-x-[120%]"
         }`}
       >
-        <div className="h-full overflow-y-auto">
-          {/* Decorative header */}
-          <div className="p-6 border-b border-[#fa7636]/20">
-            <h2 className="text-2xl font-serif font-bold bg-gradient-to-r from-[#fa7636] to-[#ffb48a] bg-clip-text text-transparent">
-              Navigation
+        <div className="relative flex h-full flex-col overflow-hidden">
+          <div className="border-b border-[#fa7636]/16 px-6 py-6">
+            <p className="text-xs uppercase tracking-[0.24em] text-[#caa58f]">Navigation</p>
+            <h2 className="mt-2 font-serif text-2xl font-bold text-gold-gradient">
+              Explore the site
             </h2>
           </div>
 
-          {/* Navigation Links */}
-          <ul className="p-6 space-y-3">
-            {navLinks.map((link, index) => (
-              <li
-                key={link.to}
-                className="animate-slideInRight"
-                style={{ animationDelay: `${index * 50}ms` }}
-              >
-                <ScrollLink
-                  to={link.to}
-                  smooth
-                  duration={500}
-                  offset={-80}
-                  spy={true}
-                  activeClass="active-mobile-nav-link"
-                  className="group flex items-center gap-4 text-[#fceee6] font-serif text-lg font-semibold px-5 py-4 rounded-2xl hover:bg-gradient-to-r hover:from-[#fa7636]/10 hover:to-transparent border-2 border-transparent hover:border-[#fa7636]/30 transition-all duration-300 cursor-pointer"
-                  onClick={() => setOpen(false)}
-                >
-                  <span className="text-2xl group-hover:scale-125 transition-transform duration-300">
-                    {link.icon}
-                  </span>
-                  <span className="flex-1">{link.label}</span>
-                  <svg
-                    className="w-5 h-5 text-[#fa7636] opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </ScrollLink>
-              </li>
-            ))}
-          </ul>
+          <div className="flex-1 overflow-y-auto px-6 py-6">
+            <ul className="space-y-3">
+              {navLinks.map((link, index) => {
+                const Icon = link.icon;
 
-          {/* Mobile CTA */}
-          <div className="p-6 border-t border-[#fa7636]/20">
+                return (
+                  <li
+                    key={link.to}
+                    className="animate-slideInRight"
+                    style={{ animationDelay: `${index * 55}ms` }}
+                  >
+                    <ScrollLink
+                      to={link.to}
+                      smooth
+                      duration={500}
+                      offset={-90}
+                      spy={true}
+                      activeClass="active-mobile-nav-link"
+                      className="group flex cursor-pointer items-center gap-4 rounded-[1.4rem] border border-transparent bg-[#0d0604]/55 px-5 py-4 font-serif text-lg font-semibold text-[#fceee6] transition-all duration-300 hover:border-[#fa7636]/25 hover:bg-[#17100c]"
+                      onClick={() => setOpen(false)}
+                    >
+                      <div className="flex h-11 w-11 items-center justify-center rounded-full border border-[#fa7636]/16 bg-[#120905] text-[#fa7636]">
+                        <Icon className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
+                      </div>
+                      <span className="flex-1">{link.label}</span>
+                      <ArrowUpRight className="h-4 w-4 text-[#fa7636] opacity-60 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    </ScrollLink>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+
+          <div className="border-t border-[#fa7636]/16 p-6">
             <ScrollLink
               to="contact-section"
               smooth
               duration={500}
-              offset={-80}
-              className="group w-full bg-gold-gradient text-[#0a0402] px-6 py-4 rounded-full font-serif font-bold shadow-lg hover:shadow-[#fa7636]/40 transition-all duration-300 hover:scale-105 cursor-pointer flex items-center justify-center gap-2"
+              offset={-90}
+              className="group flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-gold-gradient px-6 py-4 font-serif font-bold text-[#0a0402] transition-all duration-300 hover:scale-[1.02]"
               onClick={() => setOpen(false)}
             >
-              <span>Let's Talk</span>
-              <svg
-                className="w-5 h-5 group-hover:translate-x-1 transition-transform"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 7l5 5m0 0l-5 5m5-5H6"
-                />
-              </svg>
+              <span>Let&apos;s Talk</span>
+              <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             </ScrollLink>
           </div>
 
-          {/* Decorative elements */}
-          <div className="absolute top-0 right-0 w-32 h-32 bg-gold-gradient opacity-5 blur-3xl rounded-full" />
-          <div className="absolute bottom-20 left-0 w-24 h-24 bg-[#ff9462] opacity-5 blur-3xl rounded-full" />
+          <div className="pointer-events-none absolute right-0 top-0 h-32 w-32 rounded-full bg-gold-gradient opacity-6 blur-3xl" />
+          <div className="pointer-events-none absolute bottom-12 left-0 h-24 w-24 rounded-full bg-[#ff9462] opacity-8 blur-3xl" />
         </div>
       </div>
     </>
