@@ -201,21 +201,6 @@ export default function Resume() {
               Experience, education, and the stack behind the work.
             </h1>
           </div>
-
-          <div className="grid gap-4 sm:grid-cols-3">
-            <div className="rounded-[1.7rem] border border-[#fa7636]/18 bg-[#120905]/84 p-5">
-              <p className="text-3xl font-serif font-bold text-gold-gradient">3+</p>
-              <p className="mt-2 text-sm uppercase tracking-[0.18em] text-[#ffb48a]">Internships</p>
-            </div>
-            <div className="rounded-[1.7rem] border border-[#fa7636]/18 bg-[#120905]/84 p-5">
-              <p className="text-3xl font-serif font-bold text-gold-gradient">12+</p>
-              <p className="mt-2 text-sm uppercase tracking-[0.18em] text-[#ffb48a]">Languages</p>
-            </div>
-            <div className="rounded-[1.7rem] border border-[#fa7636]/18 bg-[#120905]/84 p-5">
-              <p className="text-3xl font-serif font-bold text-gold-gradient">2027</p>
-              <p className="mt-2 text-sm uppercase tracking-[0.18em] text-[#ffb48a]">Expected Graduation</p>
-            </div>
-          </div>
         </div>
 
         <div className="grid gap-12 lg:grid-cols-[15rem_minmax(0,1fr)]">
