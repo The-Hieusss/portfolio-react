@@ -107,7 +107,7 @@ const leadership = [
     logo: "/images/vinasubanner.jpg",
     title: "President",
     company: "Vietnamese Student Union at ASU",
-    date: "Aug 2024 - Present",
+    date: "Aug 2024 - May 2026",
   },
 ];
 
@@ -115,10 +115,14 @@ const NAV_SECTIONS = ["education", "experience", "leadership", "skills", "awards
 
 function SectionHeading({ id, title, copy }: { id: string; title: string; copy: string }) {
   return (
-    <div className="mb-6">
-      <p className="text-sm uppercase tracking-[0.2em] text-[#ffb48a]">{id}</p>
-      <h2 className="mt-2 text-3xl font-serif font-bold text-gold-gradient md:text-4xl">{title}</h2>
-      <p className="mt-3 max-w-2xl text-base leading-7 text-[#d8c0b1]">{copy}</p>
+    <div className="mb-6 min-w-0">
+      <p className="text-xs uppercase tracking-[0.18em] text-[#ffb48a] sm:text-sm sm:tracking-[0.2em]">{id}</p>
+      <h2 className="mt-2 max-w-full break-words text-2xl font-serif font-bold leading-tight text-gold-gradient sm:text-3xl md:text-4xl">
+        {title}
+      </h2>
+      <p className="mt-3 max-w-full break-words text-base leading-7 text-[#d8c0b1] md:max-w-2xl">
+        {copy}
+      </p>
     </div>
   );
 }
@@ -137,17 +141,19 @@ function TimelineCard({
   extra?: string;
 }) {
   return (
-    <div className="relative rounded-[1.8rem] border border-[#fa7636]/18 bg-[#120905]/88 p-5 shadow-[0_16px_50px_rgba(0,0,0,0.22)] transition duration-300 hover:border-[#fa7636]/35 hover:bg-[#17100c]">
-      <span className="absolute -left-[1.7rem] top-7 h-3.5 w-3.5 rounded-full bg-gold-gradient shadow-[0_0_18px_rgba(250,118,54,0.4)]" />
+    <div className="relative rounded-[1.2rem] border border-[#fa7636]/18 bg-[#120905]/88 p-4 shadow-[0_16px_50px_rgba(0,0,0,0.22)] transition duration-300 hover:border-[#fa7636]/35 hover:bg-[#17100c] sm:rounded-[1.8rem] sm:p-5">
+      <span className="absolute -left-[1.7rem] top-7 hidden h-3.5 w-3.5 rounded-full bg-gold-gradient shadow-[0_0_18px_rgba(250,118,54,0.4)] sm:block" />
       <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-        <div className="flex h-18 w-18 shrink-0 items-center justify-center rounded-[1.2rem] bg-white p-2 shadow-md">
-          <img src={image} alt={title} className="h-14 w-14 object-contain" />
+        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[1rem] bg-white p-2 shadow-md sm:h-18 sm:w-18 sm:rounded-[1.2rem]">
+          <img src={image} alt={title} className="h-12 w-12 object-contain sm:h-14 sm:w-14" />
         </div>
-        <div>
-          <h3 className="text-xl font-serif font-bold text-[#fff4ed]">{title}</h3>
-          <p className="mt-1 text-base text-[#ffb48a]">{subtitle}</p>
+        <div className="min-w-0">
+          <h3 className="break-words text-lg font-serif font-bold leading-tight text-[#fff4ed] sm:text-xl">
+            {title}
+          </h3>
+          <p className="mt-1 break-words text-base text-[#ffb48a]">{subtitle}</p>
           <p className="mt-2 text-sm uppercase tracking-[0.15em] text-[#caa58f]">{meta}</p>
-          {extra ? <p className="mt-2 text-sm text-[#e3cdbf]">{extra}</p> : null}
+          {extra ? <p className="mt-2 break-words text-sm text-[#e3cdbf]">{extra}</p> : null}
         </div>
       </div>
     </div>
@@ -184,30 +190,27 @@ export default function Resume() {
   return (
     <section
       id="resume-section"
-      className="relative overflow-hidden bg-gradient-to-b from-[#0a0402] via-[#1a0d08] to-[#0a0402] py-22"
+      className="relative overflow-hidden bg-gradient-to-b from-[#0a0402] via-[#1a0d08] to-[#0a0402] py-14 md:py-22"
     >
-      <div className="pointer-events-none absolute inset-x-0 top-0 flex justify-between opacity-20">
-        <img src="/images/greek-border.svg" alt="" className="h-12" />
-        <img src="/images/greek-border.svg" alt="" className="h-12 rotate-180" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 flex justify-between overflow-hidden opacity-20">
+        <img src="/images/greek-border.svg" alt="" className="h-12 max-w-[50%] object-cover" />
+        <img src="/images/greek-border.svg" alt="" className="h-12 max-w-[50%] rotate-180 object-cover" />
       </div>
       <div className="absolute left-0 top-0 h-2 w-full bg-gold-gradient" />
       <div className="pointer-events-none absolute inset-0 opacity-70 [background:radial-gradient(60%_50%_at_50%_10%,rgba(250,118,54,0.08),transparent)]" />
 
-      <div className="container relative z-10 mx-auto px-4">
-        <div className="mb-14 grid gap-8 xl:grid-cols-[0.9fr_1.1fr] xl:items-end">
+      <div className="container relative z-10 mx-auto max-w-7xl px-4">
+        <div className="mb-10 grid gap-8 sm:mb-14 xl:grid-cols-[0.9fr_1.1fr] xl:items-end">
           <div>
-            <p className="text-sm uppercase tracking-[0.26em] text-[#ffb48a]">Resume</p>
-            <h1 className="mt-4 text-4xl font-serif font-bold text-gold-gradient md:text-6xl">
-              Experience, education, and the stack behind the work.
-            </h1>
+            <p className="text-xs uppercase tracking-[0.22em] text-[#ffb48a] sm:text-sm sm:tracking-[0.26em]"></p>
           </div>
         </div>
 
-        <div className="grid gap-12 lg:grid-cols-[15rem_minmax(0,1fr)]">
-          <nav className="lg:pt-2">
-            <div className="sticky top-24 rounded-[2rem] border border-[#fa7636]/18 bg-[#0a0402]/55 p-4 backdrop-blur-sm">
-              <p className="mb-4 px-3 text-xs uppercase tracking-[0.22em] text-[#caa58f]">Sections</p>
-              <ul className="space-y-2">
+        <div className="grid min-w-0 gap-12 lg:grid-cols-[15rem_minmax(0,1fr)]">
+          <nav className="min-w-0 overflow-hidden lg:pt-2">
+            <div className="max-w-full overflow-hidden rounded-[1.3rem] border border-[#fa7636]/18 bg-[#0a0402]/55 p-3 backdrop-blur-sm lg:sticky lg:top-24 lg:rounded-[2rem] lg:p-4">
+              <p className="mb-3 px-2 text-xs uppercase tracking-[0.22em] text-[#caa58f] lg:mb-4 lg:px-3">Sections</p>
+              <ul className="grid max-w-full grid-cols-2 gap-2 sm:grid-cols-3 lg:block lg:space-y-2">
                 {NAV_SECTIONS.map((id) => {
                   const label = id[0].toUpperCase() + id.slice(1);
                   const isActive = active === id;
@@ -216,18 +219,18 @@ export default function Resume() {
                     <li key={id}>
                       <a
                         href={`#${id}`}
-                        className={`flex items-center gap-3 rounded-[1rem] px-3 py-3 font-serif transition ${
+                        className={`flex min-w-0 items-center justify-center gap-2 rounded-[0.9rem] px-3 py-3 text-center font-serif text-sm transition sm:text-base lg:justify-start lg:gap-3 lg:rounded-[1rem] ${
                           isActive
                             ? "bg-gold-gradient text-[#0a0402] shadow-lg"
                             : "text-[#fceee6] hover:bg-[#120905]/75"
                         }`}
                       >
                         <span
-                          className={`h-2.5 w-2.5 rounded-full ${
+                          className={`h-2.5 w-2.5 shrink-0 rounded-full ${
                             isActive ? "bg-[#0a0402]" : "bg-[#ffb48a]"
                           }`}
                         />
-                        <span className={isActive ? "font-bold" : "opacity-90"}>{label}</span>
+                        <span className={`min-w-0 truncate ${isActive ? "font-bold" : "opacity-90"}`}>{label}</span>
                       </a>
                     </li>
                   );
@@ -235,22 +238,22 @@ export default function Resume() {
               </ul>
               <a
                 href="/Resume.pdf"
-                className="mt-5 inline-flex w-full items-center justify-center rounded-full border border-[#fa7636]/22 bg-[#120905]/75 px-4 py-3 font-serif font-semibold text-[#ffcfb4] transition hover:bg-[#1a100c]"
+                className="mt-4 inline-flex w-full items-center justify-center rounded-full border border-[#fa7636]/22 bg-[#120905]/75 px-4 py-3 text-center font-serif text-sm font-semibold text-[#ffcfb4] transition hover:bg-[#1a100c] sm:text-base lg:mt-5"
               >
                 Open PDF Resume
               </a>
             </div>
           </nav>
 
-          <div className="space-y-16">
+          <div className="min-w-0 space-y-12 sm:space-y-16">
             <section id="education" aria-labelledby="education-heading">
               <SectionHeading
                 id="education"
                 title="Education"
                 copy="A technical foundation shaped across Vietnam, Wisconsin, and now Arizona State University."
               />
-              <div className="relative pl-7">
-                <div className="absolute left-1 top-0 bottom-0 w-px bg-[#fa7636]/28" />
+              <div className="relative pl-0 sm:pl-7">
+                <div className="absolute left-1 top-0 bottom-0 hidden w-px bg-[#fa7636]/28 sm:block" />
                 <div className="space-y-6">
                   {education.map((item) => (
                     <TimelineCard
@@ -272,8 +275,8 @@ export default function Resume() {
                 title="Experience"
                 copy="Internship work across fintech, aviation, automotive platforms, and product-focused software teams."
               />
-              <div className="relative pl-7">
-                <div className="absolute left-1 top-0 bottom-0 w-px bg-[#fa7636]/28" />
+              <div className="relative pl-0 sm:pl-7">
+                <div className="absolute left-1 top-0 bottom-0 hidden w-px bg-[#fa7636]/28 sm:block" />
                 <div className="space-y-6">
                   {experience.map((item) => (
                     <TimelineCard
@@ -294,19 +297,19 @@ export default function Resume() {
                 title="Leadership"
                 copy="Work beyond code that sharpened communication, ownership, and community-building."
               />
-              <div className="grid gap-6 md:grid-cols-2">
+              <div className="grid min-w-0 gap-6 md:grid-cols-2">
                 {leadership.map((item) => (
                   <div
                     key={`${item.company}-${item.date}`}
-                    className="group rounded-[1.8rem] border border-[#fa7636]/18 bg-[#120905]/88 p-6 transition duration-300 hover:border-[#fa7636]/35 hover:bg-[#17100c]"
+                    className="group rounded-[1.2rem] border border-[#fa7636]/18 bg-[#120905]/88 p-4 transition duration-300 hover:border-[#fa7636]/35 hover:bg-[#17100c] sm:rounded-[1.8rem] sm:p-6"
                   >
-                    <div className="flex items-center gap-5">
-                      <div className="flex h-18 w-18 shrink-0 items-center justify-center overflow-hidden rounded-[1.2rem] bg-white">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
+                      <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-[1rem] bg-white sm:h-18 sm:w-18 sm:rounded-[1.2rem]">
                         <img src={item.logo} alt={item.company} className="h-full w-full object-cover" />
                       </div>
-                      <div>
-                        <h3 className="text-xl font-serif font-bold text-[#fff4ed]">{item.title}</h3>
-                        <p className="mt-1 text-[#ffb48a]">{item.company}</p>
+                      <div className="min-w-0">
+                        <h3 className="break-words text-xl font-serif font-bold leading-tight text-[#fff4ed]">{item.title}</h3>
+                        <p className="mt-1 break-words text-[#ffb48a]">{item.company}</p>
                         <p className="mt-2 text-sm uppercase tracking-[0.15em] text-[#caa58f]">{item.date}</p>
                       </div>
                     </div>
@@ -322,14 +325,14 @@ export default function Resume() {
                 copy="Core languages plus the frameworks, runtimes, and backend tools I regularly work with."
               />
 
-              <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-4">
+              <div className="grid min-w-0 gap-4 sm:grid-cols-3 lg:grid-cols-4">
                 {programmingLanguages.map((img) => {
                   const label = img.replace(/\.(png|svg)/, "").toUpperCase();
 
                   return (
                     <div
                       key={img}
-                      className="flex items-center gap-4 rounded-[1.4rem] border border-[#fa7636]/18 bg-[#120905]/88 p-4 transition duration-300 hover:-translate-y-1 hover:border-[#fa7636]/35"
+                      className="flex min-w-0 items-center gap-4 rounded-[1.4rem] border border-[#fa7636]/18 bg-[#120905]/88 p-4 transition duration-300 hover:-translate-y-1 hover:border-[#fa7636]/35"
                       title={label}
                     >
                       <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0d0604]">
@@ -340,13 +343,13 @@ export default function Resume() {
                           loading="lazy"
                         />
                       </div>
-                      <span className="text-sm uppercase tracking-[0.14em] text-[#fceee6]">{label}</span>
+                      <span className="min-w-0 break-words text-sm uppercase tracking-[0.14em] text-[#fceee6]">{label}</span>
                     </div>
                   );
                 })}
               </div>
 
-              <div className="mt-10 rounded-[2rem] border border-[#fa7636]/18 bg-[#120905]/72 p-5">
+              <div className="mt-10 max-w-full overflow-hidden rounded-[2rem] border border-[#fa7636]/18 bg-[#120905]/72 p-5">
                 <p className="mb-5 text-sm uppercase tracking-[0.18em] text-[#ffb48a]">Frameworks & libraries</p>
                 <Carousel />
               </div>
@@ -358,8 +361,8 @@ export default function Resume() {
                 title="Awards"
                 copy="Recognition that reflects consistency in academic performance and long-term effort."
               />
-              <div className="relative pl-7">
-                <div className="absolute left-1 top-0 bottom-0 w-px bg-[#fa7636]/28" />
+              <div className="relative pl-0 sm:pl-7">
+                <div className="absolute left-1 top-0 bottom-0 hidden w-px bg-[#fa7636]/28 sm:block" />
                 <div className="space-y-6">
                   {awards.map((item) => (
                     <TimelineCard
@@ -378,9 +381,9 @@ export default function Resume() {
         </div>
       </div>
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-between opacity-20">
-        <img src="/images/greek-border.svg" alt="" className="h-12" />
-        <img src="/images/greek-border.svg" alt="" className="h-12 rotate-180" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-between overflow-hidden opacity-20">
+        <img src="/images/greek-border.svg" alt="" className="h-12 max-w-[50%] object-cover" />
+        <img src="/images/greek-border.svg" alt="" className="h-12 max-w-[50%] rotate-180 object-cover" />
       </div>
     </section>
   );

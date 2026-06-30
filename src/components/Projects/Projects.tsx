@@ -99,7 +99,7 @@ function Projects() {
       {/* Accent bar */}
       <div className="absolute top-0 left-0 w-full h-1.5 bg-gold-gradient shadow-lg shadow-[#fa7636]/20" />
 
-      <FadeInEffect className="container mx-auto px-4 md:px-6 lg:px-8 relative z-10">
+      <FadeInEffect className="container relative z-10 mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         {/* Header */}
         <header className="mb-10">
           <div className="text-center">
@@ -112,7 +112,7 @@ function Projects() {
             </div>
             <h2
               id="projects-heading"
-              className="text-5xl md:text-6xl font-serif font-bold bg-gradient-to-r from-[#fa7636] via-[#ff9462] to-[#ffb48a] bg-clip-text text-transparent tracking-wide drop-shadow-2xl mb-4"
+              className="mb-4 bg-gradient-to-r from-[#fa7636] via-[#ff9462] to-[#ffb48a] bg-clip-text font-serif text-4xl font-bold leading-tight tracking-wide text-transparent drop-shadow-2xl sm:text-5xl md:text-6xl"
             >
               Featured Projects
             </h2>
@@ -125,11 +125,11 @@ function Projects() {
         </header>
 
         {/* Sticky Controls */}
-        <div className="sticky top-16 z-20 -mx-4 md:mx-0 backdrop-blur-md mb-10">
-          <div className="bg-gradient-to-br from-[#120905]/90 to-[#1a0d08]/90 rounded-3xl border-2 border-[#fa7636]/30 shadow-2xl shadow-[#fa7636]/10 px-5 py-6 md:px-8 md:py-7">
+        <div className="z-20 mb-10 -mx-1 backdrop-blur-md md:sticky md:top-24 md:mx-0">
+          <div className="max-w-full overflow-hidden rounded-2xl border border-[#fa7636]/30 bg-gradient-to-br from-[#120905]/90 to-[#1a0d08]/90 px-3 py-4 shadow-2xl shadow-[#fa7636]/10 sm:px-5 sm:py-6 md:rounded-3xl md:border-2 md:px-8 md:py-7">
             <div className="flex flex-col lg:flex-row gap-5 lg:items-center lg:justify-between">
               {/* Search */}
-              <div className="relative w-full max-w-xl group">
+              <div className="group relative w-full max-w-xl">
                 <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#fa7636] group-focus-within:text-[#ffb48a] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
@@ -137,8 +137,8 @@ function Projects() {
                   aria-label="Search projects"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  className="w-full bg-[#0f0a08]/90 text-[#fceee6] placeholder:text-[#d9c9bf]/70 pl-12 pr-4 py-3 rounded-full border-2 border-[#fa7636]/20 focus:outline-none focus:border-[#fa7636]/60 focus:ring-4 focus:ring-[#fa7636]/10 transition-all duration-300 font-sans"
-                  placeholder="Search projects by title, description, or technology..."
+                  className="w-full rounded-full border border-[#fa7636]/20 bg-[#0f0a08]/90 py-3 pl-12 pr-10 text-sm text-[#fceee6] placeholder:text-[#d9c9bf]/70 transition-all duration-300 focus:border-[#fa7636]/60 focus:outline-none focus:ring-4 focus:ring-[#fa7636]/10 sm:text-base md:border-2"
+                  placeholder="Search projects..."
                 />
                 {query && (
                   <button
@@ -154,15 +154,15 @@ function Projects() {
               </div>
 
               {/* Chips + actions */}
-              <div className="flex flex-wrap items-center gap-3">
+              <div className="flex w-full flex-wrap items-center gap-2 sm:gap-3 lg:w-auto">
                 {CATEGORIES.map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setActiveCategory(cat)}
-                    className={`group relative px-5 py-2 rounded-full text-sm font-serif font-semibold transition-all duration-300 overflow-hidden
+                    className={`group relative overflow-hidden rounded-full px-4 py-2 font-serif text-sm font-semibold transition-all duration-300 sm:px-5
                       ${activeCategory === cat
-                        ? "bg-gold-gradient text-[#0a0402] shadow-lg shadow-[#fa7636]/30 scale-105"
-                        : "bg-[#1f1411]/60 text-[#fceee6] hover:bg-[#2a1b15] border border-[#fa7636]/20 hover:border-[#fa7636]/50 hover:scale-105"}`}
+                        ? "bg-gold-gradient text-[#0a0402] shadow-lg shadow-[#fa7636]/30 sm:scale-105"
+                        : "bg-[#1f1411]/60 text-[#fceee6] hover:bg-[#2a1b15] border border-[#fa7636]/20 hover:border-[#fa7636]/50 sm:hover:scale-105"}`}
                     aria-pressed={activeCategory === cat}
                   >
                     <span className="relative z-10 flex items-center gap-2">
@@ -181,10 +181,10 @@ function Projects() {
                 <div className="h-8 w-px bg-gradient-to-b from-transparent via-[#fa7636]/50 to-transparent mx-2 hidden lg:block" />
 
                 {/* View toggle */}
-                <div className="flex gap-2 bg-[#0f0a08]/60 p-1 rounded-full border border-[#fa7636]/20">
+                <div className="flex gap-2 rounded-full border border-[#fa7636]/20 bg-[#0f0a08]/60 p-1">
                   <button
                     onClick={() => setView("grid")}
-                    className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-serif font-semibold transition-all duration-300 ${
+                    className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 font-serif text-xs font-semibold transition-all duration-300 sm:px-4 ${
                       view === "grid"
                         ? "bg-gold-gradient text-[#0a0402] shadow-md"
                         : "text-[#e6dcd2] hover:text-[#ffb48a]"
@@ -198,7 +198,7 @@ function Projects() {
                   </button>
                   <button
                     onClick={() => setView("list")}
-                    className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-serif font-semibold transition-all duration-300 ${
+                    className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 font-serif text-xs font-semibold transition-all duration-300 sm:px-4 ${
                       view === "list"
                         ? "bg-gold-gradient text-[#0a0402] shadow-md"
                         : "text-[#e6dcd2] hover:text-[#ffb48a]"
@@ -217,7 +217,7 @@ function Projects() {
                   aria-label="Sort projects"
                   value={sort}
                   onChange={(e) => setSort(e.target.value as SortMode)}
-                  className="px-4 py-2 rounded-full text-sm font-serif font-semibold bg-[#1f1411]/60 text-[#fceee6] border border-[#fa7636]/20 hover:border-[#fa7636]/50 focus:outline-none focus:border-[#fa7636]/60 focus:ring-4 focus:ring-[#fa7636]/10 transition-all duration-300 cursor-pointer"
+                  className="rounded-full border border-[#fa7636]/20 bg-[#1f1411]/60 px-3 py-2 font-serif text-sm font-semibold text-[#fceee6] transition-all duration-300 hover:border-[#fa7636]/50 focus:border-[#fa7636]/60 focus:outline-none focus:ring-4 focus:ring-[#fa7636]/10 sm:px-4"
                 >
                   <option value="featured">Featured</option>
                   <option value="title-asc">Title A–Z</option>
@@ -231,7 +231,7 @@ function Projects() {
                       setActiveCategory("All");
                       setSort("featured");
                     }}
-                    className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-serif font-semibold bg-[#fceee6] text-[#0a0402] hover:bg-[#ffb48a] hover:shadow-lg transition-all duration-300 hover:scale-105"
+                    className="flex items-center gap-2 rounded-full bg-[#fceee6] px-4 py-2 font-serif text-sm font-semibold text-[#0a0402] transition-all duration-300 hover:bg-[#ffb48a] hover:shadow-lg sm:hover:scale-105"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -263,12 +263,12 @@ function Projects() {
         {filtered.length > 0 ? (
           view === "grid" ? (
             // Featured + grid
-            <div className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div className="mt-10 grid min-w-0 grid-cols-1 gap-8 lg:grid-cols-12">
               {/* Featured project */}
               {filtered[0] && (
-                <div className="lg:col-span-7">
+                <div className="min-w-0 lg:col-span-7">
                   <div
-                    className="relative group rounded-3xl overflow-hidden border-2 border-[#fa7636]/30 shadow-2xl transition-all duration-500 hover:shadow-[0_0_40px_rgba(250,118,54,0.3)] hover:scale-[1.02]"
+                    className="group relative overflow-hidden rounded-3xl border-2 border-[#fa7636]/30 shadow-2xl transition-all duration-500 hover:shadow-[0_0_40px_rgba(250,118,54,0.3)] sm:hover:scale-[1.02]"
                   >
                     {/* Featured badge */}
                     <div className="absolute top-6 right-6 z-10 flex items-center gap-2 bg-gold-gradient px-4 py-2 rounded-full shadow-lg">
@@ -279,18 +279,18 @@ function Projects() {
                     </div>
 
                     {/* Background image with overlay */}
-                    <div className="relative bg-gradient-to-br from-[#1a0e09] to-[#0f0a08] p-8">
+                    <div className="relative bg-gradient-to-br from-[#1a0e09] to-[#0f0a08] p-4 sm:p-6 md:p-8">
                       <img
                         src={filtered[0].modalImage}
                         alt={filtered[0].title}
-                        className="w-full h-[28rem] object-contain transition-transform duration-500 group-hover:scale-105"
+                        className="h-72 w-full object-contain transition-transform duration-500 group-hover:scale-105 sm:h-96 lg:h-[28rem]"
                         loading="lazy"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#0a0402] via-[#0a0402]/50 to-transparent opacity-90" />
                     </div>
 
                     {/* Content overlay */}
-                    <div className="absolute inset-x-0 bottom-0 p-8 bg-gradient-to-t from-[#0a0402] to-transparent">
+                    <div className="relative bg-[#0a0402] p-5 md:absolute md:inset-x-0 md:bottom-0 md:bg-gradient-to-t md:from-[#0a0402] md:to-transparent md:p-8">
                       <div className="flex flex-wrap gap-2 mb-4">
                         {filtered[0].tech.slice(0, 4).map((t) => (
                           <span
@@ -302,18 +302,18 @@ function Projects() {
                           </span>
                         ))}
                       </div>
-                      <h3 className="text-4xl font-serif font-bold bg-gradient-to-r from-[#fa7636] via-[#ff9462] to-[#ffb48a] bg-clip-text text-transparent drop-shadow-2xl mb-3">
+                      <h3 className="mb-3 bg-gradient-to-r from-[#fa7636] via-[#ff9462] to-[#ffb48a] bg-clip-text font-serif text-3xl font-bold leading-tight text-transparent drop-shadow-2xl md:text-4xl">
                         {filtered[0].title}
                       </h3>
                       <p className="text-base text-[#e6dcd2] mb-5 max-w-2xl leading-relaxed">
                         {filtered[0].description}
                       </p>
-                      <div className="flex gap-4">
+                      <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
                         <button
                           onClick={() =>
                             setOpenIndex(projects.findIndex((p) => p.title === filtered[0].title))
                           }
-                          className="group/btn bg-gold-gradient text-[#0a0402] px-6 py-3 rounded-full font-serif font-bold shadow-lg hover:shadow-[#fa7636]/40 transition-all duration-300 hover:scale-105 flex items-center gap-2"
+                          className="group/btn flex items-center justify-center gap-2 rounded-full bg-gold-gradient px-6 py-3 font-serif font-bold text-[#0a0402] shadow-lg transition-all duration-300 hover:shadow-[#fa7636]/40 sm:hover:scale-105"
                         >
                           <span>Learn More</span>
                           <svg className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -325,7 +325,7 @@ function Projects() {
                             href={filtered[0].demoUrl}
                             target="_blank"
                             rel="noreferrer"
-                            className="bg-[#fceee6] text-[#0a0402] px-6 py-3 rounded-full font-serif font-bold shadow-lg hover:bg-white hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center gap-2"
+                            className="flex items-center justify-center gap-2 rounded-full bg-[#fceee6] px-6 py-3 font-serif font-bold text-[#0a0402] shadow-lg transition-all duration-300 hover:bg-white hover:shadow-xl sm:hover:scale-105"
                           >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -344,7 +344,7 @@ function Projects() {
               )}
 
               {/* Other projects */}
-              <div className="lg:col-span-5 grid sm:grid-cols-2 lg:grid-cols-1 gap-6">
+              <div className="grid min-w-0 gap-6 sm:grid-cols-2 lg:col-span-5 lg:grid-cols-1">
                 {filtered.slice(1).map((project) => {
                   const globalIdx = projects.findIndex((p) => p.title === project.title);
                   return (
@@ -367,7 +367,7 @@ function Projects() {
                             />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h4 className="text-xl font-serif font-bold bg-gradient-to-r from-[#fa7636] to-[#ffb48a] bg-clip-text text-transparent mb-2">
+                            <h4 className="mb-2 break-words bg-gradient-to-r from-[#fa7636] to-[#ffb48a] bg-clip-text font-serif text-xl font-bold leading-tight text-transparent">
                               {project.title}
                             </h4>
                             <p className="text-sm text-[#e6dcd2]/80 line-clamp-2 leading-relaxed">
@@ -400,7 +400,7 @@ function Projects() {
                         <div className="flex items-center gap-3 pt-3 border-t border-[#fa7636]/10">
                           <button
                             onClick={() => setOpenIndex(globalIdx)}
-                            className="flex-1 bg-gold-gradient text-[#0a0402] px-4 py-2 rounded-full text-sm font-serif font-bold hover:shadow-lg hover:shadow-[#fa7636]/30 transition-all duration-300 hover:scale-105"
+                            className="flex-1 rounded-full bg-gold-gradient px-4 py-2 font-serif text-sm font-bold text-[#0a0402] transition-all duration-300 hover:shadow-lg hover:shadow-[#fa7636]/30 sm:hover:scale-105"
                           >
                             Learn More
                           </button>
@@ -409,7 +409,7 @@ function Projects() {
                               href={project.demoUrl}
                               target="_blank"
                               rel="noreferrer"
-                              className="flex items-center justify-center w-10 h-10 bg-[#fceee6] text-[#0a0402] rounded-full hover:bg-white hover:shadow-lg transition-all duration-300 hover:scale-110"
+                              className="flex h-10 w-10 items-center justify-center rounded-full bg-[#fceee6] text-[#0a0402] transition-all duration-300 hover:bg-white hover:shadow-lg sm:hover:scale-110"
                               title="View Demo"
                             >
                               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -429,7 +429,7 @@ function Projects() {
             </div>
           ) : (
             // List view
-            <div className="mt-10 space-y-6">
+            <div className="mt-10 min-w-0 space-y-6">
               {filtered.map((project) => {
                 const globalIdx = projects.findIndex((p) => p.title === project.title);
                 return (
@@ -453,8 +453,8 @@ function Projects() {
                       </div>
 
                       {/* Content */}
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-3xl font-serif font-bold bg-gradient-to-r from-[#fa7636] via-[#ff9462] to-[#ffb48a] bg-clip-text text-transparent mb-3">
+                      <div className="min-w-0 flex-1">
+                        <h3 className="mb-3 break-words bg-gradient-to-r from-[#fa7636] via-[#ff9462] to-[#ffb48a] bg-clip-text font-serif text-2xl font-bold leading-tight text-transparent sm:text-3xl">
                           {project.title}
                         </h3>
                         <p className="text-base text-[#e6dcd2]/90 leading-relaxed mb-4">
@@ -486,7 +486,7 @@ function Projects() {
                       <div className="flex md:flex-col gap-3 self-stretch md:self-start justify-center md:justify-start w-full md:w-auto">
                         <button
                           onClick={() => setOpenIndex(globalIdx)}
-                          className="flex-1 md:flex-initial bg-gold-gradient text-[#0a0402] px-6 py-3 rounded-full text-sm font-serif font-bold shadow-lg hover:shadow-[#fa7636]/30 transition-all duration-300 hover:scale-105 whitespace-nowrap"
+                          className="flex-1 whitespace-nowrap rounded-full bg-gold-gradient px-6 py-3 font-serif text-sm font-bold text-[#0a0402] shadow-lg transition-all duration-300 hover:shadow-[#fa7636]/30 sm:hover:scale-105 md:flex-initial"
                         >
                           Learn More
                         </button>
@@ -495,7 +495,7 @@ function Projects() {
                             href={project.demoUrl}
                             target="_blank"
                             rel="noreferrer"
-                            className="flex-1 md:flex-initial bg-[#fceee6] text-[#0a0402] px-6 py-3 rounded-full text-sm font-serif font-bold shadow-lg hover:bg-white hover:shadow-xl transition-all duration-300 hover:scale-105 text-center whitespace-nowrap"
+                            className="flex-1 whitespace-nowrap rounded-full bg-[#fceee6] px-6 py-3 text-center font-serif text-sm font-bold text-[#0a0402] shadow-lg transition-all duration-300 hover:bg-white hover:shadow-xl sm:hover:scale-105 md:flex-initial"
                           >
                             View Demo
                           </a>
@@ -531,7 +531,7 @@ function Projects() {
                 setActiveCategory("All");
                 setSort("featured");
               }}
-              className="bg-gold-gradient text-[#0a0402] px-8 py-3 rounded-full font-serif font-bold shadow-lg hover:shadow-[#fa7636]/30 transition-all duration-300 hover:scale-105"
+              className="rounded-full bg-gold-gradient px-8 py-3 font-serif font-bold text-[#0a0402] shadow-lg transition-all duration-300 hover:shadow-[#fa7636]/30 sm:hover:scale-105"
             >
               Reset Filters
             </button>

@@ -7,9 +7,10 @@ interface FadeInSectionProps {
   id?: string;
 }
 
-const FadeInEffect = ({ children, className }: FadeInSectionProps) => {
+const FadeInEffect = ({ children, className, id }: FadeInSectionProps) => {
   return (
     <motion.div
+      id={id}
       className={className}
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}

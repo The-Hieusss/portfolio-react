@@ -57,7 +57,7 @@ function Contact() {
   return (
     <section
       id="contact-section"
-      className="relative overflow-hidden bg-gradient-to-b from-[#0a0402] via-[#1a0d08] to-[#0a0402] py-24"
+      className="relative overflow-hidden bg-gradient-to-b from-[#0a0402] via-[#1a0d08] to-[#0a0402] py-16 md:py-24"
       aria-labelledby="contact-heading"
     >
       <div className="absolute left-0 top-0 h-2 w-full bg-gold-gradient" />
@@ -76,11 +76,11 @@ function Contact() {
           <p className="text-sm uppercase tracking-[0.26em] text-[#ffb48a]">Contact</p>
           <h2
             id="contact-heading"
-            className="mt-4 text-4xl font-serif font-bold text-gold-gradient md:text-6xl"
+            className="mt-4 text-3xl font-serif font-bold leading-tight text-gold-gradient sm:text-4xl md:text-6xl"
           >
             If you want to build something strong, let’s talk.
           </h2>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-[#e5d1c4] md:text-xl">
+          <p className="mt-6 max-w-2xl text-base leading-7 text-[#e5d1c4] md:text-xl md:leading-8">
             I’m open to internships, collaborations, and interesting technical conversations.
             The fastest way in is email, but pick whatever channel is easiest.
           </p>
@@ -91,14 +91,14 @@ function Contact() {
             <div className="rounded-[2rem] border border-[#fa7636]/20 bg-[#120905]/88 p-6 md:p-8">
               <p className="text-sm uppercase tracking-[0.22em] text-[#ffb48a]">Direct details</p>
               <div className="mt-6 space-y-4">
-                <div className="flex items-start justify-between gap-4 rounded-[1.4rem] border border-[#fa7636]/15 bg-[#0d0604]/75 p-4">
-                  <div className="flex gap-4">
+                <div className="flex items-start justify-between gap-3 rounded-[1.4rem] border border-[#fa7636]/15 bg-[#0d0604]/75 p-4">
+                  <div className="flex min-w-0 gap-3 sm:gap-4">
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#1f1411] text-[#fa7636]">
                       <Phone className="h-5 w-5" />
                     </div>
                     <div>
                       <p className="text-xs uppercase tracking-[0.18em] text-[#caa58f]">Phone</p>
-                      <p className="mt-1 text-lg text-[#fff4ed]">602-214-1715</p>
+                      <p className="mt-1 text-base text-[#fff4ed] sm:text-lg">602-214-1715</p>
                     </div>
                   </div>
                   <button
@@ -110,8 +110,8 @@ function Contact() {
                   </button>
                 </div>
 
-                <div className="flex items-start justify-between gap-4 rounded-[1.4rem] border border-[#fa7636]/15 bg-[#0d0604]/75 p-4">
-                  <div className="flex gap-4">
+                <div className="flex items-start justify-between gap-3 rounded-[1.4rem] border border-[#fa7636]/15 bg-[#0d0604]/75 p-4">
+                  <div className="flex min-w-0 gap-3 sm:gap-4">
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#1f1411] text-[#fa7636]">
                       <Mail className="h-5 w-5" />
                     </div>

@@ -44,15 +44,15 @@ function Navbar() {
 
   return (
     <>
-      <nav className="fixed inset-x-0 top-0 z-50 px-4 pt-4 md:px-6 lg:px-8">
+      <nav className="fixed inset-x-0 top-0 z-50 px-3 pt-3 md:px-6 md:pt-4 lg:px-8">
         <div
-          className={`mx-auto max-w-7xl rounded-[1.8rem] border transition-all duration-300 ${
+          className={`mx-auto max-w-7xl rounded-2xl border transition-all duration-300 md:rounded-[1.8rem] ${
             scrolled
               ? "border-[#fa7636]/35 bg-[#0a0402]/88 shadow-[0_18px_70px_rgba(0,0,0,0.35)] backdrop-blur-xl"
               : "border-[#fa7636]/18 bg-[#0a0402]/62 backdrop-blur-md"
           }`}
         >
-          <div className="flex h-20 items-center justify-between px-4 md:px-6">
+          <div className="flex h-16 items-center justify-between px-3 md:h-20 md:px-6">
             <ScrollLink
               to="home-section"
               smooth
@@ -61,7 +61,7 @@ function Navbar() {
             >
               <div className="relative">
                 <div className="absolute inset-0 rounded-full bg-gold-gradient opacity-30 blur-lg transition-opacity duration-300 group-hover:opacity-55" />
-                <div className="relative flex h-12 w-12 items-center justify-center rounded-full border border-[#fa7636]/25 bg-[#120905]/92">
+                <div className="relative flex h-11 w-11 items-center justify-center rounded-full border border-[#fa7636]/25 bg-[#120905]/92 md:h-12 md:w-12">
                   <img
                     src="/images/favicon.svg"
                     alt="logo"
@@ -73,9 +73,6 @@ function Navbar() {
               <div className="hidden sm:block">
                 <p className="font-serif text-lg font-bold tracking-[0.16em] text-gold-gradient">
                   HIEU THAN
-                </p>
-                <p className="text-[11px] uppercase tracking-[0.28em] text-[#caa58f]">
-                  Software Engineer
                 </p>
               </div>
             </ScrollLink>
@@ -140,19 +137,19 @@ function Navbar() {
       ) : null}
 
       <div
-        className={`fixed right-4 top-24 bottom-4 z-40 w-[calc(100%-2rem)] max-w-sm rounded-[2rem] border border-[#fa7636]/22 bg-gradient-to-b from-[#120905] to-[#0a0402] shadow-[0_24px_90px_rgba(0,0,0,0.45)] transition-transform duration-300 ease-out lg:hidden ${
+        className={`fixed bottom-3 right-3 top-20 z-40 w-[calc(100%-1.5rem)] max-w-sm rounded-3xl border border-[#fa7636]/22 bg-gradient-to-b from-[#120905] to-[#0a0402] shadow-[0_24px_90px_rgba(0,0,0,0.45)] transition-transform duration-300 ease-out md:bottom-4 md:right-4 md:top-24 md:w-[calc(100%-2rem)] md:rounded-[2rem] lg:hidden ${
           open ? "translate-x-0" : "translate-x-[120%]"
         }`}
       >
         <div className="relative flex h-full flex-col overflow-hidden">
-          <div className="border-b border-[#fa7636]/16 px-6 py-6">
+          <div className="border-b border-[#fa7636]/16 px-5 py-5 md:px-6 md:py-6">
             <p className="text-xs uppercase tracking-[0.24em] text-[#caa58f]">Navigation</p>
             <h2 className="mt-2 font-serif text-2xl font-bold text-gold-gradient">
               Explore the site
             </h2>
           </div>
 
-          <div className="flex-1 overflow-y-auto px-6 py-6">
+          <div className="flex-1 overflow-y-auto px-4 py-5 md:px-6 md:py-6">
             <ul className="space-y-3">
               {navLinks.map((link, index) => {
                 const Icon = link.icon;
@@ -170,7 +167,7 @@ function Navbar() {
                       offset={-90}
                       spy={true}
                       activeClass="active-mobile-nav-link"
-                      className="group flex cursor-pointer items-center gap-4 rounded-[1.4rem] border border-transparent bg-[#0d0604]/55 px-5 py-4 font-serif text-lg font-semibold text-[#fceee6] transition-all duration-300 hover:border-[#fa7636]/25 hover:bg-[#17100c]"
+                      className="group flex cursor-pointer items-center gap-3 rounded-[1.4rem] border border-transparent bg-[#0d0604]/55 px-4 py-3.5 font-serif text-base font-semibold text-[#fceee6] transition-all duration-300 hover:border-[#fa7636]/25 hover:bg-[#17100c] md:gap-4 md:px-5 md:py-4 md:text-lg"
                       onClick={() => setOpen(false)}
                     >
                       <div className="flex h-11 w-11 items-center justify-center rounded-full border border-[#fa7636]/16 bg-[#120905] text-[#fa7636]">

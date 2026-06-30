@@ -19,11 +19,11 @@ function App() {
 
   if (isLoading) {
     return (
-      <div className="h-screen w-screen flex items-center justify-center bg-black p-5">
+      <div className="flex h-dvh w-full items-center justify-center bg-black p-5">
         <img
           src="/images/labor.svg"
           alt="labor"
-          className="w-screen h-screen object-contain"
+          className="h-full w-full object-contain"
           loading="lazy"
         />
       </div>

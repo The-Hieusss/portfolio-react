@@ -12,7 +12,7 @@ const rotatingTexts = [
 function Hero() {
   return (
     <FadeInEffect
-      className="relative flex items-center justify-center min-h-screen bg-gradient-to-b from-[#0a0402] via-[#1a0d08] to-[#0a0402] overflow-hidden"
+      className="relative flex min-h-[100svh] items-center justify-center overflow-hidden bg-gradient-to-b from-[#0a0402] via-[#1a0d08] to-[#0a0402] px-4 pt-28"
       id="home-section"
     >
       {/* Background image */}
@@ -28,13 +28,16 @@ function Hero() {
       <div className="absolute inset-0 bg-gradient-to-r from-[#0a0402]/80 via-transparent to-[#0a0402]/80 z-10" />
 
       {/* Hero Content */}
-      <div className="container mx-auto flex flex-col items-center justify-center relative z-20 text-center">
-        <h1 className="text-6xl md:text-8xl font-serif font-bold text-gold-gradient drop-shadow-lg tracking-widest mb-4">
+      <div className="container relative z-20 mx-auto flex max-w-5xl flex-col items-center justify-center text-center">
+        <h1 className="mb-4 max-w-full break-words font-serif text-5xl font-bold tracking-wide text-gold-gradient drop-shadow-lg sm:text-6xl md:text-8xl md:tracking-widest">
           Hieu Than
         </h1>
-        <h3 className="text-2xl md:text-3xl font-medium text-[#fceee6] mb-4 font-sans">
+        <h3 className="mb-4 max-w-full text-xl font-medium leading-tight text-[#fceee6] sm:text-2xl md:text-3xl">
           I like{" "}
-          <span className="text-gold-gradient font-serif font-semibold">
+          <span className="font-serif font-semibold text-gold-gradient sm:hidden">
+            building software.
+          </span>
+          <span className="hidden max-w-full break-words font-serif font-semibold text-gold-gradient sm:inline-block">
             <Typewriter
               words={rotatingTexts}
               loop={true}
@@ -48,7 +51,7 @@ function Hero() {
         </h3>
 
         {/* Scroll Down Icon */}
-        <div className="mt-16 flex flex-col items-center">
+        <div className="mt-12 flex flex-col items-center md:mt-16">
           <div className="animate-bounce">
             <ChevronsDown className="w-8 h-8 text-[#fa7636]" />
           </div>

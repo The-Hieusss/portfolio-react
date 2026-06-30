@@ -3,7 +3,7 @@ function About() {
   return (
     <section
       id="about-section"
-      className="relative bg-[#0a0402] py-24"
+      className="relative bg-[#0a0402] py-16 md:py-24"
       aria-labelledby="about-heading"
     >
       <div className="absolute left-0 top-0 h-2 w-full bg-gold-gradient" />
@@ -14,7 +14,7 @@ function About() {
             <img
               src="/images/profile1.jpg"
               alt="Portrait of Hieu Than"
-              className="h-[28rem] w-full object-cover"
+              className="h-72 w-full object-cover sm:h-96 lg:h-[28rem]"
               loading="lazy"
             />
           </div>
@@ -23,12 +23,12 @@ function About() {
             <p className="text-sm uppercase tracking-[0.24em] text-[#ffb48a]">About Me</p>
             <h2
               id="about-heading"
-              className="mt-4 text-4xl font-serif font-bold text-gold-gradient md:text-5xl"
+              className="mt-4 text-3xl font-serif font-bold leading-tight text-gold-gradient sm:text-4xl md:text-5xl"
             >
               I build thoughtful software with a practical eye for design.
             </h2>
 
-            <div className="mt-6 space-y-5 text-lg leading-8 text-[#e5d1c4]">
+            <div className="mt-6 space-y-5 text-base leading-7 text-[#e5d1c4] md:text-lg md:leading-8">
               <p>
                 I’m Hieu Than, a software engineering student at Arizona State University focused on
                 building products that are clear, useful, and reliable.

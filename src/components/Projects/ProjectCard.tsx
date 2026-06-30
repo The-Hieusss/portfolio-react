@@ -15,14 +15,14 @@ type ProjectCardProps = {
 
 function ProjectCard({ project, onReadMore }: ProjectCardProps) {
   return (
-    <div className="relative group w-full flex flex-col h-full bg-gradient-to-br from-[#1a0e09]/95 to-[#120905]/95 rounded-3xl shadow-2xl border-2 border-[#fa7636]/25 overflow-hidden transition-all duration-500 hover:scale-[1.03] hover:shadow-[0_0_40px_rgba(250,118,54,0.4)] hover:border-[#fa7636]/50">
+    <div className="group relative flex h-full w-full flex-col overflow-hidden rounded-2xl border border-[#fa7636]/25 bg-gradient-to-br from-[#1a0e09]/95 to-[#120905]/95 shadow-2xl transition-all duration-500 hover:border-[#fa7636]/50 hover:shadow-[0_0_40px_rgba(250,118,54,0.4)] sm:rounded-3xl sm:border-2 sm:hover:scale-[1.03]">
       {/* Background decorative glow */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#fa7636]/5 via-transparent to-[#ff9462]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
       {/* Content wrapper */}
-      <div className="relative flex flex-col items-center p-8 h-full">
+      <div className="relative flex h-full flex-col items-center p-5 sm:p-8">
         {/* Project Icon */}
-        <div className="relative w-28 h-28 mb-6">
+        <div className="relative mb-5 h-24 w-24 sm:mb-6 sm:h-28 sm:w-28">
           {/* Glow effect behind image */}
           <div className="absolute inset-0 bg-gold-gradient opacity-25 blur-2xl rounded-2xl group-hover:opacity-40 group-hover:scale-110 transition-all duration-500" />
 
@@ -37,7 +37,7 @@ function ProjectCard({ project, onReadMore }: ProjectCardProps) {
         </div>
 
         {/* Title */}
-        <h3 className="text-2xl md:text-3xl font-serif font-bold mb-4 bg-gradient-to-r from-[#fa7636] via-[#ff9462] to-[#ffb48a] bg-clip-text text-transparent text-center tracking-wide drop-shadow-2xl">
+        <h3 className="mb-4 bg-gradient-to-r from-[#fa7636] via-[#ff9462] to-[#ffb48a] bg-clip-text text-center font-serif text-2xl font-bold leading-tight tracking-wide text-transparent drop-shadow-2xl md:text-3xl">
           {project.title}
         </h3>
 
@@ -74,7 +74,7 @@ function ProjectCard({ project, onReadMore }: ProjectCardProps) {
         <div className="flex flex-wrap justify-center gap-3 mt-auto w-full">
           <button
             onClick={onReadMore}
-            className="group/btn flex items-center gap-2 bg-gold-gradient text-[#0a0402] px-6 py-2.5 rounded-full font-serif font-bold shadow-lg hover:shadow-[#fa7636]/40 hover:scale-105 transition-all duration-300"
+            className="group/btn flex items-center gap-2 rounded-full bg-gold-gradient px-5 py-2.5 font-serif font-bold text-[#0a0402] shadow-lg transition-all duration-300 hover:shadow-[#fa7636]/40 sm:px-6 sm:hover:scale-105"
           >
             <span>Read More</span>
             <svg
@@ -97,7 +97,7 @@ function ProjectCard({ project, onReadMore }: ProjectCardProps) {
               href={project.demoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="group/demo flex items-center gap-2 bg-[#fceee6] text-[#0a0402] px-6 py-2.5 rounded-full font-serif font-bold shadow-lg hover:bg-white hover:shadow-xl hover:scale-105 transition-all duration-300"
+              className="group/demo flex items-center gap-2 rounded-full bg-[#fceee6] px-5 py-2.5 font-serif font-bold text-[#0a0402] shadow-lg transition-all duration-300 hover:bg-white hover:shadow-xl sm:px-6 sm:hover:scale-105"
             >
               <svg
                 className="w-4 h-4"
@@ -121,7 +121,7 @@ function ProjectCard({ project, onReadMore }: ProjectCardProps) {
               href={project.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="group/github flex items-center gap-2 bg-[#1a1a1a] text-white px-6 py-2.5 rounded-full font-serif font-bold shadow-lg border-2 border-[#333] hover:bg-black hover:border-[#fa7636] hover:text-[#ffb48a] hover:shadow-[#fa7636]/30 hover:scale-105 transition-all duration-300"
+              className="group/github flex items-center gap-2 rounded-full border-2 border-[#333] bg-[#1a1a1a] px-5 py-2.5 font-serif font-bold text-white shadow-lg transition-all duration-300 hover:border-[#fa7636] hover:bg-black hover:text-[#ffb48a] hover:shadow-[#fa7636]/30 sm:px-6 sm:hover:scale-105"
             >
               <svg
                 className="w-4 h-4"
