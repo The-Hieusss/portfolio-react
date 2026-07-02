@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import Carousel from "./Carousel";
 
 const education = [
@@ -156,6 +155,45 @@ function TimelineCard({
           {extra ? <p className="mt-2 break-words text-sm text-[#e3cdbf]">{extra}</p> : null}
         </div>
       </div>
+    </div>
+  );
+}
+
+function LanguageCard({ img, compact = false }: { img: string; compact?: boolean }) {
+  const label = img.replace(/\.(png|svg)/, "").toUpperCase();
+
+  return (
+    <div
+      className={
+        compact
+          ? "flex min-w-0 flex-col items-center justify-center gap-2 rounded-[1rem] border border-[#fa7636]/18 bg-[#120905]/88 p-3 text-center transition duration-300 hover:border-[#fa7636]/35 sm:flex-row sm:gap-4 sm:rounded-[1.4rem] sm:p-4 sm:text-left sm:hover:-translate-y-1"
+          : "flex min-w-0 items-center gap-4 rounded-[1.4rem] border border-[#fa7636]/18 bg-[#120905]/88 p-4 transition duration-300 hover:-translate-y-1 hover:border-[#fa7636]/35"
+      }
+      title={label}
+    >
+      <div
+        className={
+          compact
+            ? "flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#0d0604] sm:h-14 sm:w-14 sm:rounded-2xl"
+            : "flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0d0604]"
+        }
+      >
+        <img
+          src={`/images/skills/${img}`}
+          alt={label}
+          className={compact ? "h-7 w-7 object-contain sm:h-9 sm:w-9" : "h-9 w-9 object-contain"}
+          loading="lazy"
+        />
+      </div>
+      <span
+        className={
+          compact
+            ? "max-w-full truncate text-[0.65rem] uppercase tracking-[0.08em] text-[#fceee6] sm:min-w-0 sm:break-words sm:text-sm sm:tracking-[0.14em]"
+            : "min-w-0 break-words text-sm uppercase tracking-[0.14em] text-[#fceee6]"
+        }
+      >
+        {label}
+      </span>
     </div>
   );
 }
@@ -325,28 +363,10 @@ export default function Resume() {
                 copy="Core languages plus the frameworks, runtimes, and backend tools I regularly work with."
               />
 
-              <div className="grid min-w-0 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-                {programmingLanguages.map((img) => {
-                  const label = img.replace(/\.(png|svg)/, "").toUpperCase();
-
-                  return (
-                    <div
-                      key={img}
-                      className="flex min-w-0 items-center gap-4 rounded-[1.4rem] border border-[#fa7636]/18 bg-[#120905]/88 p-4 transition duration-300 hover:-translate-y-1 hover:border-[#fa7636]/35"
-                      title={label}
-                    >
-                      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0d0604]">
-                        <img
-                          src={`/images/skills/${img}`}
-                          alt={label}
-                          className="h-9 w-9 object-contain"
-                          loading="lazy"
-                        />
-                      </div>
-                      <span className="min-w-0 break-words text-sm uppercase tracking-[0.14em] text-[#fceee6]">{label}</span>
-                    </div>
-                  );
-                })}
+              <div className="grid min-w-0 grid-cols-3 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+                {programmingLanguages.map((img) => (
+                  <LanguageCard key={img} img={img} compact />
+                ))}
               </div>
 
               <div className="mt-10 max-w-full overflow-hidden rounded-[2rem] border border-[#fa7636]/18 bg-[#120905]/72 p-5">
