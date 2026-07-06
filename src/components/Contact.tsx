@@ -80,10 +80,6 @@ function Contact() {
           >
             If you want to build something strong, let’s talk.
           </h2>
-          <p className="mt-6 max-w-2xl text-base leading-7 text-[#e5d1c4] md:text-xl md:leading-8">
-            I’m open to internships, collaborations, and interesting technical conversations.
-            The fastest way in is email, but pick whatever channel is easiest.
-          </p>
         </div>
 
         <div className="grid gap-8 xl:grid-cols-[0.9fr_1.1fr]">
@@ -150,7 +146,7 @@ function Contact() {
             </div>
 
             <div className="rounded-[2rem] border border-[#fa7636]/20 bg-[#120905]/88 p-6 md:p-8">
-              <p className="text-sm uppercase tracking-[0.22em] text-[#ffb48a]">Find me elsewhere</p>
+              <p className="text-sm uppercase tracking-[0.22em] text-[#ffb48a]">See you starside</p>
               <div className="mt-5 flex flex-wrap gap-3">
                 {socialLinks.map((link) => {
                   const Icon = link.icon;

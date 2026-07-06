@@ -117,9 +117,8 @@ function Projects() {
               Featured Projects
             </h2>
             <p className="text-[#e6dcd2] text-lg mt-3 max-w-2xl mx-auto leading-relaxed">
-              Explore my portfolio of web applications, mobile experiences, and AI experiments.
               <br className="hidden md:block" />
-              <span className="text-[#ffb48a]">Filter by technology or search to discover more.</span>
+              <span className="text-[#ffb48a]"></span>
             </p>
           </div>
         </header>

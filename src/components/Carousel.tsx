@@ -1,4 +1,5 @@
 const frameworks = [
+  { img: "/frameworks/angular.svg", name: "Angular" },
   { img: "/frameworks/aspnet.svg", name: "ASP.NET" },
   { img: "/frameworks/bootstrap.png", name: "Bootstrap" },
   { img: "/frameworks/bun.svg", name: "Bun" },

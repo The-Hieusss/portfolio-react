@@ -38,7 +38,7 @@ const experience = [
   {
     logo: "/images/movedcars.png",
     title: "Software Engineer Intern",
-    company: "MoveCars.com",
+    company: "MoveCars",
     date: "Jan 2025 - May 2025",
   },
   {
@@ -288,7 +288,7 @@ export default function Resume() {
               <SectionHeading
                 id="education"
                 title="Education"
-                copy="A technical foundation shaped across Vietnam, Wisconsin, and now Arizona State University."
+                copy=""
               />
               <div className="relative pl-0 sm:pl-7">
                 <div className="absolute left-1 top-0 bottom-0 hidden w-px bg-[#fa7636]/28 sm:block" />
@@ -298,7 +298,7 @@ export default function Resume() {
                       key={item.school}
                       image={item.logo}
                       title={item.school}
-                      subtitle={item.degree || "Academic background"}
+                      subtitle={item.degree || ""}
                       meta={item.date}
                       extra={item.location}
                     />
@@ -311,7 +311,7 @@ export default function Resume() {
               <SectionHeading
                 id="experience"
                 title="Experience"
-                copy="Internship work across fintech, aviation, automotive platforms, and product-focused software teams."
+                copy=""
               />
               <div className="relative pl-0 sm:pl-7">
                 <div className="absolute left-1 top-0 bottom-0 hidden w-px bg-[#fa7636]/28 sm:block" />
@@ -333,7 +333,7 @@ export default function Resume() {
               <SectionHeading
                 id="leadership"
                 title="Leadership"
-                copy="Work beyond code that sharpened communication, ownership, and community-building."
+                copy=""
               />
               <div className="grid min-w-0 gap-6 md:grid-cols-2">
                 {leadership.map((item) => (
@@ -360,7 +360,7 @@ export default function Resume() {
               <SectionHeading
                 id="skills"
                 title="Skills"
-                copy="Core languages plus the frameworks, runtimes, and backend tools I regularly work with."
+                copy=""
               />
 
               <div className="grid min-w-0 grid-cols-3 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
@@ -379,7 +379,7 @@ export default function Resume() {
               <SectionHeading
                 id="awards"
                 title="Awards"
-                copy="Recognition that reflects consistency in academic performance and long-term effort."
+                copy=""
               />
               <div className="relative pl-0 sm:pl-7">
                 <div className="absolute left-1 top-0 bottom-0 hidden w-px bg-[#fa7636]/28 sm:block" />
