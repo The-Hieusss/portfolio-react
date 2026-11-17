@@ -28,7 +28,7 @@ export const projectsData: Project[] = [
   },
   {
     title: "Mr. T AI",
-    image: "/images/favicon.svg",
+    image: "/images/projdemo/mr-t-ai.svg",
     description:
       "AI fleet copilot for trucking: smart dispatch, proactive alerts and cost insights from plain-language commands.",
     demoUrl: "",
@@ -38,7 +38,7 @@ export const projectsData: Project[] = [
       { label: "React", icon: "/frameworks/react.svg" },
       { label: "Gemini", icon: "/frameworks/gemini.png" },
     ],
-    modalImage: "/images/favicon.svg",
+    modalImage: "/images/projdemo/mr-t-ai.svg",
     modalSummary:
       "Mr. T is a hackathon MVP of an AI copilot for fleet dispatchers. Dispatchers type or speak commands like \"assign the best driver to this load\". Gemini parses the intent, and a FastAPI backend routes it to skills that list available drivers, compare options, assign drivers, check alerts and explain each decision. Driver selection uses deterministic scoring, so the AI is only used for understanding requests and explaining results. The React dashboard shows a load board, a driver table, KPIs and a Leaflet map, with voice responses through ElevenLabs. It's built to connect to the Trucker Path NavPro API, which currently runs in mock mode.",
     modalTech: [
