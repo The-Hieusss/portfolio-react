@@ -1,206 +1,162 @@
-import {
-  ArrowUpRight,
-  Code,
-  File,
-  HomeIcon,
-  Menu,
-  SearchX,
-  SmartphoneNfc,
-  X,
-} from "lucide-react";
+import { ArrowUpRight, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link as ScrollLink } from "react-scroll";
-
-const navLinks = [
-  { label: "Home", to: "home-section", icon: HomeIcon },
-  { label: "About", to: "about-section", icon: SearchX },
-  { label: "Resume", to: "resume-section", icon: File },
-  { label: "Projects", to: "project-section", icon: Code },
-  { label: "Contact", to: "contact-section", icon: SmartphoneNfc },
-];
+import { navLinks, site } from "./data/site";
+import { buttonStyles } from "./ui/section";
+import { cn } from "@/lib/utils";
 
 function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 24);
-    };
-
-    handleScroll();
-    window.addEventListener("scroll", handleScroll);
-
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 16);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "unset";
-
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    const onResize = () => window.innerWidth >= 768 && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("resize", onResize);
     return () => {
-      document.body.style.overflow = "unset";
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("resize", onResize);
     };
   }, [open]);
 
+  const solid = scrolled || open;
+
   return (
-    <>
-      <nav className="fixed inset-x-0 top-0 z-50 px-3 pt-3 md:px-6 md:pt-4 lg:px-8">
-        <div
-          className={`mx-auto max-w-7xl rounded-2xl border transition-all duration-300 md:rounded-[1.8rem] ${
-            scrolled
-              ? "border-[#fa7636]/35 bg-[#0a0402]/88 shadow-[0_18px_70px_rgba(0,0,0,0.35)] backdrop-blur-xl"
-              : "border-[#fa7636]/18 bg-[#0a0402]/62 backdrop-blur-md"
-          }`}
+    <header className="fixed inset-x-0 top-0 z-50">
+      <div
+        className={cn(
+          "relative transition-colors duration-300",
+          solid ? "bg-ink/85 backdrop-blur-xl" : "bg-transparent",
+        )}
+      >
+        <nav
+          className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-5 sm:px-8 md:h-[4.5rem]"
+          aria-label="Primary"
         >
-          <div className="flex h-16 items-center justify-between px-3 md:h-20 md:px-6">
-            <ScrollLink
-              to="home-section"
-              smooth
-              duration={500}
-              className="group flex cursor-pointer items-center gap-3"
+          <ScrollLink
+            to="home-section"
+            href="#home-section"
+            smooth
+            duration={500}
+            className="group flex cursor-pointer items-center gap-2.5"
+            onClick={() => setOpen(false)}
+          >
+            <img
+              src="/images/favicon.svg"
+              alt=""
+              className="glow-ember h-8 w-8 transition-transform duration-300 group-hover:rotate-[-8deg]"
+            />
+            <span className="font-display text-sm font-semibold tracking-[0.2em] text-cream">
+              HIEU <span className="text-ember">THAN</span>
+            </span>
+          </ScrollLink>
+
+          <ul className="hidden items-center gap-1 md:flex">
+            {navLinks.map((link) => (
+              <li key={link.to}>
+                <ScrollLink
+                  to={link.to}
+                  href={`#${link.to}`}
+                  smooth
+                  spy
+                  duration={500}
+                  offset={-64}
+                  activeClass="is-active"
+                  className="nav-link relative flex cursor-pointer items-baseline px-3 py-2 font-mono text-xs uppercase tracking-[0.14em] text-sand transition-colors hover:text-cream after:absolute after:inset-x-3 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:bg-ember after:shadow-[0_0_10px_rgba(250,118,54,0.9)] after:transition-transform after:duration-300"
+                >
+                  {link.label}
+                </ScrollLink>
+              </li>
+            ))}
+          </ul>
+
+          <div className="flex items-center gap-2">
+            <a
+              href={site.resumeUrl}
+              target="_blank"
+              rel="noreferrer"
+              className={cn(buttonStyles.primary, "hidden px-4 py-2.5 md:inline-flex")}
             >
-              <div className="relative">
-                <div className="absolute inset-0 rounded-full bg-gold-gradient opacity-30 blur-lg transition-opacity duration-300 group-hover:opacity-55" />
-                <div className="relative flex h-11 w-11 items-center justify-center rounded-full border border-[#fa7636]/25 bg-[#120905]/92 md:h-12 md:w-12">
-                  <img
-                    src="/images/favicon.svg"
-                    alt="logo"
-                    className="h-8 w-8 transition-transform duration-300 group-hover:scale-110"
-                  />
-                </div>
-              </div>
-
-              <div className="hidden sm:block">
-                <p className="font-serif text-lg font-bold tracking-[0.16em] text-gold-gradient">
-                  HIEU THAN
-                </p>
-              </div>
-            </ScrollLink>
-
-            <div className="hidden lg:flex items-center gap-4">
-              <div className="flex items-center rounded-full border border-[#fa7636]/16 bg-[#120905]/78 p-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]">
-                {navLinks.map((link) => {
-                  const Icon = link.icon;
-
-                  return (
-                    <ScrollLink
-                      key={link.to}
-                      to={link.to}
-                      smooth
-                      duration={500}
-                      offset={-90}
-                      spy={true}
-                      activeClass="active-nav-link"
-                      className="group relative flex cursor-pointer items-center gap-2 rounded-full px-4 py-2.5 font-serif text-sm font-semibold text-[#fceee6] transition-all duration-300 hover:text-[#ffb48a]"
-                    >
-                      <Icon className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
-                      <span>{link.label}</span>
-                    </ScrollLink>
-                  );
-                })}
-              </div>
-
-              <ScrollLink
-                to="contact-section"
-                smooth
-                duration={500}
-                offset={-90}
-                className="group inline-flex cursor-pointer items-center gap-2 rounded-full bg-gold-gradient px-5 py-3 font-serif text-sm font-bold text-[#0a0402] shadow-lg shadow-[#fa7636]/15 transition-all duration-300 hover:scale-[1.02] hover:shadow-[#fa7636]/30"
-              >
-                <span>Let&apos;s Talk</span>
-                <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-              </ScrollLink>
-            </div>
+              Résumé
+              <ArrowUpRight className="h-4 w-4" />
+            </a>
 
             <button
-              className="relative flex h-11 w-11 items-center justify-center rounded-full border border-[#fa7636]/25 bg-[#120905]/88 text-[#fa7636] transition-all duration-300 hover:border-[#fa7636]/55 hover:bg-[#1a100c] focus:outline-none focus:ring-4 focus:ring-[#fa7636]/15 lg:hidden"
-              onClick={() => setOpen((value) => !value)}
-              aria-label="Toggle navigation"
+              className={cn(buttonStyles.icon, "md:hidden")}
+              onClick={() => setOpen((v) => !v)}
+              aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
+              aria-controls="mobile-menu"
             >
-              {open ? (
-                <X className="h-5 w-5 rotate-90 transition-transform duration-300" />
-              ) : (
-                <Menu className="h-5 w-5 transition-transform duration-300" />
-              )}
+              {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
-        </div>
-      </nav>
+        </nav>
 
-      {open ? (
+        {/* Mobile menu */}
         <div
-          className="fixed inset-0 z-40 animate-fadeIn bg-[#0a0402]/82 backdrop-blur-sm lg:hidden"
-          onClick={() => setOpen(false)}
-          aria-hidden="true"
-        />
-      ) : null}
-
-      <div
-        className={`fixed bottom-3 right-3 top-20 z-40 w-[calc(100%-1.5rem)] max-w-sm rounded-3xl border border-[#fa7636]/22 bg-gradient-to-b from-[#120905] to-[#0a0402] shadow-[0_24px_90px_rgba(0,0,0,0.45)] transition-transform duration-300 ease-out md:bottom-4 md:right-4 md:top-24 md:w-[calc(100%-2rem)] md:rounded-[2rem] lg:hidden ${
-          open ? "translate-x-0" : "translate-x-[120%]"
-        }`}
-      >
-        <div className="relative flex h-full flex-col overflow-hidden">
-          <div className="border-b border-[#fa7636]/16 px-5 py-5 md:px-6 md:py-6">
-            <p className="text-xs uppercase tracking-[0.24em] text-[#caa58f]">Navigation</p>
-            <h2 className="mt-2 font-serif text-2xl font-bold text-gold-gradient">
-              Explore the site
-            </h2>
-          </div>
-
-          <div className="flex-1 overflow-y-auto px-4 py-5 md:px-6 md:py-6">
-            <ul className="space-y-3">
-              {navLinks.map((link, index) => {
-                const Icon = link.icon;
-
-                return (
-                  <li
-                    key={link.to}
-                    className="animate-slideInRight"
-                    style={{ animationDelay: `${index * 55}ms` }}
+          id="mobile-menu"
+          className={cn(
+            "grid overflow-hidden transition-[grid-template-rows] duration-300 ease-out md:hidden",
+            open ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+          )}
+        >
+          <div className="min-h-0">
+            <ul className="mx-auto max-w-6xl space-y-1 px-5 pb-5 pt-1 sm:px-8">
+              {navLinks.map((link) => (
+                <li key={link.to}>
+                  <ScrollLink
+                    to={link.to}
+                    href={`#${link.to}`}
+                    smooth
+                    spy
+                    duration={500}
+                    offset={-64}
+                    activeClass="is-active"
+                    tabIndex={open ? 0 : -1}
+                    onClick={() => setOpen(false)}
+                    className="nav-link chamfer-sm flex cursor-pointer items-center px-3 py-3 font-mono text-sm uppercase tracking-[0.14em] text-cream transition hover:bg-ember/10"
                   >
-                    <ScrollLink
-                      to={link.to}
-                      smooth
-                      duration={500}
-                      offset={-90}
-                      spy={true}
-                      activeClass="active-mobile-nav-link"
-                      className="group flex cursor-pointer items-center gap-3 rounded-[1.4rem] border border-transparent bg-[#0d0604]/55 px-4 py-3.5 font-serif text-base font-semibold text-[#fceee6] transition-all duration-300 hover:border-[#fa7636]/25 hover:bg-[#17100c] md:gap-4 md:px-5 md:py-4 md:text-lg"
-                      onClick={() => setOpen(false)}
-                    >
-                      <div className="flex h-11 w-11 items-center justify-center rounded-full border border-[#fa7636]/16 bg-[#120905] text-[#fa7636]">
-                        <Icon className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
-                      </div>
-                      <span className="flex-1">{link.label}</span>
-                      <ArrowUpRight className="h-4 w-4 text-[#fa7636] opacity-60 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                    </ScrollLink>
-                  </li>
-                );
-              })}
+                    <span className="flex-1">{link.label}</span>
+                    <ArrowUpRight className="h-4 w-4 text-ember/60" />
+                  </ScrollLink>
+                </li>
+              ))}
+              <li className="pt-3">
+                <a
+                  href={site.resumeUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  tabIndex={open ? 0 : -1}
+                  className={cn(buttonStyles.primary, "w-full")}
+                >
+                  View résumé
+                  <ArrowUpRight className="h-4 w-4" />
+                </a>
+              </li>
             </ul>
           </div>
-
-          <div className="border-t border-[#fa7636]/16 p-6">
-            <ScrollLink
-              to="contact-section"
-              smooth
-              duration={500}
-              offset={-90}
-              className="group flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-gold-gradient px-6 py-4 font-serif font-bold text-[#0a0402] transition-all duration-300 hover:scale-[1.02]"
-              onClick={() => setOpen(false)}
-            >
-              <span>Let&apos;s Talk</span>
-              <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-            </ScrollLink>
-          </div>
-
-          <div className="pointer-events-none absolute right-0 top-0 h-32 w-32 rounded-full bg-gold-gradient opacity-6 blur-3xl" />
-          <div className="pointer-events-none absolute bottom-12 left-0 h-24 w-24 rounded-full bg-[#ff9462] opacity-8 blur-3xl" />
         </div>
+
+        {/* glowing ember edge */}
+        <div
+          aria-hidden
+          className={cn(
+            "absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-ember to-transparent transition-opacity duration-300",
+            solid ? "opacity-80" : "opacity-0",
+          )}
+        />
       </div>
-    </>
+    </header>
   );
 }
 

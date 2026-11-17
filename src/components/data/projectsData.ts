@@ -54,7 +54,7 @@ export const projectsData: Project[] = [
     image: "/images/projdemo/dreamscape.logo.png",
     description:
       "Build your world with a thought: describe a scene and Gemini places it in an explorable 3D world.",
-    demoUrl: "https://dreamscape-teal.vercel.app/",
+    demoUrl: "https://dreamscape-alpha-lake.vercel.app/",
     githubUrl: "https://github.com/The-Hieusss/dreamscape",
     tech: [
       { label: "Gemini", icon: "/frameworks/gemini.png" },

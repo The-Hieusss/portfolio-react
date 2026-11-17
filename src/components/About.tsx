@@ -1,62 +1,58 @@
+import FadeInEffect from "./ui/fadein";
+import { HudCorners, Panel, Section, SectionHeader } from "./ui/section";
 
 function About() {
   return (
-    <section
-      id="about-section"
-      className="relative bg-[#0a0402] py-16 md:py-24"
-      aria-labelledby="about-heading"
-    >
-      <div className="absolute left-0 top-0 h-2 w-full bg-gold-gradient" />
-
-      <div className="container mx-auto px-4">
-        <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-          <div className="overflow-hidden rounded-2xl border border-[#fa7636]/20 bg-[#120905]">
-            <img
-              src="/images/profile1.jpg"
-              alt="Portrait of Hieu Than"
-              className="h-72 w-full object-cover sm:h-96 lg:h-[28rem]"
-              loading="lazy"
-            />
+    <Section id="about-section" labelledBy="about-heading">
+      <div className="grid items-center gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+        <FadeInEffect className="relative mx-auto w-full max-w-sm lg:max-w-none">
+          <div className="relative p-3">
+            <HudCorners size="h-6 w-6" />
+            <Panel innerClassName="relative overflow-hidden">
+              <img
+                src="/images/profile1.jpg"
+                alt="Portrait of Hieu Than"
+                className="aspect-[4/5] w-full object-cover"
+                loading="lazy"
+              />
+              <div aria-hidden className="scanlines absolute inset-0" />
+              <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-ember/35 via-transparent to-transparent mix-blend-soft-light" />
+              <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-ink/90 to-transparent px-4 pb-3 pt-10 font-mono text-[10px] uppercase tracking-[0.2em] text-peach">
+                <span>ID · H.THAN</span>
+                <span className="flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-ember shadow-[0_0_8px_rgba(250,118,54,1)]" />
+                  Verified
+                </span>
+              </div>
+            </Panel>
           </div>
+        </FadeInEffect>
 
-          <div>
-            <p className="text-sm uppercase tracking-[0.24em] text-[#ffb48a]">About Me</p>
-            <h2
-              id="about-heading"
-              className="mt-4 text-3xl font-serif font-bold leading-tight text-gold-gradient sm:text-4xl md:text-5xl"
-            >
-              I build thoughtful software with a practical eye for design.
-            </h2>
-
-            <div className="mt-6 space-y-5 text-base leading-7 text-[#e5d1c4] md:text-lg md:leading-8">
-              <p>
-                I’m Hieu Than, a software engineering student at Arizona State University focused on
-                building products that are clear, useful, and reliable.
-              </p>
-              <p>
-                My work spans web, mobile, and AI-oriented projects. I care about clean interfaces,
-                strong technical foundations, and making ideas feel polished in real use.
-              </p>
-            </div>
-            
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <a
-                href="/Resume.pdf"
-                className="inline-flex items-center justify-center rounded-full bg-gold-gradient px-6 py-3 font-serif font-bold text-[#0a0402] transition hover:opacity-90"
-              >
-                View Resume
-              </a>
-              <a
-                href="#contact-section"
-                className="inline-flex items-center justify-center rounded-full border border-[#fa7636]/30 px-6 py-3 text-[#fceee6] transition hover:border-[#fa7636]/60"
-              >
-                Contact Me
-              </a>
-            </div>
+        <FadeInEffect delay={0.1}>
+          <SectionHeader
+            id="about-heading"
+            eyebrow="About"
+            title={
+              <>
+                I build thoughtful software with a{" "}
+                <span className="text-gold-gradient">practical eye for design.</span>
+              </>
+            }
+            className="!mb-6"
+          />
+          <div className="space-y-4 text-base leading-7 text-sand md:text-lg md:leading-8">
+            <p>
+              I&apos;m Hieu, a software engineering student at Arizona State University focused on
+              building products that are clear, useful and reliable.
+            </p>
+            <p>
+              My work spans web, mobile and AI-oriented projects. I care about clean interfaces,
+              strong technical foundations, and making ideas feel polished in real use.
+            </p>
           </div>
-        </div>
+        </FadeInEffect>
       </div>
-    </section>
+    </Section>
   );
 }
 

@@ -1,45 +1,49 @@
 const frameworks = [
-  { img: "/frameworks/angular.svg", name: "Angular" },
-  { img: "/frameworks/aspnet.svg", name: "ASP.NET" },
-  { img: "/frameworks/bootstrap.png", name: "Bootstrap" },
-  { img: "/frameworks/bun.svg", name: "Bun" },
-  { img: "/frameworks/expo.svg", name: "Expo" },
-  { img: "/frameworks/express.svg", name: "Express.js" },
-  { img: "/frameworks/git.svg", name: "Git" },
-  { img: "/frameworks/mysql.svg", name: "MySQL" },
-  { img: "/frameworks/node.svg", name: "Node.js" },
-  { img: "/frameworks/postgre.svg", name: "PostgreSQL" },
   { img: "/frameworks/react.svg", name: "React" },
-  { img: "/frameworks/ROR.svg", name: "Ruby on Rails" },
+  { img: "/frameworks/reactnative.svg", name: "React Native" },
+  { img: "/frameworks/node.svg", name: "Node.js" },
+  { img: "/frameworks/express.svg", name: "Express" },
   { img: "/frameworks/tailwindcss.svg", name: "Tailwind CSS" },
   { img: "/frameworks/vite.png", name: "Vite" },
+  { img: "/frameworks/bun.svg", name: "Bun" },
   { img: "/frameworks/supabase.svg", name: "Supabase" },
+  { img: "/frameworks/postgre.svg", name: "PostgreSQL" },
+  { img: "/frameworks/mysql.svg", name: "MySQL" },
   { img: "/frameworks/firebase.svg", name: "Firebase" },
+  { img: "/frameworks/three.png", name: "Three.js" },
+  { img: "/frameworks/gemini.png", name: "Gemini" },
+  { img: "/frameworks/expo.svg", name: "Expo" },
+  { img: "/frameworks/angular.svg", name: "Angular" },
+  { img: "/frameworks/aspnet.svg", name: "ASP.NET" },
+  { img: "/frameworks/ROR.svg", name: "Ruby on Rails" },
+  { img: "/frameworks/bootstrap.png", name: "Bootstrap" },
+  { img: "/frameworks/git.svg", name: "Git" },
 ];
 
 function Carousel() {
   const logos = [...frameworks, ...frameworks];
 
   return (
-    <div className="max-w-full overflow-hidden rounded-[1.5rem] border border-[#fa7636]/15 bg-[#0d0604]/70 py-4 sm:rounded-[2rem] sm:py-6">
-      <div className="animate-scroll flex w-max max-w-none items-stretch gap-3 px-3 sm:gap-5 sm:px-5">
-        {logos.map((logo, index) => (
+    <div className="mask-fade-x group overflow-hidden" aria-label="Frameworks and tools">
+      {/* Accessible static list for screen readers */}
+      <ul className="sr-only">
+        {frameworks.map((f) => (
+          <li key={f.name}>{f.name}</li>
+        ))}
+      </ul>
+      <div
+        aria-hidden
+        className="flex w-max animate-marquee gap-2.5 py-1 group-hover:[animation-play-state:paused]"
+      >
+        {logos.map((logo, i) => (
           <div
-            key={`${logo.name}-${index}`}
-            className="flex min-w-36 shrink-0 items-center gap-3 rounded-[1.2rem] border border-[#fa7636]/18 bg-[#120905]/92 px-3 py-3 shadow-[0_10px_30px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-1 hover:border-[#fa7636]/35 hover:shadow-[0_14px_30px_rgba(250,118,54,0.12)] sm:min-w-[10rem] sm:gap-4 sm:rounded-[1.4rem] sm:px-4 sm:py-4"
+            key={`${logo.name}-${i}`}
+            className="chamfer-sm flex shrink-0 items-center gap-2.5 bg-ember/10 px-3.5 py-2.5"
           >
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#fff6ef] p-2.5 shadow-md sm:h-14 sm:w-14 sm:p-3">
-              <img
-                src={logo.img}
-                alt={logo.name}
-                className="h-full w-full object-contain"
-                loading="lazy"
-              />
-            </div>
-            <div>
-              <p className="font-serif text-sm font-semibold text-[#fff4ed] sm:text-base">{logo.name}</p>
-              <p className="text-[11px] uppercase tracking-[0.14em] text-[#cfa891] sm:text-xs sm:tracking-[0.18em]">Toolkit</p>
-            </div>
+            <span className="chamfer-sm flex h-7 w-7 items-center justify-center bg-white p-1">
+              <img src={logo.img} alt="" className="h-full w-full object-contain" loading="lazy" />
+            </span>
+            <span className="whitespace-nowrap text-sm font-medium text-cream">{logo.name}</span>
           </div>
         ))}
       </div>

@@ -1,557 +1,217 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { ArrowUpRight, Github, Hammer } from "lucide-react";
 import FadeInEffect from "../ui/fadein";
+import { buttonStyles, HudCorners, Panel, Section, SectionHeader } from "../ui/section";
+import { cn } from "@/lib/utils";
 import ProjectModal from "./ProjectModal";
 import { projectsData } from "../data/projectsData";
+import { site } from "../data/site";
+import type { Project } from "../types";
 
-const projects = projectsData.map((project) => ({
-  ...project,
-  tech: project.tech.map((t) => ({
-    ...t,
-    icon:
-      t.icon.startsWith("/") || t.icon.startsWith("http")
-        ? t.icon
-        : `/images/tech/${t.icon}`,
-  })),
-}));
+const FILTERS = {
+  All: () => true,
+  Web: (p: Project) =>
+    p.modalTech.some((t) => ["React", "TailwindCSS", "Vite", "Node.js", "Bootstrap"].includes(t.label)),
+  AI: (p: Project) => p.modalTech.some((t) => ["Gemini", "OpenAI"].includes(t.label)),
+  Mobile: (p: Project) => p.modalTech.some((t) => ["React Native", "Expo"].includes(t.label)),
+} satisfies Record<string, (p: Project) => boolean>;
 
-const CATEGORIES = ["All", "Web", "Mobile", "AI", "Tools"] as const;
-type Category = (typeof CATEGORIES)[number];
-type ViewMode = "grid" | "list";
-type SortMode = "featured" | "title-asc";
+type Filter = keyof typeof FILTERS;
+
+const isPlaceholder = (p: Project) => !p.githubUrl && !p.demoUrl;
+const realProjects = projectsData.filter((p) => !isPlaceholder(p));
+const hasPlaceholder = projectsData.some(isPlaceholder);
+
+function ProjectTile({
+  project,
+  index,
+  onOpen,
+}: {
+  project: Project;
+  index: number;
+  onOpen: () => void;
+}) {
+  return (
+    <Panel interactive className="group h-full" innerClassName="flex h-full flex-col">
+      <button
+        type="button"
+        onClick={onOpen}
+        aria-label={`Open details for ${project.title}`}
+        className="relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-surface-2"
+      >
+        <div aria-hidden className="hud-grid absolute inset-0 opacity-80 [mask-image:none]" />
+        <div aria-hidden className="absolute inset-0 bg-[radial-gradient(55%_65%_at_50%_50%,rgba(250,118,54,0.35),transparent_70%)] transition-opacity duration-500 group-hover:opacity-100 opacity-70" />
+        <div aria-hidden className="absolute inset-0 scanlines" />
+        <div className="relative p-2">
+          <HudCorners size="h-3 w-3" />
+          <img
+            src={project.image}
+            alt=""
+            loading="lazy"
+            className="chamfer h-24 w-24 bg-white object-contain p-2.5 transition duration-500 group-hover:scale-105 sm:h-28 sm:w-28"
+          />
+        </div>
+        <span className="absolute left-3 top-3 font-mono text-[10px] tracking-[0.2em] text-ember">
+          P-{String(index + 1).padStart(2, "0")}
+        </span>
+        {project.demoUrl ? (
+          <span className="chamfer-sm absolute right-3 top-3 inline-flex items-center gap-1.5 bg-ink/80 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-ember">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-ember shadow-[0_0_8px_rgba(250,118,54,1)]" />
+            Live
+          </span>
+        ) : null}
+      </button>
+
+      <div className="flex flex-1 flex-col border-t border-ember/30 p-5">
+        <h3 className="text-lg font-semibold leading-snug text-cream transition group-hover:text-peach">
+          {project.title}
+        </h3>
+        <p className="mt-2 line-clamp-3 flex-1 text-sm leading-6 text-sand">{project.description}</p>
+
+        <ul className="mt-4 flex flex-wrap gap-1.5">
+          {project.tech.slice(0, 4).map((t) => (
+            <li
+              key={t.label}
+              className="chamfer-sm bg-ember/10 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.1em] text-peach"
+            >
+              {t.label}
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-5 flex items-center gap-2 border-t border-line pt-4">
+          <button
+            type="button"
+            onClick={onOpen}
+            className="mr-auto font-mono text-xs font-semibold uppercase tracking-[0.14em] text-ember transition hover:text-cream"
+          >
+            Details ▸
+          </button>
+          {project.githubUrl ? (
+            <a
+              href={project.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${project.title} source code`}
+              className={cn(buttonStyles.icon, "h-9 w-9")}
+            >
+              <Github className="h-4 w-4" />
+            </a>
+          ) : null}
+          {project.demoUrl ? (
+            <a
+              href={project.demoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${project.title} live demo`}
+              className="chamfer-sm flex h-9 w-9 items-center justify-center bg-gold-gradient text-ink transition hover:brightness-110"
+            >
+              <ArrowUpRight className="h-4 w-4" />
+            </a>
+          ) : null}
+        </div>
+      </div>
+    </Panel>
+  );
+}
 
 function Projects() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const [query, setQuery] = useState("");
-  const [activeCategory, setActiveCategory] = useState<Category>("All");
-  const [view, setView] = useState<ViewMode>("grid");
-  const [sort, setSort] = useState<SortMode>("featured");
+  const [open, setOpen] = useState<Project | null>(null);
+  const [filter, setFilter] = useState<Filter>("All");
 
-  // Counts per category for chips
-  const catCounts = useMemo(() => {
-    const byCat = { All: projects.length, Web: 0, Mobile: 0, AI: 0, Tools: 0 } as Record<Category, number>;
-    for (const p of projects) {
-      if (p.tech.some((t) => ["TailwindCSS", "Bootstrap", "Vite", "React", "Node.js"].some((w) => t.label.includes(w)))) byCat.Web++;
-      if (p.tech.some((t) => ["React Native", "Expo"].some((w) => t.label.includes(w)))) byCat.Mobile++;
-      if (p.tech.some((t) => ["Python", "Machine Learning", "OpenAI", "AI", "Gemini"].some((w) => t.label.includes(w)))) byCat.AI++;
-      // "Tools" left as 0 unless you define criteria; feel free to adapt
-    }
-    return byCat;
+  // Lets the ΑΘΗΝΑ assistant open a project's details.
+  useEffect(() => {
+    const onOpen = (e: Event) => {
+      const p = realProjects.find((x) => x.title === (e as CustomEvent<string>).detail);
+      if (p) setOpen(p);
+    };
+    window.addEventListener("open-project", onOpen);
+    return () => window.removeEventListener("open-project", onOpen);
   }, []);
 
-  const filteredBase = useMemo(() => {
-    return projects.filter((p) => {
-      const matchesQuery =
-        query.trim() === "" ||
-        p.title.toLowerCase().includes(query.toLowerCase()) ||
-        p.description.toLowerCase().includes(query.toLowerCase()) ||
-        p.tech.some((t) => t.label.toLowerCase().includes(query.toLowerCase()));
+  const counts = useMemo(
+    () =>
+      Object.fromEntries(
+        (Object.keys(FILTERS) as Filter[]).map((f) => [f, realProjects.filter(FILTERS[f]).length]),
+      ) as Record<Filter, number>,
+    [],
+  );
 
-      const matchesCategory =
-        activeCategory === "All" ||
-        (activeCategory === "Web" &&
-          p.tech.some((t) =>
-            ["TailwindCSS", "Bootstrap", "Vite", "React", "Node.js"].some((w) =>
-              t.label.includes(w)
-            )
-          )) ||
-        (activeCategory === "Mobile" &&
-          p.tech.some((t) =>
-            ["React Native", "Expo"].some((w) => t.label.includes(w))
-          )) ||
-        (activeCategory === "AI" &&
-          p.tech.some((t) =>
-            ["Python", "Machine Learning", "OpenAI", "AI" , "Gemini"].some((w) =>
-              t.label.includes(w)
-            )
-          ));
-
-      return matchesQuery && matchesCategory;
-    });
-  }, [query, activeCategory]);
-
-  const filtered = useMemo(() => {
-    const arr = [...filteredBase];
-    if (sort === "title-asc") {
-      arr.sort((a, b) => a.title.localeCompare(b.title));
-    }
-    return arr;
-  }, [filteredBase, sort]);
-
-  const hasActiveFilter = query.trim() !== "" || activeCategory !== "All";
+  const visible = realProjects.filter(FILTERS[filter]);
+  const filters = (Object.keys(FILTERS) as Filter[]).filter((f) => counts[f] > 0);
 
   return (
-    <section
-      id="project-section"
-      className="relative overflow-hidden py-20 md:py-32 bg-gradient-to-b from-[#0a0402] via-[#1a0d08] to-[#0a0402]"
-      aria-labelledby="projects-heading"
-    >
-      {/* Decorative top borders */}
-      <div className="absolute inset-x-0 top-0 flex justify-between opacity-20 pointer-events-none">
-        <img src="/images/greek-border.svg" alt="" className="h-12" />
-        <img src="/images/greek-border.svg" alt="" className="h-12 rotate-180" />
-      </div>
-
-      {/* Enhanced radial gold glow */}
-      <div className="pointer-events-none absolute inset-0 opacity-80 [background:radial-gradient(60%_50%_at_50%_10%,rgba(250,118,54,0.12),transparent)]" />
-      <div className="pointer-events-none absolute inset-0 opacity-50 [background:radial-gradient(40%_40%_at_20%_80%,rgba(255,180,138,0.08),transparent)]" />
-      <div className="pointer-events-none absolute inset-0 opacity-50 [background:radial-gradient(40%_40%_at_80%_60%,rgba(250,118,54,0.06),transparent)]" />
-
-      {/* Accent bar */}
-      <div className="absolute top-0 left-0 w-full h-1.5 bg-gold-gradient shadow-lg shadow-[#fa7636]/20" />
-
-      <FadeInEffect className="container relative z-10 mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
-        {/* Header */}
-        <header className="mb-10">
-          <div className="text-center">
-            <div className="inline-flex items-center gap-3 mb-4">
-              <span className="h-px w-12 bg-gold-gradient" />
-              <svg className="w-6 h-6 text-[#fa7636]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-              <span className="h-px w-12 bg-gold-gradient" />
-            </div>
-            <h2
-              id="projects-heading"
-              className="mb-4 bg-gradient-to-r from-[#fa7636] via-[#ff9462] to-[#ffb48a] bg-clip-text font-serif text-4xl font-bold leading-tight tracking-wide text-transparent drop-shadow-2xl sm:text-5xl md:text-6xl"
-            >
-              Featured Projects
-            </h2>
-            <p className="text-[#e6dcd2] text-lg mt-3 max-w-2xl mx-auto leading-relaxed">
-              <br className="hidden md:block" />
-              <span className="text-[#ffb48a]"></span>
-            </p>
-          </div>
-        </header>
-
-        {/* Sticky Controls */}
-        <div className="z-20 mb-10 -mx-1 backdrop-blur-md md:sticky md:top-24 md:mx-0">
-          <div className="max-w-full overflow-hidden rounded-2xl border border-[#fa7636]/30 bg-gradient-to-br from-[#120905]/90 to-[#1a0d08]/90 px-3 py-4 shadow-2xl shadow-[#fa7636]/10 sm:px-5 sm:py-6 md:rounded-3xl md:border-2 md:px-8 md:py-7">
-            <div className="flex flex-col lg:flex-row gap-5 lg:items-center lg:justify-between">
-              {/* Search */}
-              <div className="group relative w-full max-w-xl">
-                <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#fa7636] group-focus-within:text-[#ffb48a] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <input
-                  aria-label="Search projects"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  className="w-full rounded-full border border-[#fa7636]/20 bg-[#0f0a08]/90 py-3 pl-12 pr-10 text-sm text-[#fceee6] placeholder:text-[#d9c9bf]/70 transition-all duration-300 focus:border-[#fa7636]/60 focus:outline-none focus:ring-4 focus:ring-[#fa7636]/10 sm:text-base md:border-2"
-                  placeholder="Search projects..."
-                />
-                {query && (
-                  <button
-                    onClick={() => setQuery("")}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center rounded-full bg-[#fa7636]/20 hover:bg-[#fa7636]/40 text-[#ffb48a] transition-colors"
-                    aria-label="Clear search"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                )}
-              </div>
-
-              {/* Chips + actions */}
-              <div className="flex w-full flex-wrap items-center gap-2 sm:gap-3 lg:w-auto">
-                {CATEGORIES.map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setActiveCategory(cat)}
-                    className={`group relative overflow-hidden rounded-full px-4 py-2 font-serif text-sm font-semibold transition-all duration-300 sm:px-5
-                      ${activeCategory === cat
-                        ? "bg-gold-gradient text-[#0a0402] shadow-lg shadow-[#fa7636]/30 sm:scale-105"
-                        : "bg-[#1f1411]/60 text-[#fceee6] hover:bg-[#2a1b15] border border-[#fa7636]/20 hover:border-[#fa7636]/50 sm:hover:scale-105"}`}
-                    aria-pressed={activeCategory === cat}
-                  >
-                    <span className="relative z-10 flex items-center gap-2">
-                      {cat}
-                      <span className={`text-xs font-bold px-1.5 py-0.5 rounded-full ${
-                        activeCategory === cat
-                          ? "bg-[#0a0402]/20 text-[#0a0402]"
-                          : "bg-[#fa7636]/20 text-[#ffb48a]"
-                      }`}>
-                        {cat === "All" ? catCounts.All : catCounts[cat]}
-                      </span>
-                    </span>
-                  </button>
-                ))}
-
-                <div className="h-8 w-px bg-gradient-to-b from-transparent via-[#fa7636]/50 to-transparent mx-2 hidden lg:block" />
-
-                {/* View toggle */}
-                <div className="flex gap-2 rounded-full border border-[#fa7636]/20 bg-[#0f0a08]/60 p-1">
-                  <button
-                    onClick={() => setView("grid")}
-                    className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 font-serif text-xs font-semibold transition-all duration-300 sm:px-4 ${
-                      view === "grid"
-                        ? "bg-gold-gradient text-[#0a0402] shadow-md"
-                        : "text-[#e6dcd2] hover:text-[#ffb48a]"
-                    }`}
-                    aria-pressed={view === "grid"}
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zM14 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
-                    </svg>
-                    Grid
-                  </button>
-                  <button
-                    onClick={() => setView("list")}
-                    className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 font-serif text-xs font-semibold transition-all duration-300 sm:px-4 ${
-                      view === "list"
-                        ? "bg-gold-gradient text-[#0a0402] shadow-md"
-                        : "text-[#e6dcd2] hover:text-[#ffb48a]"
-                    }`}
-                    aria-pressed={view === "list"}
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                    List
-                  </button>
-                </div>
-
-                {/* Sort */}
-                <select
-                  aria-label="Sort projects"
-                  value={sort}
-                  onChange={(e) => setSort(e.target.value as SortMode)}
-                  className="rounded-full border border-[#fa7636]/20 bg-[#1f1411]/60 px-3 py-2 font-serif text-sm font-semibold text-[#fceee6] transition-all duration-300 hover:border-[#fa7636]/50 focus:border-[#fa7636]/60 focus:outline-none focus:ring-4 focus:ring-[#fa7636]/10 sm:px-4"
+    <Section id="project-section" labelledBy="projects-heading">
+      <FadeInEffect>
+        <SectionHeader
+          id="projects-heading"
+          eyebrow="Projects"
+          title={
+            <>
+              Selected <span className="text-gold-gradient">work</span>
+            </>
+          }
+          action={
+            <div role="group" aria-label="Filter projects" className="chamfer-sm inline-flex flex-wrap gap-1 bg-ember/10 p-1">
+              {filters.map((f) => (
+                <button
+                  key={f}
+                  type="button"
+                  onClick={() => setFilter(f)}
+                  aria-pressed={filter === f}
+                  className={`chamfer-sm px-3.5 py-1.5 font-mono text-xs uppercase tracking-[0.12em] transition ${
+                    filter === f ? "bg-ember text-ink" : "text-peach hover:text-cream"
+                  }`}
                 >
-                  <option value="featured">Featured</option>
-                  <option value="title-asc">Title A–Z</option>
-                </select>
-
-                {/* Clear */}
-                {hasActiveFilter && (
-                  <button
-                    onClick={() => {
-                      setQuery("");
-                      setActiveCategory("All");
-                      setSort("featured");
-                    }}
-                    className="flex items-center gap-2 rounded-full bg-[#fceee6] px-4 py-2 font-serif text-sm font-semibold text-[#0a0402] transition-all duration-300 hover:bg-[#ffb48a] hover:shadow-lg sm:hover:scale-105"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                    Clear All
-                  </button>
-                )}
-              </div>
+                  {f}
+                  <span className={`ml-1.5 ${filter === f ? "text-ink/60" : "text-ember/60"}`}>
+                    {counts[f]}
+                  </span>
+                </button>
+              ))}
             </div>
-
-            {/* Result count */}
-            <div className="mt-5 flex items-center gap-2 text-sm text-[#d9c9bf]" aria-live="polite">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-gold-gradient animate-pulse" />
-                <span className="font-semibold text-[#ffb48a]">{filtered.length}</span>
-                <span>project{filtered.length === 1 ? "" : "s"} found</span>
-              </div>
-              {hasActiveFilter && (
-                <>
-                  <span className="text-[#fa7636]/50">•</span>
-                  <span className="text-[#ffb48a]">Filtered results</span>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Content */}
-        {filtered.length > 0 ? (
-          view === "grid" ? (
-            // Featured + grid
-            <div className="mt-10 grid min-w-0 grid-cols-1 gap-8 lg:grid-cols-12">
-              {/* Featured project */}
-              {filtered[0] && (
-                <div className="min-w-0 lg:col-span-7">
-                  <div
-                    className="group relative overflow-hidden rounded-3xl border-2 border-[#fa7636]/30 shadow-2xl transition-all duration-500 hover:shadow-[0_0_40px_rgba(250,118,54,0.3)] sm:hover:scale-[1.02]"
-                  >
-                    {/* Featured badge */}
-                    <div className="absolute top-6 right-6 z-10 flex items-center gap-2 bg-gold-gradient px-4 py-2 rounded-full shadow-lg">
-                      <svg className="w-4 h-4 text-[#0a0402]" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                      <span className="text-sm font-serif font-bold text-[#0a0402]">Featured</span>
-                    </div>
-
-                    {/* Background image with overlay */}
-                    <div className="relative bg-gradient-to-br from-[#1a0e09] to-[#0f0a08] p-4 sm:p-6 md:p-8">
-                      <img
-                        src={filtered[0].modalImage}
-                        alt={filtered[0].title}
-                        className="h-72 w-full object-contain transition-transform duration-500 group-hover:scale-105 sm:h-96 lg:h-[28rem]"
-                        loading="lazy"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0402] via-[#0a0402]/50 to-transparent opacity-90" />
-                    </div>
-
-                    {/* Content overlay */}
-                    <div className="relative bg-[#0a0402] p-5 md:absolute md:inset-x-0 md:bottom-0 md:bg-gradient-to-t md:from-[#0a0402] md:to-transparent md:p-8">
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {filtered[0].tech.slice(0, 4).map((t) => (
-                          <span
-                            key={t.label}
-                            className="flex items-center gap-2 bg-[#1f1411]/80 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs text-[#fceee6] border border-[#fa7636]/30"
-                          >
-                            <img src={t.icon} alt={t.label} className="w-5 h-5 bg-white rounded p-0.5" />
-                            {t.label}
-                          </span>
-                        ))}
-                      </div>
-                      <h3 className="mb-3 bg-gradient-to-r from-[#fa7636] via-[#ff9462] to-[#ffb48a] bg-clip-text font-serif text-3xl font-bold leading-tight text-transparent drop-shadow-2xl md:text-4xl">
-                        {filtered[0].title}
-                      </h3>
-                      <p className="text-base text-[#e6dcd2] mb-5 max-w-2xl leading-relaxed">
-                        {filtered[0].description}
-                      </p>
-                      <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
-                        <button
-                          onClick={() =>
-                            setOpenIndex(projects.findIndex((p) => p.title === filtered[0].title))
-                          }
-                          className="group/btn flex items-center justify-center gap-2 rounded-full bg-gold-gradient px-6 py-3 font-serif font-bold text-[#0a0402] shadow-lg transition-all duration-300 hover:shadow-[#fa7636]/40 sm:hover:scale-105"
-                        >
-                          <span>Learn More</span>
-                          <svg className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                          </svg>
-                        </button>
-                        {filtered[0].demoUrl && (
-                          <a
-                            href={filtered[0].demoUrl}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="flex items-center justify-center gap-2 rounded-full bg-[#fceee6] px-6 py-3 font-serif font-bold text-[#0a0402] shadow-lg transition-all duration-300 hover:bg-white hover:shadow-xl sm:hover:scale-105"
-                          >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                            </svg>
-                            <span>Live Demo</span>
-                          </a>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Decorative accents */}
-                    <div className="absolute left-0 top-0 h-1.5 w-1/2 bg-gold-gradient" />
-                    <div className="absolute right-0 bottom-0 h-1.5 w-1/3 bg-gold-gradient" />
-                  </div>
-                </div>
-              )}
-
-              {/* Other projects */}
-              <div className="grid min-w-0 gap-6 sm:grid-cols-2 lg:col-span-5 lg:grid-cols-1">
-                {filtered.slice(1).map((project) => {
-                  const globalIdx = projects.findIndex((p) => p.title === project.title);
-                  return (
-                    <div
-                      key={project.title}
-                      className="group relative flex flex-col bg-gradient-to-br from-[#1a0e09]/90 to-[#120905]/90 border-2 border-[#fa7636]/20 rounded-2xl shadow-xl hover:shadow-[0_0_30px_rgba(250,118,54,0.25)] hover:border-[#fa7636]/50 transition-all duration-300 overflow-hidden"
-                    >
-                      {/* Background glow effect */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-[#fa7636]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-                      <div className="relative p-5">
-                        <div className="flex items-start gap-4 mb-4">
-                          <div className="relative flex-shrink-0">
-                            <div className="absolute inset-0 bg-gold-gradient opacity-20 blur-lg rounded-xl group-hover:opacity-40 transition-opacity" />
-                            <img
-                              src={project.image}
-                              alt={project.title}
-                              className="relative w-20 h-20 rounded-xl object-contain bg-gradient-to-br from-white to-[#fceee6] p-3 shadow-lg group-hover:scale-110 transition-transform duration-300"
-                              loading="lazy"
-                            />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <h4 className="mb-2 break-words bg-gradient-to-r from-[#fa7636] to-[#ffb48a] bg-clip-text font-serif text-xl font-bold leading-tight text-transparent">
-                              {project.title}
-                            </h4>
-                            <p className="text-sm text-[#e6dcd2]/80 line-clamp-2 leading-relaxed">
-                              {project.description}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="flex flex-wrap gap-2 mb-4">
-                          {project.tech.slice(0, 3).map((t) => (
-                            <span
-                              key={t.label}
-                              className="group/tech flex items-center gap-1.5 bg-[#1f1411]/60 px-3 py-1.5 rounded-full text-xs text-[#fceee6] border border-[#fa7636]/20 hover:border-[#fa7636]/50 hover:bg-[#2a1b15]/80 transition-all"
-                            >
-                              <img
-                                src={t.icon}
-                                alt={t.label}
-                                className="w-4 h-4 bg-white rounded p-0.5 group-hover/tech:scale-110 transition-transform"
-                              />
-                              {t.label}
-                            </span>
-                          ))}
-                          {project.tech.length > 3 && (
-                            <span className="flex items-center justify-center px-3 py-1.5 rounded-full text-xs text-[#ffb48a] bg-[#fa7636]/10 border border-[#fa7636]/20 font-semibold">
-                              +{project.tech.length - 3}
-                            </span>
-                          )}
-                        </div>
-
-                        <div className="flex items-center gap-3 pt-3 border-t border-[#fa7636]/10">
-                          <button
-                            onClick={() => setOpenIndex(globalIdx)}
-                            className="flex-1 rounded-full bg-gold-gradient px-4 py-2 font-serif text-sm font-bold text-[#0a0402] transition-all duration-300 hover:shadow-lg hover:shadow-[#fa7636]/30 sm:hover:scale-105"
-                          >
-                            Learn More
-                          </button>
-                          {project.demoUrl && (
-                            <a
-                              href={project.demoUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="flex h-10 w-10 items-center justify-center rounded-full bg-[#fceee6] text-[#0a0402] transition-all duration-300 hover:bg-white hover:shadow-lg sm:hover:scale-110"
-                              title="View Demo"
-                            >
-                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                              </svg>
-                            </a>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Decorative accent */}
-                      <div className="absolute top-0 left-0 h-1 w-1/2 bg-gold-gradient opacity-50 group-hover:opacity-100 transition-opacity" />
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          ) : (
-            // List view
-            <div className="mt-10 min-w-0 space-y-6">
-              {filtered.map((project) => {
-                const globalIdx = projects.findIndex((p) => p.title === project.title);
-                return (
-                  <div
-                    key={project.title}
-                    className="group relative flex flex-col md:flex-row gap-6 items-start bg-gradient-to-br from-[#1a0e09]/90 to-[#120905]/90 border-2 border-[#fa7636]/20 rounded-3xl shadow-xl hover:shadow-[0_0_35px_rgba(250,118,54,0.25)] hover:border-[#fa7636]/50 transition-all duration-300 overflow-hidden"
-                  >
-                    {/* Background glow effect */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#fa7636]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-                    <div className="relative flex flex-col md:flex-row gap-6 items-start p-6 w-full">
-                      {/* Image */}
-                      <div className="relative flex-shrink-0 mx-auto md:mx-0">
-                        <div className="absolute inset-0 bg-gold-gradient opacity-20 blur-2xl rounded-2xl group-hover:opacity-40 transition-opacity" />
-                        <img
-                          src={project.modalImage || project.image}
-                          alt={project.title}
-                          className="relative w-48 h-36 md:w-56 md:h-40 object-contain rounded-2xl bg-gradient-to-br from-white to-[#fceee6] p-4 shadow-lg group-hover:scale-105 transition-transform duration-300"
-                          loading="lazy"
-                        />
-                      </div>
-
-                      {/* Content */}
-                      <div className="min-w-0 flex-1">
-                        <h3 className="mb-3 break-words bg-gradient-to-r from-[#fa7636] via-[#ff9462] to-[#ffb48a] bg-clip-text font-serif text-2xl font-bold leading-tight text-transparent sm:text-3xl">
-                          {project.title}
-                        </h3>
-                        <p className="text-base text-[#e6dcd2]/90 leading-relaxed mb-4">
-                          {project.description}
-                        </p>
-                        <div className="flex flex-wrap gap-2.5">
-                          {project.tech.slice(0, 8).map((t) => (
-                            <span
-                              key={t.label}
-                              className="group/tech flex items-center gap-2 bg-[#1f1411]/60 px-3 py-2 rounded-full text-sm text-[#fceee6] border border-[#fa7636]/20 hover:border-[#fa7636]/50 hover:bg-[#2a1b15]/80 transition-all"
-                            >
-                              <img
-                                src={t.icon}
-                                alt={t.label}
-                                className="w-5 h-5 bg-white rounded p-0.5 group-hover/tech:scale-110 transition-transform"
-                              />
-                              {t.label}
-                            </span>
-                          ))}
-                          {project.tech.length > 8 && (
-                            <span className="flex items-center justify-center px-3 py-2 rounded-full text-sm text-[#ffb48a] bg-[#fa7636]/10 border border-[#fa7636]/20 font-semibold">
-                              +{project.tech.length - 8} more
-                            </span>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Actions */}
-                      <div className="flex md:flex-col gap-3 self-stretch md:self-start justify-center md:justify-start w-full md:w-auto">
-                        <button
-                          onClick={() => setOpenIndex(globalIdx)}
-                          className="flex-1 whitespace-nowrap rounded-full bg-gold-gradient px-6 py-3 font-serif text-sm font-bold text-[#0a0402] shadow-lg transition-all duration-300 hover:shadow-[#fa7636]/30 sm:hover:scale-105 md:flex-initial"
-                        >
-                          Learn More
-                        </button>
-                        {project.demoUrl && (
-                          <a
-                            href={project.demoUrl}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="flex-1 whitespace-nowrap rounded-full bg-[#fceee6] px-6 py-3 text-center font-serif text-sm font-bold text-[#0a0402] shadow-lg transition-all duration-300 hover:bg-white hover:shadow-xl sm:hover:scale-105 md:flex-initial"
-                          >
-                            View Demo
-                          </a>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Decorative accents */}
-                    <div className="absolute top-0 left-0 h-1.5 w-1/2 bg-gold-gradient opacity-70 group-hover:opacity-100 transition-opacity" />
-                    <div className="absolute bottom-0 right-0 h-1.5 w-1/3 bg-gold-gradient opacity-70 group-hover:opacity-100 transition-opacity" />
-                  </div>
-                );
-              })}
-            </div>
-          )
-        ) : (
-          <div className="flex flex-col items-center justify-center py-32 text-center">
-            <div className="relative mb-8">
-              <div className="absolute inset-0 bg-gold-gradient opacity-10 blur-3xl rounded-full" />
-              <div className="relative w-48 h-48 mx-auto bg-gradient-to-br from-[#1a0e09] to-[#120905] rounded-full border-2 border-[#fa7636]/20 flex items-center justify-center">
-                <svg className="w-24 h-24 text-[#fa7636]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-            </div>
-            <h3 className="text-2xl font-serif font-bold text-[#ffb48a] mb-3">No Projects Found</h3>
-            <p className="text-[#d9c9bf] text-lg mb-6 max-w-md">
-              We couldn't find any projects matching your criteria. Try adjusting your filters or search terms.
-            </p>
-            <button
-              onClick={() => {
-                setQuery("");
-                setActiveCategory("All");
-                setSort("featured");
-              }}
-              className="rounded-full bg-gold-gradient px-8 py-3 font-serif font-bold text-[#0a0402] shadow-lg transition-all duration-300 hover:shadow-[#fa7636]/30 sm:hover:scale-105"
-            >
-              Reset Filters
-            </button>
-          </div>
-        )}
+          }
+        />
       </FadeInEffect>
 
-      {/* Decorative bottom borders */}
-      <div className="absolute inset-x-0 bottom-0 flex justify-between opacity-20 pointer-events-none">
-        <img src="/images/greek-border.svg" alt="" className="h-12" />
-        <img src="/images/greek-border.svg" alt="" className="h-12 rotate-180" />
-      </div>
+      <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3" aria-live="polite">
+        {visible.map((project, i) => (
+          <li key={project.title}>
+            <FadeInEffect delay={(i % 3) * 0.06} className="h-full">
+              <ProjectTile project={project} index={i} onOpen={() => setOpen(project)} />
+            </FadeInEffect>
+          </li>
+        ))}
 
-      {/* Modal */}
-      {openIndex !== null && (
-        <ProjectModal
-          project={projects[openIndex]}
-          onClose={() => setOpenIndex(null)}
-        />
-      )}
-    </section>
+        {hasPlaceholder && filter === "All" ? (
+          <li>
+            <FadeInEffect delay={(visible.length % 3) * 0.06} className="h-full">
+              <a
+                href={site.githubProfile}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="chamfer group relative flex h-full min-h-64 flex-col items-center justify-center border border-dashed border-ember/40 p-8 text-center transition hover:border-ember hover:bg-ember/[0.06]"
+              >
+                <span className="chamfer-sm flex h-12 w-12 items-center justify-center bg-ember/15 text-ember">
+                  <Hammer className="h-5 w-5" />
+                </span>
+                <p className="mt-4 font-mono text-xs uppercase tracking-[0.2em] text-ember">P-?? · Fabricating</p>
+                <p className="mt-2 font-semibold text-cream">More in the forge</p>
+                <p className="mt-1 max-w-[16rem] text-sm text-sand">
+                  Something new is being built. Meanwhile, browse everything on GitHub.
+                </p>
+                <span className="mt-4 inline-flex items-center gap-1 font-mono text-xs text-peach">
+                  github.com/The-Hieusss
+                  <ArrowUpRight className="h-4 w-4 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                </span>
+              </a>
+            </FadeInEffect>
+          </li>
+        ) : null}
+      </ul>
+
+      <ProjectModal project={open} onClose={() => setOpen(null)} />
+    </Section>
   );
 }
 

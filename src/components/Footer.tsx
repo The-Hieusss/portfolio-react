@@ -1,66 +1,57 @@
-import { Omega } from "lucide-react";
+import { ArrowUp } from "lucide-react";
+import { navLinks, site, socialLinks } from "./data/site";
+import { GreekDivider } from "./ui/section";
 
 function Footer() {
   return (
-    <footer className="bg-[#0a0402] text-[#fceee6] py-10 border-t border-[#fa7636]/20">
-      <div className="container mx-auto px-4 ">
-        <div className="flex flex-wrap justify-between gap-12 mb-10">
-          {/* Motto */}
-          <div>
-            <h2 className="text-xl font-serif font-bold mb-2 text-gold-gradient tracking-wider">
-              VENI, VIDI, VICI
-            </h2>
-          </div>
+    <footer className="relative">
+      <GreekDivider label="END OF TRANSMISSION" />
+      <div className="mx-auto flex max-w-6xl flex-col gap-8 px-5 py-10 sm:px-8 md:flex-row md:items-center md:justify-between">
+        <div>
+          <p className="flex items-center gap-2.5">
+            <img src="/images/favicon.svg" alt="" className="glow-ember h-7 w-7" />
+            <span className="font-display text-sm font-semibold tracking-[0.2em] text-cream">HIEU <span className="text-ember">THAN</span></span>
+          </p>
+          <p className="mt-2 font-mono text-[10px] tracking-[0.3em] text-ember/80">VENI · VIDI · VICI</p>
+        </div>
 
-          {/* Navigation Links */}
-          <div>
-            <h2 className="text-xl font-serif font-bold mb-2 text-gold-gradient">
-              Links
-            </h2>
-            <ul className="space-y-1 font-sans">
-              {["Home", "About", "Resume", "Projects", "Contact"].map((label) => (
-                <li key={label}>
-                  <a
-                    href={`#${label.toLowerCase()}-section`}
-                    className="hover:text-[#ffb48a] transition"
-                  >
-                    {label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact Info */}
-          <div>
-            <h2 className="text-xl font-serif font-bold mb-2 text-gold-gradient tracking-wide">
-              DEUS EX MACHINA
-            </h2>
-            <ul className="space-y-1 font-sans">
-              <li>
-                📞{" "}
-                <span className="ml-1">
-                  602-214-1715
-                </span>
-              </li>
-              <li>
-                📧{" "}
-                <a
-                  href="mailto:hank170305@gmail.com"
-                  className="hover:text-[#ffb48a] ml-1 transition"
-                >
-                  hieuthan1703@gmail.com
+        <nav aria-label="Footer">
+          <ul className="flex flex-wrap gap-x-5 gap-y-2 font-mono text-xs uppercase tracking-[0.14em] text-sand">
+            {navLinks.map((l) => (
+              <li key={l.to}>
+                <a href={`#${l.to}`} className="transition hover:text-peach">
+                  {l.label}
                 </a>
               </li>
-            </ul>
-          </div>
-        </div>
+            ))}
+          </ul>
+        </nav>
 
-        {/* Logo */}
-        <div className="flex justify-center">
-          <Omega className="h-24 w-24 animate-bounce" />
+        <div className="flex items-center gap-2">
+          {socialLinks.map(({ label, href, icon: Icon }) => (
+            <a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={label}
+              className="chamfer-sm flex h-9 w-9 items-center justify-center text-peach transition hover:bg-ember hover:text-ink"
+            >
+              <Icon className="h-4 w-4" />
+            </a>
+          ))}
+          <a
+            href="#home-section"
+            aria-label="Back to top"
+            className="chamfer-sm ml-2 flex h-9 w-9 items-center justify-center bg-ember text-ink transition hover:brightness-110"
+          >
+            <ArrowUp className="h-4 w-4" />
+          </a>
         </div>
       </div>
+      <p className="pb-8 text-center font-mono text-[10px] uppercase tracking-[0.18em] text-dim">
+        © {new Date().getFullYear()} {site.name}. Designed and built by me.
+      </p>
     </footer>
   );
 }

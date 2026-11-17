@@ -1,21 +1,25 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
 
 interface FadeInSectionProps {
   children: ReactNode;
   className?: string;
   id?: string;
+  delay?: number;
 }
 
-const FadeInEffect = ({ children, className, id }: FadeInSectionProps) => {
+/** Reveals its children once as they scroll into view. */
+const FadeInEffect = ({ children, className, id, delay = 0 }: FadeInSectionProps) => {
+  const reduce = useReducedMotion();
+
   return (
     <motion.div
       id={id}
       className={className}
-      initial={{ opacity: 0, y: 50 }}
+      initial={reduce ? false : { opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ amount: 0.2 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay }}
     >
       {children}
     </motion.div>
