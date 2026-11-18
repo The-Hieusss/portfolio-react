@@ -1,7 +1,7 @@
 import { Typewriter } from "react-simple-typewriter";
 import { ArrowDown, ArrowRight, FileText, Mail } from "lucide-react";
 import { Link as ScrollLink } from "react-scroll";
-import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { site, socialLinks } from "./data/site";
 import { buttonStyles, HudCorners } from "./ui/section";
@@ -10,11 +10,14 @@ import { useHeroInView } from "@/hooks/useHeroInView";
 import { playMechaSpin } from "@/lib/mecha-sfx";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import TeleportHalo from "./hero/TeleportHalo";
+import { useBooted } from "@/lib/boot";
 
 const rotatingTexts = ["web apps.", "mobile apps.", "AI tools.", "useful software."];
 
 function Hero() {
   const reduce = useReducedMotion();
+  // Hold the entrance until the boot screen's doors open.
+  const booted = useBooted();
   const sectionRef = useRef<HTMLElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const homeRef = useRef<HTMLDivElement>(null);
@@ -26,21 +29,7 @@ function Hero() {
   const away = !useHeroInView();
   const chargeTimer = useRef<number | undefined>(undefined);
 
-  // Halo tilts toward the pointer (desktop only).
-  const px = useMotionValue(0);
-  const py = useMotionValue(0);
-  const rotateY = useSpring(useTransform(px, [-1, 1], [-18, 18]), { stiffness: 120, damping: 14 });
-  const rotateX = useSpring(useTransform(py, [-1, 1], [14, -14]), { stiffness: 120, damping: 14 });
-
   useEffect(() => () => window.clearTimeout(chargeTimer.current), []);
-
-  const onPointerMove = (e: React.PointerEvent) => {
-    if (reduce || e.pointerType !== "mouse") return;
-    const r = sectionRef.current?.getBoundingClientRect();
-    if (!r) return;
-    px.set(((e.clientX - r.left) / r.width) * 2 - 1);
-    py.set(((e.clientY - r.top) / r.height) * 2 - 1);
-  };
 
   const overclock = () => {
     playMechaSpin(2.6);
@@ -54,19 +43,14 @@ function Hero() {
       ? {}
       : {
           initial: { opacity: 0, y: 18 },
-          animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const, delay },
+          animate: booted ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 },
+          transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const, delay: delay + 0.25 },
         };
 
   return (
     <section
       ref={sectionRef}
       id="home-section"
-      onPointerMove={onPointerMove}
-      onPointerLeave={() => {
-        px.set(0);
-        py.set(0);
-      }}
       className="relative isolate flex min-h-[100svh] items-center overflow-hidden"
     >
       {/* Background art, tinted ember */}
@@ -88,7 +72,6 @@ function Hero() {
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-20 hidden md:block">
         <div className="mx-auto flex max-w-6xl justify-between px-8 font-mono text-[10px] tracking-[0.25em] text-ember/80">
           <span>SYS://PORTFOLIO v3.0</span>
-          <span>33.42°N · 111.94°W · TEMPE</span>
         </div>
       </div>
 
@@ -187,7 +170,7 @@ function Hero() {
           </div>
         ) : (
           /* Mecha halo: background accent on mobile, its own column on desktop */
-        <div className="pointer-events-none absolute -right-40 top-20 -z-10 w-[24rem] opacity-[0.18] [perspective:900px] sm:-right-24 sm:opacity-25 lg:pointer-events-auto lg:relative lg:inset-auto lg:z-auto lg:w-full lg:opacity-100">
+        <div className="pointer-events-none absolute -right-40 top-20 -z-10 w-[24rem] opacity-[0.18] sm:-right-24 sm:opacity-25 lg:pointer-events-auto lg:relative lg:inset-auto lg:z-auto lg:w-full lg:opacity-100">
           {/* teleport beam when ΑΘΗΝΑ returns */}
           {!reduce ? (
             <motion.span
@@ -216,7 +199,6 @@ function Hero() {
                 ? { duration: 0.45, ease: "easeIn" }
                 : { duration: charged ? 0.25 : 0.9, ease: [0.22, 1, 0.36, 1], delay: charged ? 0 : 0.35 }
             }
-            style={reduce ? undefined : { rotateX, rotateY, transformStyle: "preserve-3d" }}
             className="relative p-4"
           >
             <HudCorners size="h-5 w-5" className="hidden lg:block" />
@@ -247,8 +229,6 @@ function Hero() {
           charged={charged}
           surge={surge}
           onOverclock={overclock}
-          rotateX={rotateX}
-          rotateY={rotateY}
         />
       ) : null}
 

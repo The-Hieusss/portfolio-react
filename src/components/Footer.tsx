@@ -1,5 +1,5 @@
 import { ArrowUp } from "lucide-react";
-import { navLinks, site, socialLinks } from "./data/site";
+import { navLinks, socialLinks } from "./data/site";
 import { GreekDivider } from "./ui/section";
 
 function Footer() {
@@ -49,9 +49,6 @@ function Footer() {
           </a>
         </div>
       </div>
-      <p className="pb-8 text-center font-mono text-[10px] uppercase tracking-[0.18em] text-dim">
-        © {new Date().getFullYear()} {site.name}. Designed and built by me.
-      </p>
     </footer>
   );
 }

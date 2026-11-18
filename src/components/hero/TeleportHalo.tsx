@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { RefObject } from "react";
 import { motion } from "framer-motion";
-import type { MotionValue } from "framer-motion";
 import MechaHalo from "../ui/mecha-halo";
 import { HudCorners } from "../ui/section";
 
@@ -128,8 +127,6 @@ export default function TeleportHalo({
   charged,
   surge,
   onOverclock,
-  rotateX,
-  rotateY,
 }: {
   sectionRef: RefObject<HTMLElement | null>;
   textRef: RefObject<HTMLElement | null>;
@@ -138,8 +135,6 @@ export default function TeleportHalo({
   charged: boolean;
   surge: number;
   onOverclock: () => void;
-  rotateX: MotionValue<number>;
-  rotateY: MotionValue<number>;
 }) {
   const [spot, setSpot] = useState<Spot | null>(null);
   const [phase, setPhase] = useState<Phase>("idle");
@@ -293,7 +288,7 @@ export default function TeleportHalo({
 
   return (
     <div
-      className="absolute z-10 [perspective:900px]"
+      className="absolute z-10"
       style={{ left: spot.x, top: spot.y, width: spot.size }}
       onPointerEnter={() => (hovering.current = true)}
       onPointerLeave={() => (hovering.current = false)}
@@ -303,7 +298,6 @@ export default function TeleportHalo({
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ ...animate, transitionEnd: phase === "idle" && !away ? { filter: "none" } : undefined }}
         transition={transition}
-        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
         className={big ? "relative p-4" : "relative p-2"}
       >
         <HudCorners size={big ? "h-5 w-5" : "h-3 w-3"} />

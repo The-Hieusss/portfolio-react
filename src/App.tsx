@@ -8,6 +8,7 @@ import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import Assistant from "./components/assistant/Assistant";
 import { Analytics } from "@vercel/analytics/react";
+import BootScreen from "./components/BootScreen";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
       </main>
       <Footer />
       <Assistant />
+      <BootScreen />
       <Analytics />
     </div>
   );

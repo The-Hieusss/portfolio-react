@@ -100,6 +100,33 @@ function Radial({ angle, push, dist, children }: { angle: number; push: MotionVa
   return <motion.g style={{ x, y }}>{children}</motion.g>;
 }
 
+/* ── 3D rig: the shell is a stack of SVG layers at different depths ─────────── */
+// Depths are in cqw (percent of the halo's own width), so the 3D scales with its size.
+const Z = {
+  back: -9, // glow, outer orbit
+  eye: -5, // eye sits recessed in the socket
+  collar: -1.5, // fins + bezel ring
+  dial: 2.5, // tick dial, radar sweep
+  gear: 5.5,
+  plates: 10, // armor plates + readout (thickness copies sit just behind)
+  clamps: 13,
+};
+const PLATE_DEPTH = [8, 8.7, 9.4]; // extrusion slices behind the plates
+const CLAMP_DEPTH = [11, 12];
+const TILT_X = 16; // max deg toward the cursor
+const TILT_Y = 22;
+const SWAY = { x: 7, y: 11 }; // idle drift amplitude, deg
+
+function Layer({ z, children }: { z: number; children: ReactNode }) {
+  return (
+    <div className="pointer-events-none absolute inset-0" style={{ transform: `translateZ(${z}cqw)` }}>
+      <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full overflow-visible">
+        {children}
+      </svg>
+    </div>
+  );
+}
+
 /** Armored mecha housing around ΑΘΗΝΑ's tracking eye. */
 export default function MechaHalo({
   className,
@@ -125,6 +152,26 @@ export default function MechaHalo({
   const shakeX = useMotionValue(0);
   const shakeY = useMotionValue(0);
   const sweep = useMotionValue(0);
+  const tiltX = useMotionValue(0);
+  const tiltY = useMotionValue(0);
+  const root = useRef<HTMLDivElement>(null);
+  const aim = useRef({ x: 0, y: 0, at: -1e9 });
+
+  // Lean toward the cursor.
+  useEffect(() => {
+    if (reduce) return;
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse" || !root.current) return;
+      const r = root.current.getBoundingClientRect();
+      if (!r.width) return;
+      const clamp = (v: number) => Math.max(-1, Math.min(1, v));
+      const dx = clamp((e.clientX - (r.left + r.width / 2)) / 600);
+      const dy = clamp((e.clientY - (r.top + r.height / 2)) / 500);
+      aim.current = { x: -dy * TILT_X, y: dx * TILT_Y, at: performance.now() };
+    };
+    window.addEventListener("pointermove", onMove, { passive: true });
+    return () => window.removeEventListener("pointermove", onMove);
+  }, [reduce]);
 
   const run = useRef<{ t0: number; e0: number; from: number; to: number } | null>(null);
   const vel = useRef({ orbit: ORBIT_IDLE, gear: GEAR_IDLE, sweep: SWEEP_IDLE });
@@ -161,6 +208,18 @@ export default function MechaHalo({
     gear.set((gear.get() + vel.current.gear * dt) % 360);
     sweep.set((sweep.get() + vel.current.sweep * dt) % 360);
 
+    // Cursor lean, drifting into a slow idle sway when the mouse goes quiet.
+    const now = performance.now();
+    const quiet = Math.min(1, Math.max(0, (now - aim.current.at - 1800) / 1500));
+    const s = now / 1000;
+    const swayX = Math.sin(s * 0.9) * SWAY.x;
+    const swayY = Math.sin(s * 0.7 + 1.3) * SWAY.y;
+    const gx = aim.current.x * (1 - quiet) + swayX * quiet;
+    const gy = aim.current.y * (1 - quiet) + swayY * quiet;
+    const kt = Math.min(1, dt * 5);
+    tiltX.set(tiltX.get() + (gx - tiltX.get()) * kt);
+    tiltY.set(tiltY.get() + (gy - tiltY.get()) * kt);
+
     if (r) {
       const total = cumAt(T) - cumAt(r.e0);
       const prog = total > 0 ? (cumAt(el) - cumAt(r.e0)) / total : 1;
@@ -179,298 +238,339 @@ export default function MechaHalo({
     }
   });
 
+  const plateShape = (p: (typeof plates)[number]) => platePath(PLATE.r1, PLATE.r2, p.a0, p.a1);
+  const clampShape = `${C - 8},${C - 199} ${C + 8},${C - 199} ${C + 12},${C - 191} ${C + 12},${C - 158} ${C - 12},${C - 158} ${C - 12},${C - 191}`;
+
   return (
-    <svg
-      viewBox="0 0 400 400"
-      className={cn("overflow-visible", className)}
+    <div
+      ref={root}
+      className={cn("relative aspect-square [container-type:inline-size]", className)}
       style={{ ["--flow" as string]: charged ? "0.35s" : "2.4s" }}
       aria-hidden
     >
-      <defs>
-        <radialGradient id="halo-core" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#fa7636" stopOpacity="0.55" />
-          <stop offset="55%" stopColor="#fa7636" stopOpacity="0.12" />
-          <stop offset="100%" stopColor="#fa7636" stopOpacity="0" />
-        </radialGradient>
-        <linearGradient id="halo-plate" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#2e1f16" />
-          <stop offset="100%" stopColor="#140d0a" />
-        </linearGradient>
-        <pattern id="halo-hex" width="9" height="15.6" patternUnits="userSpaceOnUse">
-          <path
-            d="M4.5 0 L9 2.6 L9 7.8 L4.5 10.4 L0 7.8 L0 2.6 Z M4.5 10.4 L4.5 15.6"
-            fill="none"
-            stroke="#fa7636"
-            strokeOpacity="0.13"
-            strokeWidth="0.7"
-          />
-        </pattern>
-        <linearGradient id="halo-edge" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#ffb48a" />
-          <stop offset="100%" stopColor="#fa7636" />
-        </linearGradient>
-      </defs>
-
-      {/* glow */}
-      <circle cx={C} cy={C} r="196" fill="url(#halo-core)" style={{ opacity: charged ? 1 : 0.7, transition: "opacity 400ms" }} />
-      {charged ? (
-        <circle cx={C} cy={C} r="110" fill="none" stroke="#ffb48a" strokeWidth="2" className="halo-pulse" style={origin} />
-      ) : null}
-
-      <motion.g style={{ x: shakeX, y: shakeY }}>
-      {/* outer orbit with tracking nodes */}
-      <motion.g style={{ rotate: orbit, ...origin }}>
-        <circle cx={C} cy={C} r="193" fill="none" stroke="#fa7636" strokeOpacity="0.4" strokeWidth="1" strokeDasharray="2 7" />
-        <rect x={C - 4} y={3} width="8" height="8" fill="#fa7636" transform={`rotate(45 ${C} 7)`} />
-        <polygon points={`${C},${C + 188} ${C - 5},${C + 197} ${C + 5},${C + 197}`} fill="#ffb48a" fillOpacity="0.8" />
-      </motion.g>
-
-      {/* rails the armor plates ride on */}
-      {plates.map((p) => {
-        const [cx0, cy0] = pt(188, p.a0 - 2);
-        const [cx1, cy1] = pt(188, p.a1 + 2);
-        return (
-          <g key={p.mid} stroke="#fa7636" strokeOpacity="0.35" strokeWidth="1" fill="none">
-            <path d={arcPath(188, p.a0 - 2, p.a1 + 2)} />
-            <circle cx={cx0} cy={cy0} r="1.6" fill="#fa7636" />
-            <circle cx={cx1} cy={cy1} r="1.6" fill="#fa7636" />
-          </g>
-        );
-      })}
-
-      {/* spinning gear ring */}
-      <motion.g style={{ rotate: gear, ...origin }}>
-        <circle cx={C} cy={C} r="149" fill="none" stroke="#fa7636" strokeOpacity="0.55" strokeWidth="2" />
-        {teeth.map((a) => (
-          <rect
-            key={a}
-            x={C - 2.5}
-            y={C - 156}
-            width="5"
-            height="7"
-            fill="#fa7636"
-            fillOpacity={a % 45 === 0 ? 0.95 : 0.5}
-            transform={`rotate(${a} ${C} ${C})`}
-          />
-        ))}
-      </motion.g>
-
-      {/* armor plates: unlock, rotate a quarter turn, slam back */}
-      <motion.g style={{ rotate: shell, ...origin }}>
-      {plates.map((p) => (
-        <Radial key={p.mid} angle={p.mid} push={push} dist={PUSH_PX}>
-          <path
-            d={platePath(PLATE.r1, PLATE.r2, p.a0, p.a1)}
-            fill="url(#halo-plate)"
-            stroke="url(#halo-edge)"
-            strokeWidth="1.6"
-            strokeOpacity={charged ? 1 : 0.8}
-            style={fade}
-          />
-          {!compact && <path d={platePath(PLATE.r1, PLATE.r2, p.a0, p.a1)} fill="url(#halo-hex)" />}
-          {/* bevel: lit outer lip, shadowed inner lip */}
-          <path d={arcPath(PLATE.r2 - 1.6, p.a0 + 1.5, p.a1 - 1.5)} fill="none" stroke="#ffb48a" strokeOpacity="0.55" strokeWidth="1" />
-          <path d={arcPath(PLATE.r1 + 1.6, p.a0 + 5, p.a1 - 5)} fill="none" stroke="#0b0705" strokeOpacity="0.8" strokeWidth="1.5" />
-          {compact ? (
-            <path d={arcPath(178, p.a0 + 4, p.a1 - 4)} fill="none" stroke="#fa7636" strokeOpacity="0.35" strokeWidth="1" />
-          ) : (
-            <>
-              {/* energy conduit: recessed channel with power flowing through it */}
-              <path d={arcPath(179.5, p.a0 + 3, p.a1 - 3)} fill="none" stroke="#0b0705" strokeWidth="3.4" strokeLinecap="round" />
-              <path
-                d={arcPath(179.5, p.a0 + 3, p.a1 - 3)}
-                fill="none"
-                stroke={charged ? "#fff1e6" : "#fa7636"}
-                strokeOpacity={charged ? 1 : 0.85}
-                strokeWidth="1.4"
-                strokeDasharray="5 11"
-                strokeLinecap="round"
-                className="halo-flow"
-                style={{ filter: "drop-shadow(0 0 2px rgba(250,118,54,0.9))" }}
-              />
-            </>
-          )}
-          {!compact && (
-            <>
-              {/* vent slots either side of the glyph */}
-              {[-1, 1].flatMap((side) =>
-                [0, 1, 2, 3].map((k) => {
-                  const a = p.mid + side * (11 + k * 4);
-                  const [x1, y1] = pt(164, a);
-                  const [x2, y2] = pt(173, a);
-                  return (
-                    <line
-                      key={`${side}-${k}`}
-                      x1={x1}
-                      y1={y1}
-                      x2={x2}
-                      y2={y2}
-                      stroke={charged ? "#ffb48a" : "#fa7636"}
-                      strokeOpacity={0.45 + heat * 0.5}
-                      strokeWidth="2.2"
-                      strokeLinecap="round"
-                      style={fade}
-                    />
-                  );
-                }),
-              )}
-              {/* rivets */}
-              {[p.a0 + 5, p.a1 - 5].map((a) => {
-                const [x, y] = pt(169, a);
-                return <circle key={a} cx={x} cy={y} r="2.3" fill="#0b0705" stroke="#fa7636" strokeOpacity="0.8" strokeWidth="1" />;
-              })}
-              <circle
-                cx={pt(168.5, p.mid)[0]}
-                cy={pt(168.5, p.mid)[1]}
-                r="9.5"
-                fill="#0b0705"
-                stroke="#ffb48a"
-                strokeOpacity={charged ? 1 : 0.6}
-                strokeWidth="1"
-                style={fade}
-              />
-              <circle cx={pt(168.5, p.mid)[0]} cy={pt(168.5, p.mid)[1]} r="12" fill="none" stroke="#fa7636" strokeOpacity="0.35" strokeWidth="0.8" strokeDasharray="1.5 2.5" />
-              <text
-                x={pt(168.5, p.mid)[0]}
-                y={pt(168.5, p.mid)[1] + 4.5}
-                textAnchor="middle"
-                fontFamily="Cinzel, serif"
-                fontSize="13"
-                fill="#ffb48a"
-              >
-                {p.glyph}
-              </text>
-            </>
-          )}
-        </Radial>
-      ))}
-      </motion.g>
-
-      {/* clamps holding the plates, each with a status light */}
-      {clamps.map((a, i) => (
-        <Radial key={a} angle={a} push={push} dist={PUSH_PX + 5}>
-        <g transform={`rotate(${a} ${C} ${C})`}>
-          <polygon
-            points={`${C - 8},${C - 199} ${C + 8},${C - 199} ${C + 12},${C - 191} ${C + 12},${C - 158} ${C - 12},${C - 158} ${C - 12},${C - 191}`}
-            fill="#1c140f"
-            stroke="#fa7636"
-            strokeOpacity="0.85"
-            strokeWidth="1.4"
-          />
-          <line x1={C - 7} y1={C - 165} x2={C + 7} y2={C - 165} stroke="#fa7636" strokeOpacity="0.4" strokeWidth="1" />
-          {!compact && (
-            <g stroke="#fa7636" strokeOpacity="0.45" strokeWidth="0.8" fill="none">
-              <line x1={C - 8.5} y1={C - 186} x2={C - 8.5} y2={C - 161} />
-              <line x1={C + 8.5} y1={C - 186} x2={C + 8.5} y2={C - 161} />
-              <rect x={C - 10} y={C - 188} width="3" height="5" fill="#3a2a20" />
-              <rect x={C + 7} y={C - 188} width="3" height="5" fill="#3a2a20" />
-            </g>
-          )}
-          <polygon points={hex(C, C - 175, 3.6)} fill="#3a2a20" stroke="#ffb48a" strokeOpacity="0.8" strokeWidth="0.8" />
-          <rect
-            x={C - 4}
-            y={C - 195}
-            width="8"
-            height="3"
-            fill={charged ? "#ffb48a" : "#fa7636"}
-            className="animate-pulse"
-            style={{ animationDelay: `${i * 0.5}s` }}
-          />
-        </g>
-        </Radial>
-      ))}
-
-      {/* tick dial */}
-      {!compact && (
-        <g>
-          {ticks.map(({ a, major }) => {
-            const [x1, y1] = pt(major ? 134 : 138, a);
-            const [x2, y2] = pt(143, a);
-            return (
-              <line
-                key={a}
-                x1={x1}
-                y1={y1}
-                x2={x2}
-                y2={y2}
-                stroke="#fa7636"
-                strokeOpacity={major ? 0.9 : 0.35}
-                strokeWidth={major ? 2 : 1}
-              />
-            );
-          })}
-        </g>
-      )}
-
-      {/* radar sweep with a fading trail */}
-      <motion.g style={{ rotate: sweep }}>
-        <circle cx={C} cy={C} r="146" fill="none" />
-        {sweepSlices.map((i) => (
-          <path key={i} d={wedge(110, 146, -i * 4 - 4, -i * 4)} fill="#fa7636" fillOpacity={(0.32 * (10 - i)) / 10} />
-        ))}
-        <line x1={C} y1={C - 110} x2={C} y2={C - 146} stroke="#ffb48a" strokeWidth="1.5" />
-      </motion.g>
-      {!compact &&
-        [0, 90, 180, 270].map((a) => (
-          <polygon
-            key={a}
-            points={`${C},${C - 131} ${C - 4},${C - 137} ${C + 4},${C - 137}`}
-            fill="#ffb48a"
-            transform={`rotate(${a} ${C} ${C})`}
-          />
-        ))}
-
-      {/* heat-sink fin collar: glows when overclocked */}
-      <g>
-        {(compact ? finsCompact : finsFull).map((a) => {
-          const [x1, y1] = pt(113, a);
-          const [x2, y2] = pt(127, a);
-          return (
-            <line
-              key={a}
-              x1={x1}
-              y1={y1}
-              x2={x2}
-              y2={y2}
-              stroke={charged ? "#ffb48a" : "#fa7636"}
-              strokeOpacity={0.3 + heat * 0.6}
-              strokeWidth="3"
-              style={fade}
-            />
-          );
-        })}
-        <circle cx={C} cy={C} r="129.5" fill="none" stroke="#fa7636" strokeOpacity="0.55" strokeWidth="1.2" />
-      </g>
-
-      {/* bolted bezel around the eye */}
-      <circle cx={C} cy={C} r="109" fill="#1c140f" stroke="#fa7636" strokeOpacity="0.75" strokeWidth="1.5" />
-      <circle cx={C} cy={C} r="103" fill="#0b0705" />
-      {!compact &&
-        bolts.map((a) => {
-          const [x, y] = pt(106, a);
-          return <polygon key={a} points={hex(x, y, 2.4)} fill="#3a2a20" stroke="#ffb48a" strokeOpacity="0.7" strokeWidth="0.7" />;
-        })}
-
-      {/* robotic eye core */}
-      <MechaEye cx={C} cy={C} charged={charged} />
-
-      </motion.g>
-
-      {/* readout */}
-      {!compact && (
-        <text
-          x={C}
-          y="399"
-          textAnchor="middle"
-          fontFamily="JetBrains Mono, monospace"
-          fontSize="9"
-          letterSpacing="3"
-          fill="#fa7636"
-          fillOpacity="0.85"
+      <div className="absolute inset-0 [perspective:320cqw]">
+        <motion.div
+          className="absolute inset-0 [transform-style:preserve-3d]"
+          style={{ rotateX: tiltX, rotateY: tiltY, x: shakeX, y: shakeY }}
         >
-          {charged ? "OVERCLOCK ▲▲▲ ENGAGED" : "UNIT H.THAN-01 · ONLINE"}
-        </text>
-      )}
-    </svg>
+          {/* ── back: glow, orbit ── */}
+          <Layer z={Z.back}>
+            <defs>
+              <radialGradient id="halo-core" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="#fa7636" stopOpacity="0.55" />
+                <stop offset="55%" stopColor="#fa7636" stopOpacity="0.12" />
+                <stop offset="100%" stopColor="#fa7636" stopOpacity="0" />
+              </radialGradient>
+              <linearGradient id="halo-plate" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#2e1f16" />
+                <stop offset="100%" stopColor="#140d0a" />
+              </linearGradient>
+              <linearGradient id="halo-edge" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#ffb48a" />
+                <stop offset="100%" stopColor="#fa7636" />
+              </linearGradient>
+              <pattern id="halo-hex" width="9" height="15.6" patternUnits="userSpaceOnUse">
+                <path
+                  d="M4.5 0 L9 2.6 L9 7.8 L4.5 10.4 L0 7.8 L0 2.6 Z M4.5 10.4 L4.5 15.6"
+                  fill="none"
+                  stroke="#fa7636"
+                  strokeOpacity="0.13"
+                  strokeWidth="0.7"
+                />
+              </pattern>
+            </defs>
+            <circle
+              cx={C}
+              cy={C}
+              r="196"
+              fill="url(#halo-core)"
+              style={{ opacity: charged ? 1 : 0.7, transition: "opacity 400ms" }}
+            />
+            {charged ? (
+              <circle cx={C} cy={C} r="110" fill="none" stroke="#ffb48a" strokeWidth="2" className="halo-pulse" style={origin} />
+            ) : null}
+            <motion.g style={{ rotate: orbit }}>
+              <circle cx={C} cy={C} r="193" fill="none" stroke="#fa7636" strokeOpacity="0.4" strokeWidth="1" strokeDasharray="2 7" />
+              <rect x={C - 4} y={3} width="8" height="8" fill="#fa7636" transform={`rotate(45 ${C} 7)`} />
+              <polygon points={`${C},${C + 188} ${C - 5},${C + 197} ${C + 5},${C + 197}`} fill="#ffb48a" fillOpacity="0.8" />
+            </motion.g>
+          </Layer>
+
+          {/* ── eye, recessed in its socket ── */}
+          <Layer z={Z.eye}>
+            <circle cx={C} cy={C} r="104" fill="#0b0705" />
+            <MechaEye cx={C} cy={C} charged={charged} />
+          </Layer>
+
+          {/* ── collar: heat-sink fins + bolted bezel ring (open in the middle) ── */}
+          <Layer z={Z.collar}>
+            {(compact ? finsCompact : finsFull).map((a) => {
+              const [x1, y1] = pt(113, a);
+              const [x2, y2] = pt(127, a);
+              return (
+                <line
+                  key={a}
+                  x1={x1}
+                  y1={y1}
+                  x2={x2}
+                  y2={y2}
+                  stroke={charged ? "#ffb48a" : "#fa7636"}
+                  strokeOpacity={0.3 + heat * 0.6}
+                  strokeWidth="3"
+                  style={fade}
+                />
+              );
+            })}
+            <circle cx={C} cy={C} r="129.5" fill="none" stroke="#fa7636" strokeOpacity="0.55" strokeWidth="1.2" />
+            <circle cx={C} cy={C} r="106" fill="none" stroke="#1c140f" strokeWidth="6" />
+            <circle cx={C} cy={C} r="109" fill="none" stroke="#fa7636" strokeOpacity="0.75" strokeWidth="1.5" />
+            <circle cx={C} cy={C} r="103" fill="none" stroke="#fa7636" strokeOpacity="0.35" strokeWidth="1" />
+            {!compact &&
+              bolts.map((a) => {
+                const [x, y] = pt(106, a);
+                return <polygon key={a} points={hex(x, y, 2.4)} fill="#3a2a20" stroke="#ffb48a" strokeOpacity="0.7" strokeWidth="0.7" />;
+              })}
+          </Layer>
+
+          {/* ── dial: ticks, cardinal markers, radar sweep ── */}
+          <Layer z={Z.dial}>
+            {!compact &&
+              ticks.map(({ a, major }) => {
+                const [x1, y1] = pt(major ? 134 : 138, a);
+                const [x2, y2] = pt(143, a);
+                return (
+                  <line
+                    key={a}
+                    x1={x1}
+                    y1={y1}
+                    x2={x2}
+                    y2={y2}
+                    stroke="#fa7636"
+                    strokeOpacity={major ? 0.9 : 0.35}
+                    strokeWidth={major ? 2 : 1}
+                  />
+                );
+              })}
+            <motion.g style={{ rotate: sweep }}>
+              <circle cx={C} cy={C} r="146" fill="none" />
+              {sweepSlices.map((i) => (
+                <path key={i} d={wedge(110, 146, -i * 4 - 4, -i * 4)} fill="#fa7636" fillOpacity={(0.32 * (10 - i)) / 10} />
+              ))}
+              <line x1={C} y1={C - 110} x2={C} y2={C - 146} stroke="#ffb48a" strokeWidth="1.5" />
+            </motion.g>
+            {!compact &&
+              [0, 90, 180, 270].map((a) => (
+                <polygon
+                  key={a}
+                  points={`${C},${C - 131} ${C - 4},${C - 137} ${C + 4},${C - 137}`}
+                  fill="#ffb48a"
+                  transform={`rotate(${a} ${C} ${C})`}
+                />
+              ))}
+          </Layer>
+
+          {/* ── gear ring + plate rails ── */}
+          <Layer z={Z.gear}>
+            <motion.g style={{ rotate: gear }}>
+              <circle cx={C} cy={C} r="149" fill="none" stroke="#fa7636" strokeOpacity="0.55" strokeWidth="2" />
+              {teeth.map((a) => (
+                <rect
+                  key={a}
+                  x={C - 2.5}
+                  y={C - 156}
+                  width="5"
+                  height="7"
+                  fill="#fa7636"
+                  fillOpacity={a % 45 === 0 ? 0.95 : 0.5}
+                  transform={`rotate(${a} ${C} ${C})`}
+                />
+              ))}
+            </motion.g>
+            {plates.map((p) => {
+              const [cx0, cy0] = pt(188, p.a0 - 2);
+              const [cx1, cy1] = pt(188, p.a1 + 2);
+              return (
+                <g key={p.mid} stroke="#fa7636" strokeOpacity="0.35" strokeWidth="1" fill="none">
+                  <path d={arcPath(188, p.a0 - 2, p.a1 + 2)} />
+                  <circle cx={cx0} cy={cy0} r="1.6" fill="#fa7636" />
+                  <circle cx={cx1} cy={cy1} r="1.6" fill="#fa7636" />
+                </g>
+              );
+            })}
+          </Layer>
+
+          {/* ── plate thickness: darker slices behind the plates ── */}
+          {(compact ? PLATE_DEPTH.slice(1) : PLATE_DEPTH).map((z) => (
+            <Layer key={z} z={z}>
+              <motion.g style={{ rotate: shell }}>
+                <circle cx={C} cy={C} r="184" fill="none" />
+                {plates.map((p) => (
+                  <Radial key={p.mid} angle={p.mid} push={push} dist={PUSH_PX}>
+                    <path d={plateShape(p)} fill="#120a06" stroke="#fa7636" strokeOpacity="0.3" strokeWidth="1.4" />
+                  </Radial>
+                ))}
+              </motion.g>
+            </Layer>
+          ))}
+
+          {/* ── armor plates ── */}
+          <Layer z={Z.plates}>
+            {!compact && (
+              <text
+                x={C}
+                y="399"
+                textAnchor="middle"
+                fontFamily="JetBrains Mono, monospace"
+                fontSize="9"
+                letterSpacing="3"
+                fill="#fa7636"
+                fillOpacity="0.85"
+              >
+                {charged ? "OVERCLOCK ▲▲▲ ENGAGED" : "UNIT H.THAN-01 · ONLINE"}
+              </text>
+            )}
+            <motion.g style={{ rotate: shell }}>
+              <circle cx={C} cy={C} r="184" fill="none" />
+              {plates.map((p) => (
+                <Radial key={p.mid} angle={p.mid} push={push} dist={PUSH_PX}>
+                  <path
+                    d={plateShape(p)}
+                    fill="url(#halo-plate)"
+                    stroke="url(#halo-edge)"
+                    strokeWidth="1.6"
+                    strokeOpacity={charged ? 1 : 0.8}
+                    style={fade}
+                  />
+                  {!compact && <path d={plateShape(p)} fill="url(#halo-hex)" />}
+                  <path d={arcPath(PLATE.r2 - 1.6, p.a0 + 1.5, p.a1 - 1.5)} fill="none" stroke="#ffb48a" strokeOpacity="0.55" strokeWidth="1" />
+                  <path d={arcPath(PLATE.r1 + 1.6, p.a0 + 5, p.a1 - 5)} fill="none" stroke="#0b0705" strokeOpacity="0.8" strokeWidth="1.5" />
+                  {compact ? (
+                    <path d={arcPath(178, p.a0 + 4, p.a1 - 4)} fill="none" stroke="#fa7636" strokeOpacity="0.35" strokeWidth="1" />
+                  ) : (
+                    <>
+                      <path d={arcPath(179.5, p.a0 + 3, p.a1 - 3)} fill="none" stroke="#0b0705" strokeWidth="3.4" strokeLinecap="round" />
+                      <path
+                        d={arcPath(179.5, p.a0 + 3, p.a1 - 3)}
+                        fill="none"
+                        stroke={charged ? "#fff1e6" : "#fa7636"}
+                        strokeOpacity={charged ? 1 : 0.85}
+                        strokeWidth="1.4"
+                        strokeDasharray="5 11"
+                        strokeLinecap="round"
+                        className="halo-flow"
+                        style={{ filter: "drop-shadow(0 0 2px rgba(250,118,54,0.9))" }}
+                      />
+                      {[-1, 1].flatMap((side) =>
+                        [0, 1, 2, 3].map((k) => {
+                          const a = p.mid + side * (11 + k * 4);
+                          const [x1, y1] = pt(164, a);
+                          const [x2, y2] = pt(173, a);
+                          return (
+                            <line
+                              key={`${side}-${k}`}
+                              x1={x1}
+                              y1={y1}
+                              x2={x2}
+                              y2={y2}
+                              stroke={charged ? "#ffb48a" : "#fa7636"}
+                              strokeOpacity={0.45 + heat * 0.5}
+                              strokeWidth="2.2"
+                              strokeLinecap="round"
+                              style={fade}
+                            />
+                          );
+                        }),
+                      )}
+                      {[p.a0 + 5, p.a1 - 5].map((a) => {
+                        const [x, y] = pt(169, a);
+                        return <circle key={a} cx={x} cy={y} r="2.3" fill="#0b0705" stroke="#fa7636" strokeOpacity="0.8" strokeWidth="1" />;
+                      })}
+                      <circle
+                        cx={pt(168.5, p.mid)[0]}
+                        cy={pt(168.5, p.mid)[1]}
+                        r="9.5"
+                        fill="#0b0705"
+                        stroke="#ffb48a"
+                        strokeOpacity={charged ? 1 : 0.6}
+                        strokeWidth="1"
+                        style={fade}
+                      />
+                      <circle
+                        cx={pt(168.5, p.mid)[0]}
+                        cy={pt(168.5, p.mid)[1]}
+                        r="12"
+                        fill="none"
+                        stroke="#fa7636"
+                        strokeOpacity="0.35"
+                        strokeWidth="0.8"
+                        strokeDasharray="1.5 2.5"
+                      />
+                      <text
+                        x={pt(168.5, p.mid)[0]}
+                        y={pt(168.5, p.mid)[1] + 4.5}
+                        textAnchor="middle"
+                        fontFamily="Cinzel, serif"
+                        fontSize="13"
+                        fill="#ffb48a"
+                      >
+                        {p.glyph}
+                      </text>
+                    </>
+                  )}
+                </Radial>
+              ))}
+            </motion.g>
+          </Layer>
+
+          {/* ── clamp thickness ── */}
+          {(compact ? CLAMP_DEPTH.slice(1) : CLAMP_DEPTH).map((z) => (
+            <Layer key={z} z={z}>
+              {clamps.map((a) => (
+                <Radial key={a} angle={a} push={push} dist={PUSH_PX + 5}>
+                  <polygon
+                    points={clampShape}
+                    transform={`rotate(${a} ${C} ${C})`}
+                    fill="#120a06"
+                    stroke="#fa7636"
+                    strokeOpacity="0.3"
+                    strokeWidth="1.2"
+                  />
+                </Radial>
+              ))}
+            </Layer>
+          ))}
+
+          {/* ── clamps, front-most ── */}
+          <Layer z={Z.clamps}>
+            {clamps.map((a, i) => (
+              <Radial key={a} angle={a} push={push} dist={PUSH_PX + 5}>
+                <g transform={`rotate(${a} ${C} ${C})`}>
+                  <polygon points={clampShape} fill="#1c140f" stroke="#fa7636" strokeOpacity="0.85" strokeWidth="1.4" />
+                  <line x1={C - 7} y1={C - 165} x2={C + 7} y2={C - 165} stroke="#fa7636" strokeOpacity="0.4" strokeWidth="1" />
+                  {!compact && (
+                    <g stroke="#fa7636" strokeOpacity="0.45" strokeWidth="0.8" fill="none">
+                      <line x1={C - 8.5} y1={C - 186} x2={C - 8.5} y2={C - 161} />
+                      <line x1={C + 8.5} y1={C - 186} x2={C + 8.5} y2={C - 161} />
+                      <rect x={C - 10} y={C - 188} width="3" height="5" fill="#3a2a20" />
+                      <rect x={C + 7} y={C - 188} width="3" height="5" fill="#3a2a20" />
+                    </g>
+                  )}
+                  <polygon points={hex(C, C - 175, 3.6)} fill="#3a2a20" stroke="#ffb48a" strokeOpacity="0.8" strokeWidth="0.8" />
+                  <rect
+                    x={C - 4}
+                    y={C - 195}
+                    width="8"
+                    height="3"
+                    fill={charged ? "#ffb48a" : "#fa7636"}
+                    className="animate-pulse"
+                    style={{ animationDelay: `${i * 0.5}s` }}
+                  />
+                </g>
+              </Radial>
+            ))}
+          </Layer>
+        </motion.div>
+      </div>
+    </div>
   );
 }
