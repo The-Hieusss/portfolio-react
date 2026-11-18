@@ -195,6 +195,16 @@
   filter: drop-shadow(0 0 18px rgb(250 118 54 / 0.45));
 }
 
+/* Power flowing through ΑΘΗΝΑ's armor conduits */
+.halo-flow {
+  animation: halo-flow var(--flow, 2.4s) linear infinite;
+}
+@keyframes halo-flow {
+  to {
+    stroke-dashoffset: -32;
+  }
+}
+
 /* Shockwave ring when the hero halo is overclocked */
 .halo-pulse {
   animation: halo-pulse 0.9s ease-out infinite;

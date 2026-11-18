@@ -126,6 +126,7 @@ export default function TeleportHalo({
   homeRef,
   away,
   charged,
+  surge,
   onOverclock,
   rotateX,
   rotateY,
@@ -135,6 +136,7 @@ export default function TeleportHalo({
   homeRef: RefObject<HTMLElement | null>;
   away: boolean;
   charged: boolean;
+  surge: number;
   onOverclock: () => void;
   rotateX: MotionValue<number>;
   rotateY: MotionValue<number>;
@@ -316,6 +318,7 @@ export default function TeleportHalo({
           <MechaHalo
             className="w-full transition-[filter] duration-300 group-hover:drop-shadow-[0_0_30px_rgba(250,118,54,0.45)]"
             charged={charged}
+            surge={surge}
             compact={!big}
           />
         </button>

@@ -21,6 +21,7 @@ function Hero() {
   // Desktop: the halo roams the hero. Mobile / reduced motion: it stays a fixed accent.
   const roam = useMediaQuery("(min-width: 1024px)") && !reduce;
   const [charged, setCharged] = useState(false);
+  const [surge, setSurge] = useState(0);
   // When the hero scrolls away, the halo "teleports" to the floating ΑΘΗΝΑ dock.
   const away = !useHeroInView();
   const chargeTimer = useRef<number | undefined>(undefined);
@@ -43,6 +44,7 @@ function Hero() {
 
   const overclock = () => {
     playMechaSpin(2.6);
+    setSurge((n) => n + 1);
     setCharged(true);
     window.clearTimeout(chargeTimer.current);
     chargeTimer.current = window.setTimeout(() => setCharged(false), 2600);
@@ -226,7 +228,7 @@ function Hero() {
               className="group block w-full cursor-pointer rounded-full focus:outline-none"
               title="Click to overclock"
             >
-              <MechaHalo className="w-full transition-[filter] duration-300 group-hover:drop-shadow-[0_0_30px_rgba(250,118,54,0.45)]" charged={charged} />
+              <MechaHalo className="w-full transition-[filter] duration-300 group-hover:drop-shadow-[0_0_30px_rgba(250,118,54,0.45)]" charged={charged} surge={surge} />
             </button>
             <p className="mt-1 hidden text-center font-mono text-[10px] uppercase tracking-[0.25em] text-ember/60 lg:block">
               {charged ? "⚡ Power surge" : "▸ Click the core"}
@@ -243,6 +245,7 @@ function Hero() {
           homeRef={homeRef}
           away={away}
           charged={charged}
+          surge={surge}
           onOverclock={overclock}
           rotateX={rotateX}
           rotateY={rotateY}
