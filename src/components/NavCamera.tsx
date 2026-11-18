@@ -1,9 +1,16 @@
-import { useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { motion, useAnimationFrame, useMotionValue, useReducedMotion, useTransform } from "framer-motion";
 import MechaHalo from "./ui/mecha-halo";
 import { cn } from "@/lib/utils";
 import { setAssistantOpen, useAssistantOpen } from "@/lib/assistant";
 import { playMechaClose, playMechaOpen } from "@/lib/mecha-sfx";
+
+const SIZE = 64; // camera diameter in px (h-16)
+const K = SIZE / 400; // halo viewBox units → px
+const MAX_ANGLE = 70; // keep the ray aimed at the page, not up into the navbar
+const CYCLE = 11; // s: the ray sweeps on its own this often…
+const SHOW = 6; // …for this long
+const TOUCH_HOLD = 2.5; // s the ray stays lit after a touch
 
 /**
  * Phone-only ΑΘΗΝΑ: a surveillance camera hung from the sticky navbar.
@@ -14,6 +21,41 @@ export default function NavCamera({ hidden = false }: { hidden?: boolean }) {
   const reduce = useReducedMotion();
   const open = useAssistantOpen();
   const [surge, setSurge] = useState(0);
+
+  // The eye's gaze (SVG units) drives the ray: its tip sits on the iris and it points where the eye looks.
+  const lookX = useMotionValue(0);
+  const lookY = useMotionValue(0);
+  const look = useMemo(() => ({ x: lookX, y: lookY }), [lookX, lookY]);
+  const tipX = useTransform(lookX, (v) => v * K);
+  const tipY = useTransform(lookY, (v) => v * K);
+  const angle = useTransform([lookX, lookY], ([x, y]: number[]) => {
+    const deg = (Math.atan2(-x, y) * 180) / Math.PI;
+    return Math.max(-MAX_ANGLE, Math.min(MAX_ANGLE, deg));
+  });
+
+  // Lit on its periodic sweep, and whenever someone touches the screen.
+  const rayOpacity = useMotionValue(0);
+  const lastTouch = useRef(-1e9);
+  useEffect(() => {
+    const onTouch = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse") lastTouch.current = performance.now();
+    };
+    window.addEventListener("pointerdown", onTouch, { passive: true });
+    window.addEventListener("pointermove", onTouch, { passive: true });
+    return () => {
+      window.removeEventListener("pointerdown", onTouch);
+      window.removeEventListener("pointermove", onTouch);
+    };
+  }, []);
+  useAnimationFrame((t) => {
+    if (reduce) return;
+    const c = (t / 1000) % CYCLE;
+    const ramp = 0.8;
+    const sweep = c < SHOW ? Math.min(1, c / ramp, (SHOW - c) / ramp) : 0;
+    const since = (performance.now() - lastTouch.current) / 1000;
+    const touch = since < TOUCH_HOLD ? Math.min(1, (TOUCH_HOLD - since) / 0.6) : 0;
+    rayOpacity.set(Math.max(sweep, touch) * 0.9);
+  });
 
   const toggle = () => {
     if (open) {
@@ -33,18 +75,6 @@ export default function NavCamera({ hidden = false }: { hidden?: boolean }) {
         hidden && "pointer-events-none opacity-0",
       )}
     >
-      {/* scan cone: sweeps the page every so often */}
-      {!reduce ? (
-        <motion.div
-          aria-hidden
-          className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[16rem] w-[11rem] -translate-x-1/2 origin-top [clip-path:polygon(50%_0,0_100%,100%_100%)] bg-[linear-gradient(to_bottom,rgba(250,118,54,0.22),rgba(250,118,54,0.05)_60%,transparent)]"
-          animate={{ rotate: [-26, 26, -26], opacity: [0, 0.9, 0.9, 0] }}
-          transition={{
-            rotate: { duration: 6, repeat: Infinity, ease: "easeInOut", repeatDelay: 5 },
-            opacity: { duration: 6, times: [0, 0.15, 0.85, 1], repeat: Infinity, repeatDelay: 5 },
-          }}
-        />
-      ) : null}
 
       {/* ceiling rail the camera hangs from */}
       <span
@@ -73,9 +103,19 @@ export default function NavCamera({ hidden = false }: { hidden?: boolean }) {
           compact
           charged={open}
           surge={surge}
+          look={look}
           className="h-full w-full drop-shadow-[0_0_14px_rgba(250,118,54,0.55)]"
         />
       </button>
+
+      {/* scan ray: shines out of the lens and follows the eye */}
+      {!reduce ? (
+        <motion.div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-1/2 h-[16rem] w-[11rem] -translate-x-1/2 [clip-path:polygon(50%_0,0_100%,100%_100%)] bg-[linear-gradient(to_bottom,rgba(255,180,138,0.45),rgba(250,118,54,0.18)_18%,rgba(250,118,54,0.05)_60%,transparent)] mix-blend-screen"
+          style={{ x: tipX, y: tipY, rotate: angle, opacity: rayOpacity, transformOrigin: "50% 0%" }}
+        />
+      ) : null}
     </div>
   );
 }

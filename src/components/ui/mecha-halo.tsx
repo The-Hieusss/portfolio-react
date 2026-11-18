@@ -4,6 +4,7 @@ import { motion, useAnimationFrame, useMotionValue, useReducedMotion, useTransfo
 import type { MotionValue } from "framer-motion";
 import { cn } from "@/lib/utils";
 import MechaEye from "./mecha-eye";
+import type { EyeLook } from "./mecha-eye";
 
 const C = 200; // center of the 400×400 viewBox
 const origin = { transformOrigin: `${C}px ${C}px` };
@@ -133,6 +134,7 @@ export default function MechaHalo({
   charged = false,
   compact = false,
   surge = 0,
+  look,
 }: {
   className?: string;
   charged?: boolean;
@@ -140,6 +142,8 @@ export default function MechaHalo({
   compact?: boolean;
   /** Increment to fire the overclock spin sequence. */
   surge?: number;
+  /** Receives the eye's gaze so something outside can follow it. */
+  look?: EyeLook;
 }) {
   const heat = charged ? 1 : 0;
   const fade = { transition: "stroke-opacity 300ms, stroke 300ms" };
@@ -299,7 +303,7 @@ export default function MechaHalo({
           {/* ── eye, recessed in its socket ── */}
           <Layer z={Z.eye}>
             <circle cx={C} cy={C} r="104" fill="#0b0705" />
-            <MechaEye cx={C} cy={C} charged={charged} />
+            <MechaEye cx={C} cy={C} charged={charged} look={look} />
           </Layer>
 
           {/* ── collar: heat-sink fins + bolted bezel ring (open in the middle) ── */}

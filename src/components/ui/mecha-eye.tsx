@@ -1,9 +1,13 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { motion, useReducedMotion, useSpring } from "framer-motion";
+import type { MotionValue } from "framer-motion";
+
+/** Optional sink for where the iris is pointing (SVG units, ±MAX_LOOK). */
+export type EyeLook = { x: MotionValue<number>; y: MotionValue<number> };
 
 const SOCKET = 98; // socket radius inside the halo's inner plate (r=104)
 const IRIS = 56;
-const MAX_LOOK = 30; // how far the iris can travel from center
+export const MAX_LOOK = 30; // how far the iris can travel from center
 const IDLE_MS = 2200; // pointer quiet for this long → eye starts looking around
 
 const fibers = Array.from({ length: 16 }, (_, i) => (i * 360) / 16);
@@ -14,7 +18,17 @@ const blades = Array.from({ length: 6 }, (_, i) => i * 60);
  * Tracks the cursor; when the pointer is idle (or on touch screens) it glances around in snappy
  * saccades, blinks with armored shutters, and its aperture breathes.
  */
-export default function MechaEye({ cx, cy, charged = false }: { cx: number; cy: number; charged?: boolean }) {
+export default function MechaEye({
+  cx,
+  cy,
+  charged = false,
+  look,
+}: {
+  cx: number;
+  cy: number;
+  charged?: boolean;
+  look?: EyeLook;
+}) {
   const reduce = useReducedMotion();
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "");
   const anchor = useRef<SVGCircleElement>(null);
@@ -26,6 +40,17 @@ export default function MechaEye({ cx, cy, charged = false }: { cx: number; cy: 
   const spring = reduce ? { stiffness: 90, damping: 20 } : { stiffness: 320, damping: 24, mass: 0.6 };
   const x = useSpring(0, spring);
   const y = useSpring(0, spring);
+
+  // Mirror the iris position out to whoever wants to follow the gaze (e.g. the camera's ray).
+  useEffect(() => {
+    if (!look) return;
+    const a = x.on("change", (v) => look.x.set(v));
+    const b = y.on("change", (v) => look.y.set(v));
+    return () => {
+      a();
+      b();
+    };
+  }, [look, x, y]);
   // Highlights lag slightly behind the iris for a glassy lens feel.
   const hx = useSpring(0, { stiffness: 180, damping: 20 });
   const hy = useSpring(0, { stiffness: 180, damping: 20 });
