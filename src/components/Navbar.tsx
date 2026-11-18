@@ -4,6 +4,7 @@ import { Link as ScrollLink } from "react-scroll";
 import { navLinks, site } from "./data/site";
 import { buttonStyles } from "./ui/section";
 import { cn } from "@/lib/utils";
+import NavCamera from "./NavCamera";
 
 function Navbar() {
   const [open, setOpen] = useState(false);
@@ -101,6 +102,9 @@ function Navbar() {
             </button>
           </div>
         </nav>
+
+        {/* Phones: ΑΘΗΝΑ hangs from the bar as a surveillance camera */}
+        <NavCamera hidden={open} />
 
         {/* Mobile menu */}
         <div

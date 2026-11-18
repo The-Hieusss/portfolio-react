@@ -8,6 +8,8 @@ import MechaHalo from "../ui/mecha-halo";
 import { HudCorners } from "../ui/section";
 import { useHeroInView } from "@/hooks/useHeroInView";
 import { playMechaClose, playMechaOpen } from "@/lib/mecha-sfx";
+import { setAssistantOpen, useAssistantOpen } from "@/lib/assistant";
+import { PHONE_QUERY, useMediaQuery } from "@/hooks/useMediaQuery";
 import { answer, SUGGESTIONS } from "./brain";
 import type { Action, Reply } from "./brain";
 
@@ -132,7 +134,10 @@ export default function Assistant() {
   const heroInView = useHeroInView();
   const away = !heroInView;
 
-  const [open, setOpen] = useState(false);
+  // Phones: ΑΘΗΝΑ lives in the navbar (camera), so no dock; the panel opens under the navbar.
+  const phone = useMediaQuery(PHONE_QUERY);
+  const open = useAssistantOpen();
+  const setOpen = setAssistantOpen;
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [thinking, setThinking] = useState(false);
   const [input, setInput] = useState("");
@@ -188,17 +193,17 @@ export default function Assistant() {
     }
   }, [open, msgs.length, pushBot]);
 
-  // Returning to the hero teleports ΑΘΗΝΑ home and closes the panel.
+  // Desktop: returning to the hero teleports ΑΘΗΝΑ home and closes the panel.
   useEffect(() => {
-    if (!away) setOpen(false);
-  }, [away]);
+    if (!away && !phone) setOpen(false);
+  }, [away, phone, setOpen]);
 
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
+  }, [open, setOpen]);
 
   useEffect(() => () => window.clearTimeout(timer.current), []);
   useEffect(scrollToEnd, [msgs, thinking, scrollToEnd]);
@@ -232,16 +237,28 @@ export default function Assistant() {
     <>
       {/* Chat panel */}
       <AnimatePresence>
-        {away && open ? (
+        {(away || phone) && open ? (
           <motion.div
             key="panel"
             role="dialog"
             aria-label="ΑΘΗΝΑ assistant"
-            initial={reduce ? { opacity: 0 } : { opacity: 0, y: 16, scale: 0.96, clipPath: "inset(100% 0 0 0)" }}
-            animate={{ opacity: 1, y: 0, scale: 1, clipPath: "inset(0% 0 0 0)" }}
-            exit={reduce ? { opacity: 0 } : { opacity: 0, y: 12, scale: 0.97, clipPath: "inset(100% 0 0 0)" }}
+            initial={
+              reduce
+                ? { opacity: 0 }
+                : { opacity: 0, y: phone ? -16 : 16, scale: 0.96, clipPath: phone ? "inset(0 0 100% 0)" : "inset(100% 0 0 0)" }
+            }
+            animate={{ opacity: 1, y: 0, scale: 1, clipPath: "inset(0% 0 0% 0)" }}
+            exit={
+              reduce
+                ? { opacity: 0 }
+                : { opacity: 0, y: phone ? -12 : 12, scale: 0.97, clipPath: phone ? "inset(0 0 100% 0)" : "inset(100% 0 0 0)" }
+            }
             transition={{ duration: 0.35, ease }}
-            className="fixed bottom-28 right-3 z-50 flex h-[min(34rem,calc(100svh-11rem))] w-[calc(100vw-1.5rem)] origin-bottom-right flex-col sm:bottom-[9.5rem] sm:right-6 sm:w-[24rem]"
+            className={
+              phone
+                ? "fixed right-3 top-[6.875rem] z-50 flex h-[min(34rem,calc(100svh-8rem))] w-[calc(100vw-1.5rem)] origin-top flex-col"
+                : "fixed bottom-28 right-3 z-50 flex h-[min(34rem,calc(100svh-11rem))] w-[calc(100vw-1.5rem)] origin-bottom-right flex-col sm:bottom-[9.5rem] sm:right-6 sm:w-[24rem]"
+            }
           >
             <div className="chamfer flex h-full flex-col bg-ember/40 p-px drop-shadow-[0_0_40px_rgba(250,118,54,0.25)]">
               <div className="chamfer relative flex h-full flex-col overflow-hidden bg-ink">
@@ -360,7 +377,7 @@ export default function Assistant() {
 
       {/* Docked ΑΘΗΝΑ (teleports in when the hero scrolls away) */}
       <AnimatePresence>
-        {away ? (
+        {away && !phone ? (
           <motion.div
             key="dock"
             variants={reduce ? undefined : root}

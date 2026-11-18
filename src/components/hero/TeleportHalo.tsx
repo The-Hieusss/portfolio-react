@@ -3,6 +3,7 @@ import type { RefObject } from "react";
 import { motion } from "framer-motion";
 import MechaHalo from "../ui/mecha-halo";
 import { HudCorners } from "../ui/section";
+import { useBooted } from "@/lib/boot";
 
 type Spot = { x: number; y: number; size: number; home: boolean };
 type Phase = "idle" | "out" | "in";
@@ -11,7 +12,10 @@ type Box = { x: number; y: number; w: number; h: number };
 const OUT_MS = 450;
 const IN_MS = 750;
 const HINT_H = 28; // room for the "Click the core" line under big halos
-const SMALL = [110, 170] as const; // size range in the text column
+const SMALL = [110, 170] as const; // size range in the text column (desktop)
+const SMALL_PHONE = [88, 130] as const; // size range on narrow screens
+const FREE_HOME_SIZES = [130, 116, 100, 88]; // phone resting sizes, largest that fits wins
+const PHONE_W = 640;
 const EDGE = 16;
 const TOP_SAFE = 96; // navbar + HUD readout row
 const PAD = 14; // breathing room around text
@@ -45,6 +49,25 @@ function measureObstacles(section: DOMRect, textCol: HTMLElement): Box[] {
     }
   });
   return out;
+}
+
+/**
+ * No layout slot (phones): find the largest clear resting spot, scanning from the top-right
+ * so it settles in the open space above the text. Null when the screen leaves no gap.
+ */
+function findFreeHome(section: DOMRect, textCol: HTMLElement): Spot | null {
+  const obstacles = measureObstacles(section, textCol);
+  const W = section.width;
+  const H = section.height;
+  for (const size of FREE_HOME_SIZES) {
+    for (let y = TOP_SAFE; y <= H - size - 40; y += 8) {
+      for (let x = W - size - EDGE; x >= EDGE; x -= 8) {
+        const box = { x, y, w: size, h: size };
+        if (!obstacles.some((o) => hits(box, o))) return { x, y, size, home: true };
+      }
+    }
+  }
+  return null;
 }
 
 const sparks = Array.from({ length: 14 }, (_, i) => {
@@ -116,8 +139,10 @@ const fx = (b: number, split: number, a: number) =>
   `brightness(${b}) drop-shadow(${split}px 0 0 rgba(255,214,170,${a})) drop-shadow(${-split}px 0 0 rgba(230,60,20,${a}))`;
 
 /**
- * Desktop hero halo that periodically teleports to random spots in the hero.
- * In the text column it shrinks and only lands in gaps that don't cover the name, tagline or buttons.
+ * Hero halo that periodically teleports to random spots in the hero.
+ * Desktop: parks in the right-column slot (`homeRef`); in the text column it shrinks.
+ * Phones: no slot, so it finds its own clear spot and hops between the gaps above/below the text.
+ * It never lands on the name, tagline or buttons. `still` (reduced motion) parks it without teleporting.
  */
 export default function TeleportHalo({
   sectionRef,
@@ -127,6 +152,7 @@ export default function TeleportHalo({
   charged,
   surge,
   onOverclock,
+  still = false,
 }: {
   sectionRef: RefObject<HTMLElement | null>;
   textRef: RefObject<HTMLElement | null>;
@@ -135,8 +161,10 @@ export default function TeleportHalo({
   charged: boolean;
   surge: number;
   onOverclock: () => void;
+  still?: boolean;
 }) {
   const [spot, setSpot] = useState<Spot | null>(null);
+  const [noRoom, setNoRoom] = useState(false);
   const [phase, setPhase] = useState<Phase>("idle");
   const [stage, setStage] = useState(0); // remounts FX each stage
   const hovering = useRef(false);
@@ -146,23 +174,41 @@ export default function TeleportHalo({
 
   const homeSpot = useCallback((): Spot | null => {
     const s = sectionRef.current?.getBoundingClientRect();
+    if (!s) return null;
     const h = homeRef.current?.getBoundingClientRect();
-    if (!s || !h || !h.width) return null;
-    return { x: h.left - s.left, y: h.top - s.top, size: h.width, home: true };
-  }, [sectionRef, homeRef]);
+    if (h && h.width) return { x: h.left - s.left, y: h.top - s.top, size: h.width, home: true };
+    return textRef.current ? findFreeHome(s, textRef.current) : null;
+  }, [sectionRef, homeRef, textRef]);
 
   // Park at home on mount and whenever layout changes while parked.
   useLayoutEffect(() => {
     // Any layout change sends it home rather than risk a random spot now overlapping text.
     const park = () => {
-      if (!busy.current) setSpot(homeSpot());
+      if (busy.current) return;
+      const h = homeSpot();
+      setSpot(h);
+      setNoRoom(!h);
     };
     park();
     const ro = new ResizeObserver(park);
     if (sectionRef.current) ro.observe(sectionRef.current);
     if (homeRef.current) ro.observe(homeRef.current);
+    if (textRef.current) ro.observe(textRef.current);
     return () => ro.disconnect();
-  }, [homeSpot, sectionRef, homeRef]);
+  }, [homeSpot, sectionRef, homeRef, textRef]);
+
+  // The hero text rises into place after the boot screen: re-measure once it has settled.
+  const booted = useBooted();
+  useEffect(() => {
+    if (!booted) return;
+    const t = window.setTimeout(() => {
+      if (busy.current || (spotRef.current && !spotRef.current.home)) return;
+      const h = homeSpot();
+      setSpot(h);
+      setNoRoom(!h);
+    }, 1400);
+    return () => window.clearTimeout(t);
+  }, [booted, homeSpot]);
 
   const pickSpot = useCallback((): Spot | null => {
     const section = sectionRef.current;
@@ -179,9 +225,10 @@ export default function TeleportHalo({
     // Sometimes just go home.
     if (cur && !cur.home && Math.random() < 0.25) return home;
 
+    const small = W < PHONE_W ? SMALL_PHONE : SMALL;
     for (let i = 0; i < 80; i++) {
       const inText = Math.random() < 0.5;
-      const size = inText ? rand(SMALL[0], SMALL[1]) : rand(0.5, 0.95) * home.size;
+      const size = inText ? rand(small[0], small[1]) : rand(0.5, 0.95) * home.size;
       const xMin = inText ? EDGE : textRight + 12;
       const xMax = inText ? textRight - size : W - size - EDGE;
       if (xMax <= xMin) continue;
@@ -221,7 +268,7 @@ export default function TeleportHalo({
 
   // Random teleport loop. Holds while hovered, overclocked, scrolled away or tab hidden.
   useEffect(() => {
-    if (away) return;
+    if (away || still) return;
     let t = 0;
     const loop = (delay: number) => {
       t = window.setTimeout(() => {
@@ -233,7 +280,7 @@ export default function TeleportHalo({
     };
     loop(rand(3500, 6000));
     return () => window.clearTimeout(t);
-  }, [away, charged, pickSpot, teleport]);
+  }, [away, still, charged, pickSpot, teleport]);
 
   // Scrolled away: quietly reset to home. Coming back: beam in there.
   const wasAway = useRef(false);
@@ -245,6 +292,7 @@ export default function TeleportHalo({
     }
     if (!wasAway.current) return;
     wasAway.current = false;
+    if (still) return;
     busy.current = true;
     setPhase("in");
     setStage((n) => n + 1);
@@ -253,7 +301,7 @@ export default function TeleportHalo({
       busy.current = false;
     }, IN_MS + 300);
     return () => window.clearTimeout(t);
-  }, [away, homeSpot]);
+  }, [away, still, homeSpot]);
 
   const animate = useMemo(() => {
     if (away) return { opacity: 0, scaleX: 1.3, scaleY: 0.02, filter: fx(3, 6, 0.8) };
@@ -283,7 +331,13 @@ export default function TeleportHalo({
           ? { duration: 0.45, ease: "easeIn" as const }
           : { duration: charged ? 0.25 : 0.5, ease: [0.22, 1, 0.36, 1] as const };
 
-  if (!spot) return null;
+  // Screen too short to leave any gap: keep the old faded background accent rather than cover text.
+  if (!spot)
+    return noRoom ? (
+      <div aria-hidden className="pointer-events-none absolute -right-24 top-20 -z-10 w-[22rem] opacity-20">
+        <MechaHalo className="w-full" compact />
+      </div>
+    ) : null;
   const big = spot.size >= 250;
 
   return (

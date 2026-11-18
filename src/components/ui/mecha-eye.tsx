@@ -37,10 +37,10 @@ export default function MechaEye({ cx, cy, charged = false }: { cx: number; cy: 
     hy.set(dy * 0.75);
   };
 
-  // Follow the cursor.
+  // Follow the cursor, and on touch screens look at wherever the finger lands or drags.
   useEffect(() => {
     const onMove = (e: PointerEvent) => {
-      if (e.pointerType !== "mouse") return;
+      if (e.pointerType === "mouse" ? false : e.type === "pointermove" && e.pressure === 0) return;
       const el = anchor.current;
       if (!el) return;
       const r = el.getBoundingClientRect();
@@ -54,7 +54,11 @@ export default function MechaEye({ cx, cy, charged = false }: { cx: number; cy: 
       lookAt((vx / dist) * reach, (vy / dist) * reach);
     };
     window.addEventListener("pointermove", onMove, { passive: true });
-    return () => window.removeEventListener("pointermove", onMove);
+    window.addEventListener("pointerdown", onMove, { passive: true });
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerdown", onMove);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

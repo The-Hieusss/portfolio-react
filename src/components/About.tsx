@@ -64,11 +64,7 @@ function PilotScan() {
           </div>
 
           {/* top readout */}
-          <div aria-hidden className="absolute inset-x-0 top-0 flex items-center justify-between bg-gradient-to-b from-ink/80 to-transparent px-4 pb-8 pt-3 font-mono text-[10px] uppercase tracking-[0.2em] text-peach/90">
-            <span className="flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,1)]" />
-              Rec
-            </span>
+          <div aria-hidden className="absolute inset-x-0 top-0 flex items-center justify-end bg-gradient-to-b from-ink/80 to-transparent px-4 pb-8 pt-3 font-mono text-[10px] uppercase tracking-[0.2em] text-peach/90">
             <span>33.42°N · 111.94°W</span>
           </div>
 

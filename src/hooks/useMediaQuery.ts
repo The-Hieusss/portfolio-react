@@ -15,3 +15,6 @@ export function useMediaQuery(query: string) {
 
   return matches;
 }
+
+/** Phone layout: ΑΘΗΝΑ lives in the navbar as a surveillance camera instead of the hero and dock. */
+export const PHONE_QUERY = "(max-width: 767px)";
