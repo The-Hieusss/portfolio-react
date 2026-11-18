@@ -7,12 +7,19 @@ import { site, socialLinks } from "./data/site";
 import { buttonStyles, HudCorners } from "./ui/section";
 import MechaHalo from "./ui/mecha-halo";
 import { useHeroInView } from "@/hooks/useHeroInView";
+import { playMechaSpin } from "@/lib/mecha-sfx";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import TeleportHalo from "./hero/TeleportHalo";
 
 const rotatingTexts = ["web apps.", "mobile apps.", "AI tools.", "useful software."];
 
 function Hero() {
   const reduce = useReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+  const homeRef = useRef<HTMLDivElement>(null);
+  // Desktop: the halo roams the hero. Mobile / reduced motion: it stays a fixed accent.
+  const roam = useMediaQuery("(min-width: 1024px)") && !reduce;
   const [charged, setCharged] = useState(false);
   // When the hero scrolls away, the halo "teleports" to the floating ΑΘΗΝΑ dock.
   const away = !useHeroInView();
@@ -35,6 +42,7 @@ function Hero() {
   };
 
   const overclock = () => {
+    playMechaSpin(2.6);
     setCharged(true);
     window.clearTimeout(chargeTimer.current);
     chargeTimer.current = window.setTimeout(() => setCharged(false), 2600);
@@ -83,9 +91,10 @@ function Hero() {
       </div>
 
       <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-5 pb-24 pt-32 sm:px-8 lg:grid-cols-[1.15fr_0.85fr]">
-        <div className="relative">
+        <div ref={textRef} className="relative">
           <motion.p
             {...rise(0)}
+            data-obstacle="box"
             className="chamfer-sm inline-flex items-center gap-2.5 bg-ember/12 px-3.5 py-2 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-peach"
           >
             <span className="relative flex h-2 w-2">
@@ -97,12 +106,13 @@ function Hero() {
 
           <motion.h1
             {...rise(0.08)}
+            data-obstacle="text"
             className="mt-6 font-display text-5xl font-semibold leading-[1.02] tracking-wide text-cream sm:text-7xl lg:text-8xl"
           >
             Hieu <span className="glow-ember text-gold-gradient">Than</span>
           </motion.h1>
 
-          <motion.div {...rise(0.12)} className="mt-5 flex items-center gap-3" aria-hidden>
+          <motion.div {...rise(0.12)} data-obstacle="children" className="mt-5 flex items-center gap-3" aria-hidden>
             <span className="h-px w-12 bg-ember" />
             <span className="font-mono text-[10px] tracking-[0.22em] text-ember sm:text-[11px] sm:tracking-[0.3em]">
               ENGINEER · BUILDER · ΑΡΙΣΤΕΙΑ
@@ -111,6 +121,7 @@ function Hero() {
 
           <motion.p
             {...rise(0.16)}
+            data-obstacle="box"
             className="mt-6 text-xl font-medium text-cream sm:text-2xl md:text-3xl"
           >
             I build{" "}
@@ -127,7 +138,7 @@ function Hero() {
             </span>
           </motion.p>
 
-          <motion.div {...rise(0.24)} className="mt-9 flex flex-wrap items-center gap-3">
+          <motion.div {...rise(0.24)} data-obstacle="children" className="mt-9 flex flex-wrap items-center gap-3">
             <ScrollLink
               to="project-section"
               href="#project-section"
@@ -166,7 +177,14 @@ function Hero() {
           </motion.div>
         </div>
 
-        {/* Mecha halo: background accent on mobile, its own column on desktop */}
+        {roam ? (
+          /* Home slot: the roaming halo parks here and measures its size from it */
+          <div ref={homeRef} aria-hidden className="pointer-events-none">
+            <div className="aspect-square w-full" />
+            <div className="h-7" />
+          </div>
+        ) : (
+          /* Mecha halo: background accent on mobile, its own column on desktop */
         <div className="pointer-events-none absolute -right-40 top-20 -z-10 w-[24rem] opacity-[0.18] [perspective:900px] sm:-right-24 sm:opacity-25 lg:pointer-events-auto lg:relative lg:inset-auto lg:z-auto lg:w-full lg:opacity-100">
           {/* teleport beam when ΑΘΗΝΑ returns */}
           {!reduce ? (
@@ -215,7 +233,21 @@ function Hero() {
             </p>
           </motion.div>
         </div>
+        )}
       </div>
+
+      {roam ? (
+        <TeleportHalo
+          sectionRef={sectionRef}
+          textRef={textRef}
+          homeRef={homeRef}
+          away={away}
+          charged={charged}
+          onOverclock={overclock}
+          rotateX={rotateX}
+          rotateY={rotateY}
+        />
+      ) : null}
 
       <ScrollLink
         to="about-section"

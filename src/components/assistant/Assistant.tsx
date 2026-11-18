@@ -7,6 +7,7 @@ import { scroller } from "react-scroll";
 import MechaHalo from "../ui/mecha-halo";
 import { HudCorners } from "../ui/section";
 import { useHeroInView } from "@/hooks/useHeroInView";
+import { playMechaClose, playMechaOpen } from "@/lib/mecha-sfx";
 import { answer, SUGGESTIONS } from "./brain";
 import type { Action, Reply } from "./brain";
 
@@ -259,7 +260,10 @@ export default function Assistant() {
                   </div>
                   <button
                     type="button"
-                    onClick={() => setOpen(false)}
+                    onClick={() => {
+                      playMechaClose();
+                      setOpen(false);
+                    }}
                     aria-label="Close assistant"
                     className="chamfer-sm flex h-8 w-8 items-center justify-center bg-ember/10 text-peach transition hover:bg-ember hover:text-ink"
                   >
@@ -392,7 +396,11 @@ export default function Assistant() {
               <motion.button
                 type="button"
                 variants={reduce ? undefined : body}
-                onClick={() => setOpen((v) => !v)}
+                onClick={() => {
+                  if (open) playMechaClose();
+                  else playMechaOpen();
+                  setOpen(!open);
+                }}
                 aria-label={open ? "Close ΑΘΗΝΑ assistant" : "Open ΑΘΗΝΑ assistant"}
                 aria-expanded={open}
                 className="group relative block h-full w-full rounded-full focus-visible:outline-2"

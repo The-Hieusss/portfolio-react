@@ -23,6 +23,8 @@
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --animate-marquee: marquee 40s linear infinite;
+  --animate-shake: shake 0.32s ease-in-out;
+  --animate-portrait-scan: portrait-scan 5s ease-in-out infinite;
   --animate-spin-slow: spin 60s linear infinite;
   --animate-spin-rev: spin-rev 40s linear infinite;
   --animate-scan: scan 7s linear infinite;
@@ -53,6 +55,30 @@
     }
   }
 
+  @keyframes portrait-scan {
+    0% {
+      top: -4rem;
+      opacity: 0;
+    }
+    10%, 85% {
+      opacity: 1;
+    }
+    100% {
+      top: 100%;
+      opacity: 0;
+    }
+  }
+  @keyframes shake {
+    0%, 100% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(-4px);
+    }
+    75% {
+      transform: translateX(4px);
+    }
+  }
   @keyframes marquee {
     from {
       transform: translateX(0);

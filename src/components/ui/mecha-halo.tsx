@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import MechaEye from "./mecha-eye";
 
 const C = 200; // center of the 400×400 viewBox
 const origin = { transformOrigin: `${C}px ${C}px` };
@@ -19,7 +20,7 @@ const ticks = Array.from({ length: 72 }, (_, i) => {
 
 const glyphs = ["Α", "Θ", "Σ", "Ω"];
 
-/** Rotating orange HUD ring with a Spartan helmet at its core. */
+/** Rotating orange HUD ring with a tracking robotic eye at its core. */
 export default function MechaHalo({
   className,
   charged = false,
@@ -177,31 +178,8 @@ export default function MechaHalo({
         strokeOpacity="0.6"
         strokeWidth="1.5"
       />
-      <circle
-        cx={C}
-        cy={C}
-        r="96"
-        fill="none"
-        stroke="#fa7636"
-        strokeOpacity="0.25"
-        strokeWidth="1"
-        strokeDasharray="1 4"
-      />
-
-      {/* Spartan helmet core */}
-      <image
-        href="/images/favicon.svg"
-        x={C - 62}
-        y={C - 62}
-        width="124"
-        height="124"
-        className="animate-flicker"
-        style={{
-          ...origin,
-          transform: charged ? "scale(1.08)" : "scale(1)",
-          transition: "transform 300ms",
-        }}
-      />
+      {/* robotic eye core */}
+      <MechaEye cx={C} cy={C} charged={charged} />
 
       {/* readouts */}
       {!compact && (

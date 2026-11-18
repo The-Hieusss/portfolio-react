@@ -138,12 +138,9 @@ export default function Resume() {
         <FadeInEffect className="mt-20" id="awards">
           <Group icon={<Award className="h-4 w-4" />} title="Awards">
             <ul className="grid gap-3 sm:grid-cols-2">
-              {awards.map((a, i) => (
+              {awards.map((a) => (
                 <li key={a.title}>
-                  <Panel interactive innerClassName="flex items-start gap-4 p-4">
-                    <span className="font-mono text-2xl font-semibold leading-none text-ember/80">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
+                  <Panel interactive innerClassName="p-4">
                     <div className="min-w-0">
                       <p className="font-semibold leading-snug text-cream">{a.title}</p>
                       <p className="mt-0.5 text-sm text-sand">
