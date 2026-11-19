@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Disposable Downloads</title>
+  <desc id="desc">A download folder inside a 24-hour countdown ring, its corner dissolving into pixels</desc>
+  <circle cx="32" cy="32" r="30" fill="#0b1220"/>
+  <!-- 24h countdown ring: track + remaining time -->
+  <circle cx="32" cy="32" r="25" fill="none" stroke="#1e293b" stroke-width="3"/>
+  <circle cx="32" cy="32" r="25" fill="none" stroke="#34d399" stroke-width="3" stroke-linecap="round"
+    stroke-dasharray="112 45.08" transform="rotate(-90 32 32)"/>
+  <!-- ring tick at 12 o'clock -->
+  <rect x="31" y="4.5" width="2" height="4" rx="1" fill="#a7f3d0"/>
+  <!-- folder -->
+  <path d="M18 23.5 Q18 21 20.5 21 H27 L29.5 23.5 H43.5 Q46 23.5 46 26 V42 Q46 44.5 43.5 44.5 H20.5 Q18 44.5 18 42 Z" fill="#34d399"/>
+  <!-- download arrow into a tray -->
+  <path d="M32 27.5 V37" stroke="#0b1220" stroke-width="3" stroke-linecap="round"/>
+  <path d="M27.8 33.2 L32 37.4 L36.2 33.2" fill="none" stroke="#0b1220" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M26 40.6 H38" stroke="#0b1220" stroke-width="2.4" stroke-linecap="round"/>
+  <!-- corner breaking apart: bites out of the folder… -->
+  <rect x="43.5" y="40" width="3" height="3" fill="#0b1220"/>
+  <rect x="40.5" y="42" width="3" height="3" fill="#0b1220"/>
+  <rect x="43.5" y="43" width="3" height="2" fill="#0b1220"/>
+  <!-- …drifting away as pixels -->
+  <rect x="47.5" y="40.5" width="2.6" height="2.6" fill="#34d399" opacity="0.85"/>
+  <rect x="50.5" y="44.5" width="2.2" height="2.2" fill="#34d399" opacity="0.6"/>
+  <rect x="46" y="47" width="1.8" height="1.8" fill="#34d399" opacity="0.4"/>
+</svg>

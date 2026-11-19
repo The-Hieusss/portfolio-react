@@ -30,6 +30,7 @@ const has = (t: string, ...words: string[]) =>
   words.some((w) => new RegExp(`(^|\\s)${w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(\\s|$|s\\b)`).test(t));
 
 const projectAliases: Record<string, string[]> = {
+  "Disposable Downloads": ["disposable", "downloads folder", "self-cleaning", "self cleaning"],
   "Canopy Companion": ["canopy", "shade", "walking route", "route planner"],
   "Mr. T AI": ["mr t", "mr. t", "mrt", "trucking", "fleet", "dispatch"],
   Dreamscape: ["dreamscape", "3d world", "dream scape"],

@@ -2,6 +2,27 @@ import type { Project } from "../types";
 
 export const projectsData: Project[] = [
   {
+    title: "Disposable Downloads",
+    image: "/images/projdemo/disposable-downloads.svg",
+    description:
+      "Self-cleaning downloads for macOS: anything you mark as disposable goes to the Trash after 24 hours.",
+    demoUrl: "",
+    githubUrl: "https://github.com/The-Hieusss/disposable-downloads",
+    tech: [
+      { label: "Shell", icon: "/images/skills/shell.svg" },
+      { label: "launchd", icon: "/images/skills/launchd.svg" },
+      { label: "Quick Actions", icon: "/images/skills/quick-action.svg" },
+    ],
+    modalImage: "/images/projdemo/disposable-downloads.svg",
+    modalSummary:
+      "Disposable Downloads is for the files you only need for a few minutes, like an assignment to upload or a document to hand to an AI assistant, which otherwise pile up in Downloads forever. It adds a ~/Disposable folder: anything that lands there is moved to the Trash 24 hours after it arrives, checked hourly by a launchd job, and the Trash can optionally be emptied every night. You can pick Disposable in your browser's save dialog, or right-click files in Finder and choose the \"Mark as Disposable\" Quick Action, which moves them in and sends a notification saying when they'll be trashed. It uses only built-in macOS tools, installs with one script without sudo, lets you change the timer and Trash settings, and logs everything it does.",
+    modalTech: [
+      { label: "Shell", icon: "/images/skills/shell.svg" },
+      { label: "launchd", icon: "/images/skills/launchd.svg" },
+      { label: "Quick Actions", icon: "/images/skills/quick-action.svg" },
+    ],
+  },
+  {
     title: "Canopy Companion",
     image: "/images/projdemo/canopy-companion.svg",
     description:

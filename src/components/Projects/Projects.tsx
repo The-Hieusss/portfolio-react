@@ -14,6 +14,7 @@ const FILTERS = {
     p.modalTech.some((t) => ["React", "TailwindCSS", "Vite", "Node.js", "Bootstrap"].includes(t.label)),
   AI: (p: Project) => p.modalTech.some((t) => ["Gemini", "OpenAI"].includes(t.label)),
   Mobile: (p: Project) => p.modalTech.some((t) => ["React Native", "Expo"].includes(t.label)),
+  Tools: (p: Project) => p.modalTech.some((t) => ["Shell"].includes(t.label)),
 } satisfies Record<string, (p: Project) => boolean>;
 
 type Filter = keyof typeof FILTERS;
