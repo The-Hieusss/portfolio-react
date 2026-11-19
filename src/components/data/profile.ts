@@ -33,7 +33,7 @@ export const experience = [
     current: true,
   },
   {
-    logo: "/images/movedcars.png",
+    logo: "/images/movecars.svg",
     title: "Software Engineer Intern",
     subtitle: "MoveCars",
     date: "Jan 2025 – May 2025",
